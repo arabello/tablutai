@@ -1,6 +1,8 @@
 package ai.tablut
 
 import ai.tablut.state.StateFacade
+import ai.tablut.adversarial.TablutGame
+import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch
 
 object Main {
 	def main(args: Array[String]): Unit = {
@@ -9,11 +11,11 @@ object Main {
 		val maxComputationSeconds = 50
 
 		val stateFactory = StateFacade.normalStateFactory()
-		/*
-		val game = TablutGame(stateFactory)
-		val search = IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
-		val gson = GsonTablut.gson
-*/
+
+		val game = new TablutGame(stateFactory)
+		val search = new IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
+		//val gson = GsonTablut.gson
+
 		// Loop
 		// val jsonState = receive json from server
 		// val currState = gson.fromJson(jsonState, Board::class.java)
