@@ -1,12 +1,12 @@
 package ai.tablut.state
 
-case class GameRules(
+private case class GameRules(
 	                    nRows: Int,
 	                    nCols: Int,
 	                    camps: Set[(Int, Int)],
 	                    escapePoints: Set[(Int, Int)]){
 
-	def isWinner(state: State): Boolean
+	def isWinner(state: State): Boolean = ???
 }
 
 object GameRules{

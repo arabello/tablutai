@@ -1,6 +1,6 @@
 package ai.tablut.state
 
-case class BoardImpl(rows: Int, cols: Int) extends Board[BoardCell]{
+private case class BoardImpl(rows: Int, cols: Int) extends Board[BoardCell]{
 	override def applyAction(action: Action): Board[BoardCell] = ???
 
 	/**
