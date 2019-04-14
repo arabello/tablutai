@@ -1,5 +1,9 @@
 package ai.tablut.state
 
+/**
+  * Context data for the game. Contains all the rules that can be different
+  * between game implementation (game variants)
+  */
 trait GameContext{
 	val nRows: Int
 	val nCols: Int

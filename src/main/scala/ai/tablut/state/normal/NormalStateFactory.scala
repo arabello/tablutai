@@ -10,6 +10,9 @@ object NormalStateFactory extends StateFactory{
 
 	override def createBoardCell(coords: (Int, Int), cellContent: CellContent.Value): BoardCell = {
 
+		if(coords._1 > context.nCols || coords._2 > context.nRows)
+			InvalidBoardCell(coords, CellType.NOTHING, cellContent)
+
 		val cellType = if (context.camps.contains(coords)) CellType.CAMP
 		else if (context.escapePoints.contains(coords)) CellType.ESCAPE_POINT
 		else if (context.throne == coords) CellType.CASTLE

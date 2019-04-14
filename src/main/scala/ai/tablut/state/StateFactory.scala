@@ -1,8 +1,7 @@
 package ai.tablut.state
 
 /**
-  * Factory to create game state parts within game rules
-  * depending by the implementation of this interface
+  * Entry point to create state components
   */
 trait StateFactory {
 	val context: GameContext
@@ -10,12 +9,11 @@ trait StateFactory {
 	def createInitialState(): State
 
 	/**
-	  * Create a new cell not bounded to a [[ai.tablut.state.Board]] using the current [[ai.tablut.state.GameContext]]
-	  *
-	  * @param coords Position of a cell. First value as column index, second value as the row index
-	  * @param cellType
+	  * Create a new cell. If the given content is not valid for the coordinates related
+	  * returns [[ai.tablut.state.InvalidBoardCell]]
+	  * @param coords
 	  * @param cellContent
-	  * @return A new instance
+	  * @return
 	  */
 	def createBoardCell(coords: (Int, Int), cellContent: CellContent.Value): BoardCell
 }
