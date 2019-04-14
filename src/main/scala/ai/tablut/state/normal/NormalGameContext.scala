@@ -1,6 +1,8 @@
 package ai.tablut.state.normal
 
-import ai.tablut.state.{GameContext, State}
+import ai.tablut.state.CellContent.{Value => _, _}
+import ai.tablut.state.CellType._
+import ai.tablut.state.{CellContent, CellType, GameContext, State}
 
 private object NormalGameContext extends GameContext{
 
@@ -25,4 +27,8 @@ private object NormalGameContext extends GameContext{
 	)
 
 	override def isWinner(state: State): Boolean = ???
+
+	override val invalidBoardCell: Set[(CellType.Value, CellContent.Value)] = Set(
+		(CAMP, WHITE), (CAMP, KING), (CASTLE, WHITE), (CASTLE, BLACK)
+	)
 }

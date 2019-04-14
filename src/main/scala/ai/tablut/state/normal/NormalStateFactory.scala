@@ -15,6 +15,9 @@ object NormalStateFactory extends StateFactory{
 		else if (context.throne == coords) CellType.CASTLE
 		else CellType.NOTHING
 
-		BoardCellImpl(coords, cellType, cellContent)
+		if (context.invalidBoardCell.contains((cellType, cellContent)))
+			InvalidBoardCell(coords, cellType, cellContent)
+		else
+			BoardCellImpl(coords, cellType, cellContent)
 	}
 }

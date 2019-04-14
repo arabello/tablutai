@@ -1,7 +1,7 @@
 package ai.tablut.state.test
 
 import ai.tablut.state._
-import org.scalatest.{FlatSpec, WordSpec}
+import org.scalatest.WordSpec
 
 class BoardCellTest extends WordSpec{
 
@@ -38,6 +38,14 @@ class BoardCellTest extends WordSpec{
 
 				val escape = factory.createBoardCell((1,0), CellContent.BLACK)
 				assert(escape.cellType == CellType.ESCAPE_POINT)
+			}
+
+			"pattern match over InvalidBoardCell" in{
+				val camp = factory.createBoardCell((4,0), CellContent.WHITE)
+				camp match {
+					case InvalidBoardCell(_, _, _) => succeed
+					case _ => fail()
+				}
 			}
 		}
 	}
