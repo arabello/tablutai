@@ -1,6 +1,9 @@
 package ai.tablut.state
 
 private case class BoardImpl(rows: Int, cols: Int) extends Board[BoardCell]{
+        
+        val grid: Array[Array[BoardCell]] = Array.ofDim[BoardCell](rows, cols)
+
 	override def applyAction(action: Action): Board[BoardCell] = ???
 
 	/**

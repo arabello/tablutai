@@ -1,5 +1,7 @@
 package ai.tablut.adversarial
 
+import java.util
+
 import ai.tablut.state.{Action, Player, State, StateFactory}
 import aima.core.search.adversarial.Game
 
@@ -21,10 +23,7 @@ class TablutGame(val stateFactory: StateFactory) extends Game[State, Action, Pla
 
 	override def getPlayers: Array[Player.Value] = ???
 
-	/**
-	  * Returns the set of legal moves in a state.
-	  */
-	override def getActions(state: State): Seq[Action] = ???
+	override def getActions(state: State): util.List[Action] = ???
 
 	/**
 	  * A utility function (also called an objective function or

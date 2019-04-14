@@ -1,6 +1,6 @@
 package ai.tablut.state
 
-private case class GameRules(
+case class GameRules(
 	                    nRows: Int,
 	                    nCols: Int,
 	                    camps: Set[(Int, Int)],
