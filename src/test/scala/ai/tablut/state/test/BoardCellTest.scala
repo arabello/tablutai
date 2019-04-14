@@ -16,14 +16,14 @@ class BoardCellTest extends WordSpec{
 					CellContent.WHITE
 				)
 
-				 assert(cell.getHumanCoords == "e4")
+				 assert(cell.toHumanCoords == "e4")
 
 				 val cell2 = factory.createBoardCell(
 					 (6,6),
 					 CellContent.EMPTY
 				 )
 
-				 assert(cell2.getHumanCoords == "g7")
+				 assert(cell2.toHumanCoords == "g7")
 			}
 
 			"recognize its type" in {

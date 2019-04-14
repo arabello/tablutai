@@ -1,5 +1,6 @@
 package ai.tablut.state
 
 object Player extends Enumeration {
-	val WHITE, BLACK = Value
+	type Player = Value
+	@transient val WHITE, BLACK = Value
 }

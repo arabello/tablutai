@@ -1,12 +1,40 @@
 package ai.tablut.serialization
 
-import ai.tablut.state.{Action, State}
-import com.google.gson.GsonBuilder
+import ai.tablut.state.Action
+import play.api.libs.json.{JsObject, Json}
 
 object TablutSerializer {
-	val gson = {
-		val builder = new GsonBuilder()
-		builder.registerTypeAdapter(Action.getClass, new ActionJsonAdapter())
-		builder.registerTypeAdapter(State.getClass, new StateJsonAdapter())
-	}
+
+	def toJson(action: Action): String = Json.obj(
+		"from" -> action.from.toHumanCoords,
+		"to" -> action.to.toHumanCoords,
+		"turn" -> action.who.toString
+	).toString()
 }
+
+/*
+    {
+        "from":"e4",
+        "to":"f4",
+        "turn":"WHITE"
+    }
+ */
+
+
+
+/*
+{
+    "board":[
+        ["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"],
+        ["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
+        ["EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","EMPTY"],
+        ["BLACK","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","BLACK"],
+        ["BLACK","BLACK","WHITE","WHITE","KING","WHITE","WHITE","BLACK","BLACK"],
+        ["BLACK","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","BLACK"],
+        ["EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","EMPTY"],
+        ["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
+        ["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
+        ],
+    "turn":"WHITE"}
+
+ */

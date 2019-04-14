@@ -1,9 +1,12 @@
 package ai.tablut.state
 
+import ai.tablut.state.CellContent.CellContent
+import ai.tablut.state.CellType.CellType
+
 private case class BoardCellImpl(
 	                                coords: (Int, Int),
-	                                cellType: CellType.Value,
-	                                cellContent: CellContent.Value) extends BoardCell{
+	                                cellType: CellType,
+	                                cellContent: CellContent) extends BoardCell{
 	/**
 	  * @return True if it meets the game rules. False otherwise.
 	  */
@@ -23,7 +26,7 @@ private case class BoardCellImpl(
 	8
 	9
     */
-	override def getHumanCoords: String = {
+	override def toHumanCoords: String = {
 		val decASCII: Char = (coords._1 + 97).toChar
 		val adjustedRow = coords._2 + 1
 		s"$decASCII$adjustedRow"

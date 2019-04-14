@@ -1,5 +1,8 @@
 package ai.tablut.state
 
+import ai.tablut.state.CellContent.CellContent
+import ai.tablut.state.CellType.CellType
+
 trait BoardCell extends GameRulesComplied {
 	/**
 	  * Pair of integer representing the position of a cell
@@ -9,8 +12,8 @@ trait BoardCell extends GameRulesComplied {
 	  * consistency to [[ai.tablut.state.Board]]
 	  */
 	val coords: (Int, Int)
-	val cellType: CellType.Value
-	val cellContent: CellContent.Value
+	val cellType: CellType
+	val cellContent: CellContent
 
 	/**
 	  * Board grid is a matrix. Considering the upper left corner as the origin point,
@@ -19,5 +22,5 @@ trait BoardCell extends GameRulesComplied {
 	  * starting from "a" and ch2 is number starting from 1.
 	  * @return A string representing the coordinate using lower case letter for columns and number starting from 1 as rows
 	  */
-	def getHumanCoords: String
+	def toHumanCoords: String
 }
