@@ -8,5 +8,5 @@ trait GameRulesComplied {
 	/**
 	  * @return True if it meets the game rules. False otherwise.
 	  */
-	def isGameRulesComplied(gameRules: GameRules): Boolean
+	def isGameRulesComplied(gameRules: GameContext): Boolean
 }

@@ -4,5 +4,5 @@ case class Action(who: Player.Value, from: BoardCell, to: BoardCell) extends Gam
 	/**
 	  * @return True if it meets the game rules. False otherwise.
 	  */
-	override def isGameRulesComplied(gameRules: GameRules): Boolean = ???
+	override def isGameRulesComplied(gameRules: GameContext): Boolean = ???
 }
