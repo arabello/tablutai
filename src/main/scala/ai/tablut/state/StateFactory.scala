@@ -5,7 +5,7 @@ package ai.tablut.state
   * depending by the implementation of this interface
   */
 trait StateFactory {
-	val gameRules: GameContext
+	val context: GameContext
 
 	def createInitialState(): State
 
@@ -17,5 +17,5 @@ trait StateFactory {
 	  * @param cellContent
 	  * @return A new instance
 	  */
-	def createBoardCell(coords: (Int, Int), cellType: GameContext.CellType.Value, cellContent: GameContext.CellContent.Value): BoardCell
+	def createBoardCell(coords: (Int, Int), cellContent: CellContent.Value): BoardCell
 }

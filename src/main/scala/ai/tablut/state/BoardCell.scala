@@ -9,8 +9,8 @@ trait BoardCell extends GameRulesComplied {
 	  * consistency to [[ai.tablut.state.Board]]
 	  */
 	val coords: (Int, Int)
-	val cellType: GameContext.CellType.Value
-	val cellContent: GameContext.CellContent.Value
+	val cellType: CellType.Value
+	val cellContent: CellContent.Value
 
 	/**
 	  * Board grid is a matrix. Considering the upper left corner as the origin point,

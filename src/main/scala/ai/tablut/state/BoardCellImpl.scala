@@ -2,8 +2,8 @@ package ai.tablut.state
 
 private case class BoardCellImpl(
 	                                coords: (Int, Int),
-	                                cellType: GameContext.CellType.Value,
-	                                cellContent: GameContext.CellContent.Value) extends BoardCell{
+	                                cellType: CellType.Value,
+	                                cellContent: CellContent.Value) extends BoardCell{
 	/**
 	  * @return True if it meets the game rules. False otherwise.
 	  */
