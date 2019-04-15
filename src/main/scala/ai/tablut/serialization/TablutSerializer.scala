@@ -1,6 +1,6 @@
 package ai.tablut.serialization
 
-import ai.tablut.state.Action
+import ai.tablut.state.{Action, State}
 import play.api.libs.json.{JsObject, Json}
 
 object TablutSerializer {
@@ -9,6 +9,13 @@ object TablutSerializer {
 		"from" -> action.from.toHumanCoords,
 		"to" -> action.to.toHumanCoords,
 		"turn" -> action.who.toString
+	).toString()
+
+	def toJson(state: State): String = Json.obj(
+		"board" -> Json.arr(
+
+		),
+		"turn" -> state.turn
 	).toString()
 }
 

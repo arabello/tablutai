@@ -12,7 +12,7 @@ class BoardCellTest extends WordSpec{
 
 			 "create human coordinates correctly" in{
 				val cell = factory.createBoardCell(
-					(4,3),
+					(3,4),
 					CellContent.WHITE
 				)
 
@@ -27,21 +27,21 @@ class BoardCellTest extends WordSpec{
 			}
 
 			"recognize its type" in {
-				val cell = factory.createBoardCell((4,3), CellContent.WHITE)
+				val cell = factory.createBoardCell((3,4), CellContent.WHITE)
 				assert(cell.cellType == CellType.NOTHING)
 
 				val castle = factory.createBoardCell((4,4), CellContent.WHITE)
 				assert(castle.cellType == CellType.CASTLE)
 
-				val camp = factory.createBoardCell((4,0), CellContent.BLACK)
+				val camp = factory.createBoardCell((0,4), CellContent.BLACK)
 				assert(camp.cellType == CellType.CAMP)
 
-				val escape = factory.createBoardCell((1,0), CellContent.BLACK)
+				val escape = factory.createBoardCell((0,1), CellContent.BLACK)
 				assert(escape.cellType == CellType.ESCAPE_POINT)
 			}
 
 			"pattern match over InvalidBoardCell" in{
-				val camp = factory.createBoardCell((4,0), CellContent.WHITE)
+				val camp = factory.createBoardCell((0,4), CellContent.WHITE)
 				camp match {
 					case InvalidBoardCell(_, _, _) => succeed
 					case _ => fail()

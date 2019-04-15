@@ -27,8 +27,8 @@ private case class BoardCellImpl(
 	9
     */
 	override def toHumanCoords: String = {
-		val decASCII: Char = (coords._1 + 97).toChar
-		val adjustedRow = coords._2 + 1
+		val adjustedRow = coords._1 + 1
+		val decASCII: Char = (coords._2 + 97).toChar
 		s"$decASCII$adjustedRow"
 	}
 }
