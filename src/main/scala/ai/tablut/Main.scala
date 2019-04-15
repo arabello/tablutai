@@ -36,7 +36,6 @@ object Main {
 		val game = new TablutGame(stateFactory, initState)
 		val search = new IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
 
-
 		var currState = initState
 		while(true) {
 			val nextAction = search.makeDecision(currState)

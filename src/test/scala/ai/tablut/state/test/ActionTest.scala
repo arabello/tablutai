@@ -1,7 +1,7 @@
 package ai.tablut.state.test
 
 import ai.tablut.serialization.TablutSerializer
-import ai.tablut.state.{Action, Player, StateFacade}
+import ai.tablut.state.{Action, CellContent, Player, StateFacade}
 import org.scalatest.WordSpec
 
 class ActionTest extends WordSpec{

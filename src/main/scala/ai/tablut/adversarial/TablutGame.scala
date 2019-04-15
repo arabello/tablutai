@@ -2,8 +2,10 @@ package ai.tablut.adversarial
 
 import java.util
 
-import ai.tablut.state.{Action, Player, State, StateFactory}
+import ai.tablut.state.CellContent.{CellContent => _, _}
+import ai.tablut.state._
 import aima.core.search.adversarial.Game
+import scala.collection.JavaConversions._
 
 class TablutGame(val stateFactory: StateFactory, initialState: State) extends Game[State, Action, Player.Value] {
 	/**
@@ -23,13 +25,16 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 
 	override def getPlayers: Array[Player.Value] = Player.values.toArray
 
-	override def getActions(state: State): util.List[Action] = ???/*{
-		state.board.grid.map{ row =>
-			row.map{ cell =>
-
-			}
-		}
-	}*/
+	override def getActions(state: State): util.List[Action] = state.board.grid.flatMap( row => row
+				.filter(c => c.cellContent match {
+					case CellContent.WHITE | CellContent.KING => state.turn == Player.WHITE
+					case CellContent.BLACK => state.turn == Player.BLACK
+					case _ => false
+				}).flatMap(cell =>
+				(for (x <- 0 until state.board.rows; a = Action(state.turn, cell, state.board.grid(x)(cell.coords._2)) if a.validate(stateFactory.context, state.board)) yield a)
+					++
+					(for (y <- 0 until state.board.cols; a = Action(state.turn, cell, state.board.grid(cell.coords._1)(y)) if a.validate(stateFactory.context, state.board)) yield a))
+		)
 
 	/**
 	  * A utility function (also called an objective function or
