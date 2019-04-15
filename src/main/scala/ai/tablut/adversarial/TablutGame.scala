@@ -19,11 +19,17 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 	/**
 	  * Defines which player has the move in a state.
 	  */
-	override def getPlayer(state: State): Player.Value = ???
+	override def getPlayer(state: State): Player.Value = state.turn
 
-	override def getPlayers: Array[Player.Value] = ???
+	override def getPlayers: Array[Player.Value] = Player.values.toArray
 
-	override def getActions(state: State): util.List[Action] = ???
+	override def getActions(state: State): util.List[Action] = ???/*{
+		state.board.grid.map{ row =>
+			row.map{ cell =>
+
+			}
+		}
+	}*/
 
 	/**
 	  * A utility function (also called an objective function or

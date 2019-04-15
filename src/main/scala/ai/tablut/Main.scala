@@ -1,8 +1,10 @@
 package ai.tablut
 
+import ai.tablut.adversarial.TablutGame
 import ai.tablut.connectivity.ConnFactory
 import ai.tablut.serialization.TablutSerializer
-import ai.tablut.state.{Action, StateFacade}
+import ai.tablut.state.StateFacade
+import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch
 
 object Main {
 	def main(args: Array[String]): Unit = {
@@ -29,13 +31,15 @@ object Main {
 
 		client.writeTeamName()
 		val jsonInitState = client.readState()
-		var currState = TablutSerializer.fromJson(jsonInitState, stateFactory)
+		val initState = TablutSerializer.fromJson(jsonInitState, stateFactory)
 
-		//val game = new TablutGame(stateFactory)
-		//val search = new IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
+		val game = new TablutGame(stateFactory, initState)
+		val search = new IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
 
+
+		var currState = initState
 		while(true) {
-			val nextAction = Action(currState.turn, currState.board(3)(4), currState.board(3)(5)) // search.makeDecision(currState)
+			val nextAction = search.makeDecision(currState)
 			client.writeAction(nextAction)
 
 			val jsonState = client.readState()

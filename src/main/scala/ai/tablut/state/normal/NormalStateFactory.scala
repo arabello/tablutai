@@ -8,10 +8,10 @@ object NormalStateFactory extends StateFactory{
 
 	override val context: GameContext = NormalGameContext
 
-	override def createBoardCell(coords: (Int, Int), cellContent: CellContent.Value): BoardCell = {
+	override def createBoardCell(coords: (Int, Int), cellContent: CellContent.Value): Option[BoardCell] = {
 
 		if(coords._1 > context.nCols || coords._2 > context.nRows)
-			InvalidBoardCell(coords, CellType.NOTHING, cellContent)
+			None
 
 		val cellType = if (context.camps.contains(coords)) CellType.CAMP
 		else if (context.escapePoints.contains(coords)) CellType.ESCAPE_POINT
@@ -19,14 +19,14 @@ object NormalStateFactory extends StateFactory{
 		else CellType.NOTHING
 
 		if (context.invalidBoardCell.contains((cellType, cellContent)))
-			InvalidBoardCell(coords, cellType, cellContent)
+			None
 		else
-			BoardCellImpl(coords, cellType, cellContent)
+			Some(BoardCell(coords, cellType, cellContent))
 	}
 
-	override def createState(grid: Seq[Seq[CellContent]], turn: Player): State = StateImpl(
-		BoardImpl(grid.length, grid.head.length,
-			(for(x <- grid.indices) yield (for(y <- grid.head.indices) yield createBoardCell((x,y), grid(x)(y))).toVector).toVector),
+	override def createState(grid: Seq[Seq[CellContent]], turn: Player): State = State(
+		Board(grid.length, grid.head.length,
+			(for(x <- grid.indices) yield (for(y <- grid.head.indices) yield createBoardCell((x,y), grid(x)(y)).get).toVector).toVector),
 		turn
 	)
 }

@@ -1,6 +1,5 @@
 package ai.tablut.state
 
-trait State {
-	val board: Board
-	val turn: Player.Value
-}
+import ai.tablut.state.Player.Player
+
+case class State(board: Board, turn: Player)

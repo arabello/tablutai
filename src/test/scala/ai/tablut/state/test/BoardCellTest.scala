@@ -14,38 +14,35 @@ class BoardCellTest extends WordSpec{
 				val cell = factory.createBoardCell(
 					(3,4),
 					CellContent.WHITE
-				)
+				).get
 
 				 assert(cell.toHumanCoords == "e4")
 
 				 val cell2 = factory.createBoardCell(
 					 (6,6),
 					 CellContent.EMPTY
-				 )
+				 ).get
 
 				 assert(cell2.toHumanCoords == "g7")
 			}
 
 			"recognize its type" in {
-				val cell = factory.createBoardCell((3,4), CellContent.WHITE)
+				val cell = factory.createBoardCell((3,4), CellContent.WHITE).get
 				assert(cell.cellType == CellType.NOTHING)
 
-				val castle = factory.createBoardCell((4,4), CellContent.WHITE)
+				val castle = factory.createBoardCell((4,4), CellContent.WHITE).get
 				assert(castle.cellType == CellType.CASTLE)
 
-				val camp = factory.createBoardCell((0,4), CellContent.BLACK)
+				val camp = factory.createBoardCell((0,4), CellContent.BLACK).get
 				assert(camp.cellType == CellType.CAMP)
 
-				val escape = factory.createBoardCell((0,1), CellContent.BLACK)
+				val escape = factory.createBoardCell((0,1), CellContent.BLACK).get
 				assert(escape.cellType == CellType.ESCAPE_POINT)
 			}
 
 			"pattern match over InvalidBoardCell" in{
-				val camp = factory.createBoardCell((0,4), CellContent.WHITE)
-				camp match {
-					case InvalidBoardCell(_, _, _) => succeed
-					case _ => fail()
-				}
+				val camp = factory.createBoardCell((0, 4), CellContent.WHITE).orNull
+				assert(camp == null)
 			}
 		}
 	}

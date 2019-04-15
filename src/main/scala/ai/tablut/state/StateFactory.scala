@@ -11,12 +11,5 @@ trait StateFactory {
 
 	def createState(grid: Seq[Seq[CellContent]], turn: Player): State
 
-	/**
-	  * Create a new cell. If the given content is not valid for the coordinates related
-	  * returns [[ai.tablut.state.InvalidBoardCell]]
-	  * @param coords
-	  * @param cellContent
-	  * @return
-	  */
-	def createBoardCell(coords: (Int, Int), cellContent: CellContent): BoardCell
+	def createBoardCell(coords: (Int, Int), cellContent: CellContent): Option[BoardCell]
 }

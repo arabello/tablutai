@@ -11,8 +11,8 @@ class SerializationTest extends WordSpec{
 
 			"serialize an action" in{
 				val action = Action(Player.WHITE,
-					factory.createBoardCell((3,4), CellContent.WHITE),
-					factory.createBoardCell((3,5), CellContent.WHITE))
+					factory.createBoardCell((3,4), CellContent.WHITE).get,
+					factory.createBoardCell((3,5), CellContent.WHITE).get)
 
 				val json = TablutSerializer.toJson(action)
 
