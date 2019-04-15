@@ -1,12 +1,12 @@
 package ai.tablut.state.normal
 
+import ai.tablut.state.CellContent.CellContent
+import ai.tablut.state.Player.Player
 import ai.tablut.state._
 
 object NormalStateFactory extends StateFactory{
 
 	override val context: GameContext = NormalGameContext
-
-	override def createInitialState(): State = ???
 
 	override def createBoardCell(coords: (Int, Int), cellContent: CellContent.Value): BoardCell = {
 
@@ -23,4 +23,10 @@ object NormalStateFactory extends StateFactory{
 		else
 			BoardCellImpl(coords, cellType, cellContent)
 	}
+
+	override def createState(grid: Seq[Seq[CellContent]], turn: Player): State = StateImpl(
+		BoardImpl(grid.length, grid.head.length,
+			(for(x <- grid.indices) yield (for(y <- grid.head.indices) yield createBoardCell((x,y), grid(x)(y))).toVector).toVector),
+		turn
+	)
 }

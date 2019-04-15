@@ -1,8 +1,6 @@
 package ai.tablut.state
 
-private case class BoardImpl(rows: Int, cols: Int) extends Board{
-        
-	val grid: Array[Array[BoardCell]] = Array.ofDim[BoardCell](rows, cols)
+private case class BoardImpl(rows: Int, cols: Int, grid: Vector[Vector[BoardCell]]) extends Board{
 
 	override def applyAction(action: Action): Board = ???
 

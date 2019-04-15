@@ -12,8 +12,8 @@ object Main {
 
 		val stateFactory = StateFacade.normalStateFactory()
 
-		val game = new TablutGame(stateFactory)
-		val search = new IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
+		//val game = new TablutGame(stateFactory)
+		//val search = new IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
 		//val gson = GsonTablut.gson
 
 		// Loop

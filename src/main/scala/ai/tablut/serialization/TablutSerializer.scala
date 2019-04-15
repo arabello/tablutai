@@ -1,7 +1,8 @@
 package ai.tablut.serialization
 
-import ai.tablut.state.{Action, State}
-import play.api.libs.json.{JsObject, Json}
+import ai.tablut.state.CellContent.CellContent
+import ai.tablut.state._
+import play.api.libs.json.Json
 
 object TablutSerializer {
 
@@ -12,11 +13,19 @@ object TablutSerializer {
 	).toString()
 
 	def toJson(state: State): String = Json.obj(
-		"board" -> Json.arr(
+			"board" -> Json.arr(
+				state.board.grid.map(row => Json.arr(row.map(cell => cell.cellContent)))
+			),
+			"turn" -> state.turn
+		).toString()
 
-		),
-		"turn" -> state.turn
-	).toString()
+	def fromJson(json: String, factory: StateFactory): State = {
+		val obj = Json.parse(json)
+		val contentRows: Seq[Seq[CellContent]] = obj("board").as[Seq[Seq[String]]].map(row => row.map(value => CellContent.withName(value)))
+		val player = Player.withName(obj("turn").as[String])
+
+		factory.createState(contentRows, player)
+	}
 }
 
 /*

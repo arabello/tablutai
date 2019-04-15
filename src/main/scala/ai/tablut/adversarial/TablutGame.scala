@@ -5,11 +5,11 @@ import java.util
 import ai.tablut.state.{Action, Player, State, StateFactory}
 import aima.core.search.adversarial.Game
 
-class TablutGame(val stateFactory: StateFactory) extends Game[State, Action, Player.Value] {
+class TablutGame(val stateFactory: StateFactory, initialState: State) extends Game[State, Action, Player.Value] {
 	/**
 	  * The initial state, which specifies how the game is set up at the start
 	  */
-	override def getInitialState: State = stateFactory.createInitialState()
+	override def getInitialState: State = initialState
 
 	/**
 	  * The transition model, which defines the result of a move.

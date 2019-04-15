@@ -3,13 +3,9 @@ package ai.tablut.state
 trait Board extends GameRulesComplied {
 	val cols: Int
 	val rows: Int
+	val grid: Seq[Seq[BoardCell]]
 
-	/**
-	  * The data structure of a board is a two dimensional arrays.
-	  * The first dimension must be used for the row by the implementation
-	  * in order to maintain consistency to [[ai.tablut.state.BoardCell]]
-	  */
-	val grid: Array[Array[BoardCell]]
+	def apply(x: Int)(y: Int): BoardCell = grid(x)(y)
 
 	def applyAction(action: Action): Board
 }
