@@ -16,7 +16,7 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 	/**
 	  * The transition model, which defines the result of a move.
 	  */
-	override def getResult(state: State, action: Action): State = ???
+	override def getResult(state: State, action: Action): State = state.copy(board = state.board.applyAction(action))
 
 	/**
 	  * Defines which player has the move in a state.

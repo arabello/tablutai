@@ -13,9 +13,7 @@ object TablutSerializer {
 	).toString()
 
 	def toJson(state: State): String = Json.obj(
-			"board" -> Json.arr(
-				state.board.grid.map(row => Json.arr(row.map(cell => cell.cellContent)))
-			),
+			"board" -> state.board.grid.map(row => row.map(c => c.cellContent.toString)),
 			"turn" -> state.turn
 		).toString()
 
