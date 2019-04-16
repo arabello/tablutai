@@ -5,7 +5,7 @@ import java.util
 import ai.tablut.state.CellContent.{CellContent => _, _}
 import ai.tablut.state._
 import aima.core.search.adversarial.Game
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 class TablutGame(val stateFactory: StateFactory, initialState: State) extends Game[State, Action, Player.Value] {
 	/**
@@ -34,7 +34,7 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 				(for (x <- 0 until state.board.rows; a = Action(state.turn, cell, state.board.grid(x)(cell.coords._2)) if a.validate(stateFactory.context, state.board)) yield a)
 					++
 					(for (y <- 0 until state.board.cols; a = Action(state.turn, cell, state.board.grid(cell.coords._1)(y)) if a.validate(stateFactory.context, state.board)) yield a))
-		)
+		).asJava
 
 	/**
 	  * A utility function (also called an objective function or

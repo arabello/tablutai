@@ -1,6 +1,7 @@
 package ai.tablut.state
 
 import ai.tablut.state.Player.Player
+import scala.math
 
 /**
   * Data structure to handle a player game move
@@ -43,15 +44,32 @@ case class Action(who: Player, from: BoardCell, to: BoardCell) extends GameRules
 	  * @return True if this element is legitimate according the given board. False otherwise
 	  */
 	override def isLegal(board: Board): Boolean = {
-		val fromX = from.coords._1
-		val fromY = from.coords._2
-		val toX = from.coords._1
-		val toY = from.coords._2
+		import scala.math.{min, max}
 
-		for (x <- fromX until toX; y <- fromY until toY)
-			if (board(x)(y).cellContent != CellContent.EMPTY)
-				return false
-			else if (board(x)(y).cellType == CellType.CAMP || board(x)(y).cellType == CellType.CASTLE)
+		val fromX = min(from.coords._1, to.coords._1)
+		val fromY = min(from.coords._2, to.coords._2)
+		val toX = max(from.coords._1, to.coords._1)
+		val toY = max(from.coords._2, to.coords._2)
+
+		val fromCoord = if (fromX == toX) fromY else fromX
+		val toCoord = if (fromY == toY) toX else toY
+
+		val isXFixed = fromX == toX
+
+		val f = fromCoord + (if (isXFixed) // Horizontal move
+					if (from.coords._2 < to.coords._2) 1 else 0
+				else // Vertical move
+					if (from.coords._1 < to.coords._1) 1 else 0)
+
+		val t = toCoord + (if (isXFixed) // Horizontal move
+					if (from.coords._2 < to.coords._2) 0 else -1
+				else // Vertical move
+					if (from.coords._1 < to.coords._1) 0 else -1)
+
+		val between = if (isXFixed) for (y <- f to t) yield (fromX, y) else for(x <- f to t) yield (x, fromY)
+
+		for(coords <- between; cell = board.grid(coords._1)(coords._2))
+			if (cell.cellContent != CellContent.EMPTY || cell.cellType == CellType.CASTLE || cell.cellType == CellType.CAMP)
 				return false
 
 		true
