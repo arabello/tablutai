@@ -30,8 +30,10 @@ class BoardCellTest extends WordSpec{
 				val cell = factory.createBoardCell((3,4), CellContent.WHITE).get
 				assert(cell.cellType == CellType.NOTHING)
 
-				val castle = factory.createBoardCell((4,4), CellContent.WHITE).get
+				val castle = factory.createBoardCell((4,4), CellContent.KING).get
 				assert(castle.cellType == CellType.CASTLE)
+
+				assert(factory.createBoardCell((4,4), CellContent.WHITE).orNull == null)
 
 				val camp = factory.createBoardCell((0,4), CellContent.BLACK).get
 				assert(camp.cellType == CellType.CAMP)

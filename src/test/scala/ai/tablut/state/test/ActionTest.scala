@@ -31,8 +31,8 @@ class ActionTest extends WordSpec{
 			}
 
 			"a legal move" in{
-				assert(!Action(Player.WHITE, board(2)(4), board(6)(4)).isGameRulesComplied(rules))
-				assert(!Action(Player.WHITE, board(3)(4), board(4)(4)).isGameRulesComplied(rules))
+				assert(!Action(Player.WHITE, board(2)(4), board(6)(4)).isLegal(board))
+				assert(!Action(Player.WHITE, board(3)(4), board(4)(4)).isLegal(board))
 			}
 		}
 	}

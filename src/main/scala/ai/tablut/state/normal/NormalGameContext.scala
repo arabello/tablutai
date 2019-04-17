@@ -19,6 +19,10 @@ private object NormalGameContext extends GameContext{
 		(3,8), (4,8), (5,8), (4,8)
 	)
 
+	override val invalidBoardCell: Set[(CellType, CellContent)] = Set(
+		(CAMP, WHITE), (CAMP, KING), (CASTLE, WHITE), (CASTLE, BLACK)
+	)
+
 	override val escapePoints: Set[(Int, Int)] = Set(
 		(0,1), (0,2), (0,6), (0,7),
 		(8,1), (8,2), (8,6), (8,7),
@@ -90,8 +94,4 @@ private object NormalGameContext extends GameContext{
 			}
 		}
 	}
-
-	override val invalidBoardCell: Set[(CellType, CellContent)] = Set(
-			(CAMP, WHITE), (CAMP, KING), (CASTLE, WHITE), (CASTLE, BLACK)
-		)
 }
