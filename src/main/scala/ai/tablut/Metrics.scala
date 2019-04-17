@@ -1,9 +1,10 @@
 package ai.tablut
 
 object Metrics {
-	def printMillis(msg: String, block: () => Unit): Unit = {
+	def printMillis(msg: String)(block: => Any): Any = {
 		val current = System.currentTimeMillis()
-		block()
+		val res = block
 		println(s"[metrics : printMillis] $msg ${System.currentTimeMillis() - current}")
+		res
 	}
 }

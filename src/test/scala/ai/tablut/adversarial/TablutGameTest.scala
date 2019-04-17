@@ -5,6 +5,7 @@ import ai.tablut.state.{Action, Player, StateFacade}
 import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch
 import org.scalatest.{FlatSpec, WordSpec}
 import scala.collection.JavaConverters._
+import ai.tablut.Metrics._
 
 class TablutGameTest extends WordSpec{
 	"TablutGame" when {
@@ -63,8 +64,10 @@ class TablutGameTest extends WordSpec{
 					Action(p, b(4)(6), b(5)(6)),Action(p, b(4)(6), b(6)(6)),Action(p, b(4)(6), b(7)(6)),Action(p, b(4)(6), b(8)(6)),
 				)
 
-				val actions = game.getActions(initState)
-				assert(actions.asScala.toSet == expected)
+				printMillis("getActions time"){
+					val actions = game.getActions(initState)
+					assert(actions.asScala.toSet == expected)
+				}
 			}
 		}
 	}
