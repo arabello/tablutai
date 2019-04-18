@@ -16,7 +16,7 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, utilMin: Double, 
 	  * @param player
 	  * @return
 	  */
-	override def eval(state: State, player: Player.Value): Double = {
+	override def eval(state: State, player: Player.Value): Double = scala.math.random()/*{
 		val utility = super.eval(state, player)
 		if (game.isTerminal(state))
 			utility
@@ -40,7 +40,7 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, utilMin: Double, 
 
 			normalizeHeuristicValue(value, min, max)
 		}
-	}
+	}*/
 
 	/**
 	  *
