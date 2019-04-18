@@ -105,9 +105,9 @@ class BoardTest extends WordSpec{
 				              |["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
 				              |["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
 				              |],
-				              |	"turn":"WHITE"}""".stripMargin.replace("\n", "").trim
+				              |"turn":"WHITE"}""".stripMargin.replace("\n", "").trim
 
-				val action = Action(Player.WHITE, state.board(4)(6), state.board(4)(5))
+				val action = Action(Player.WHITE, state.board(4)(6), state.board(3)(6))
 				val result = state.copy(board = startState.board.apply(action))
 				assert(TablutSerializer.toJson(result) == expected)
 			}

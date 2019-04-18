@@ -1,19 +1,31 @@
 package ai.tablut.state
+import ai.tablut.state.CellContent.Converter
 
 case class Board(rows: Int, cols: Int, grid: Vector[Vector[BoardCell]]) extends GameRulesComplied {
 
 	def apply(x: Int)(y: Int): BoardCell = grid(x)(y)
 
+	def get(x: Int)(y: Int): Option[BoardCell] = try{ Some(grid(x)(y)) } catch { case _: Throwable => None }
+
 	def apply(action: Action): Board = {
+		import ai.tablut.state.Board.BoardCellImplicits
+
 		val contentMoved = grid(action.from.coords._1)(action.from.coords._2).cellContent
-		//implicit val afterMove: Board =
-		copy(grid = grid.map(row => row.map(cell =>
+		implicit val afterMove: Board = copy(grid = grid.map(row => row.map(cell =>
 			cell.coords match {
 				case action.from.coords => cell.copy(cellContent = CellContent.EMPTY)
 				case action.to.coords => cell.copy(cellContent = contentMoved)
 				case _ => cell
 			}
 		)))
+
+		val allies = (action.to surroundingAt 2).filter(c => c.orNull != null && c.get.cellContent == action.who.toCellContent).map(c => c.get)
+		allies.map(c => (action.to until c).drop(1).head).foldLeft[Board](afterMove)((acc, enemy) =>
+			if (enemy.cellContent != CellContent.EMPTY && enemy.cellContent != action.who.toCellContent)
+				acc.clearCell(enemy.coords)
+			else
+				acc
+		)
 	}
 
 	/**
@@ -32,18 +44,6 @@ case class Board(rows: Int, cols: Int, grid: Vector[Vector[BoardCell]]) extends 
 		case (coords._1, coords._2) => cell.copy(cellContent = CellContent.EMPTY)
 		case _ => cell
 	})))
-
-	/**
-	  * List of the 4 cells surrounding the given coordinates at the specified distance in the order of
-	  * up, right, down, left
-	  * @param coords
-	  * @param distance
-	  * @return
-	  */
-	def surroundingOf(coords: (Int, Int), distance: Int): Vector[BoardCell] = {
-		val (x, y) = coords
-		Vector(grid(x - distance)(y), grid(x)(y + distance), grid(x + distance)(y), grid(x)(y - distance))
-	}
 
 	override def isGameRulesComplied(gameRules: GameContext): Boolean = ???
 }
@@ -68,7 +68,34 @@ object Board{
 			}
 		}
 
+		/**
+		  * Create a Vector cells iterating horizontally or vertically from this cell to the given one excluded
+		  * within the implicit board
+		  * @param to
+		  * @param board
+		  * @return
+		  */
 		def until(to: BoardCell)(implicit board: Board): Vector[BoardCell] = segment(from.coords, to.coords, board).dropRight(1)
+
+		/**
+		  * Create a Vector cells iterating horizontally or vertically from this cell to the given one included
+		  * within the implicit board
+		  * @param to
+		  * @param board
+		  * @return
+		  */
 		def to(to: BoardCell)(implicit board: Board): Vector[BoardCell] = segment(from.coords, to.coords, board)
+
+		/**
+		  * List of the 4 cells surrounding the given coordinates at the specified distance in the order of
+		  * up, right, down, left
+		  * @param coords
+		  * @param distance
+		  * @return
+		  */
+		def surroundingAt(distance: Int)(implicit board: Board): Vector[Option[BoardCell]] = {
+			val (x, y) = from.coords
+			Vector(board.get(x - distance)(y), board.get(x)(y + distance), board.get(x + distance)(y), board.get(x)(y - distance))
+		}
 	}
 }

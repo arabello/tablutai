@@ -112,7 +112,7 @@ class BoardCellTest extends WordSpec{
 				val b5 = start3 to end3
 
 				assert(b5.head == start3)
-				assert(b5.size R== 7)
+				assert(b5.size == 7)
 				assert(b5.contains(board(5)(4)))
 
 				val b6 = start3 until end3
