@@ -1,5 +1,5 @@
 package ai.tablut.state
-import ai.tablut.state.CellContent.Converter
+import ai.tablut.state.CellContent._
 
 case class Board(rows: Int, cols: Int, grid: Vector[Vector[BoardCell]]) extends GameRulesComplied {
 
@@ -13,7 +13,7 @@ case class Board(rows: Int, cols: Int, grid: Vector[Vector[BoardCell]]) extends 
 		val contentMoved = grid(action.from.coords._1)(action.from.coords._2).cellContent
 		implicit val afterMove: Board = copy(grid = grid.map(row => row.map(cell =>
 			cell.coords match {
-				case action.from.coords => cell.copy(cellContent = CellContent.EMPTY)
+				case action.from.coords => cell.copy(cellContent = EMPTY)
 				case action.to.coords => cell.copy(cellContent = contentMoved)
 				case _ => cell
 			}
@@ -21,7 +21,8 @@ case class Board(rows: Int, cols: Int, grid: Vector[Vector[BoardCell]]) extends 
 
 		val allies = (action.to surroundingAt 2).filter(c => c.orNull != null && c.get.cellContent == action.who.toCellContent).map(c => c.get)
 		allies.map(c => (action.to until c).drop(1).head).foldLeft[Board](afterMove)((acc, enemy) =>
-			if (enemy.cellContent != CellContent.EMPTY && enemy.cellContent != action.who.toCellContent)
+			if ((enemy.cellContent == BLACK && action.who.toCellContent == WHITE) ||
+				( (enemy.cellContent == WHITE || enemy.cellContent == KING) && action.who.toCellContent == BLACK))
 				acc.clearCell(enemy.coords)
 			else
 				acc
@@ -41,11 +42,22 @@ case class Board(rows: Int, cols: Int, grid: Vector[Vector[BoardCell]]) extends 
 	  * @return
 	  */
 	def clearCell(coords: (Int, Int)): Board = copy(grid = grid.map(row => row.map(cell => cell.coords match{
-		case (coords._1, coords._2) => cell.copy(cellContent = CellContent.EMPTY)
+		case (coords._1, coords._2) => cell.copy(cellContent = EMPTY)
 		case _ => cell
 	})))
 
 	override def isGameRulesComplied(gameRules: GameContext): Boolean = ???
+
+	override def toString: String = {
+		val sb = scala.collection.mutable.StringBuilder.newBuilder
+
+		sb.append("\n")
+		grid.foreach { row =>
+			row.foreach(cell => sb.append(s" (${cell.cellContent}) "))
+			sb.append("\n")
+		}
+		sb.mkString
+	}
 }
 
 object Board{

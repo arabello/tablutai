@@ -45,6 +45,9 @@ case class Action(who: Player, from: BoardCell, to: BoardCell) extends GameRules
 	override def isLegal(board: Board): Boolean = {
 		import scala.math.{max, min}
 
+		if (from == to)
+			return false
+
 		val fromX = min(from.coords._1, to.coords._1)
 		val fromY = min(from.coords._2, to.coords._2)
 		val toX = max(from.coords._1, to.coords._1)
@@ -73,4 +76,6 @@ case class Action(who: Player, from: BoardCell, to: BoardCell) extends GameRules
 
 		true
 	}
+
+	override def toString: String = s"$who : ${from.coords}[${from.cellContent}] -> ${to.coords}[${to.cellContent}]"
 }
