@@ -1,10 +1,9 @@
 package ai.tablut
 
-import ai.tablut.adversarial.TablutGame
+import ai.tablut.adversarial.{IDABSimpleSearch, TablutGame}
 import ai.tablut.connectivity.ConnFactory
 import ai.tablut.serialization.TablutSerializer
 import ai.tablut.state.StateFacade
-import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch
 
 object Main {
 	def main(args: Array[String]): Unit = {
@@ -23,9 +22,9 @@ object Main {
 
 		val client = if (clientType == "w") ConnFactory.createWhiteClient() else ConnFactory.createBlackClient()
 
-		val worstStateValue = -1.0
+		val worstStateValue = 0.0
 		val bestStateValue = 1.0
-		val maxComputationSeconds = 3
+		val maxComputationSeconds = 40
 
 		val stateFactory = StateFacade.normalStateFactory()
 
@@ -34,11 +33,14 @@ object Main {
 		val initState = TablutSerializer.fromJson(jsonInitState, stateFactory)
 
 		val game = new TablutGame(stateFactory, initState)
-		val search = new IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
+		val search = new IDABSimpleSearch(stateFactory.context, game, worstStateValue, bestStateValue, maxComputationSeconds)
+		//val search = new IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
 
 		var currState = initState
 		while(true) {
 			val nextAction = search.makeDecision(currState)
+			val metrics = search.getMetrics
+			println(metrics)
 			println(nextAction)
 			client.writeAction(nextAction)
 

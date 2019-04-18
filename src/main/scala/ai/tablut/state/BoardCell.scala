@@ -11,6 +11,7 @@ import ai.tablut.state.CellType.CellType
   * consistency to [[ai.tablut.state.Board]]
   */
 case class BoardCell(coords: (Int, Int), cellType: CellType, cellContent: CellContent) extends GameRulesComplied {
+
 	/**
 	  * @return True if it meets the game rules. False otherwise.
 	  */
@@ -28,18 +29,8 @@ case class BoardCell(coords: (Int, Int), cellType: CellType, cellContent: CellCo
 		val decASCII: Char = (coords._2 + 97).toChar
 		s"$decASCII$adjustedRow"
 	}
-	/*
-		Example for normal Tablut
+}
 
-		  a b c d e f g h i
-		1
-		2
-		3
-		4
-		5
-		6
-		7
-		8
-		9
-	*/
+object BoardCell{
+	def unapply(arg: BoardCell): Option[((Int, Int), CellType, CellContent)] = Some(arg.coords, arg.cellType, arg.cellContent)
 }

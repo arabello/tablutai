@@ -1,7 +1,6 @@
 package ai.tablut.state
 
 import ai.tablut.state.Player.Player
-import scala.math
 
 /**
   * Data structure to handle a player game move
@@ -44,7 +43,7 @@ case class Action(who: Player, from: BoardCell, to: BoardCell) extends GameRules
 	  * @return True if this element is legitimate according the given board. False otherwise
 	  */
 	override def isLegal(board: Board): Boolean = {
-		import scala.math.{min, max}
+		import scala.math.{max, min}
 
 		val fromX = min(from.coords._1, to.coords._1)
 		val fromY = min(from.coords._2, to.coords._2)

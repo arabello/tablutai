@@ -94,4 +94,7 @@ private object NormalGameContext extends GameContext{
 			}
 		}
 	}
+
+	override val maxWhites: Int = 9
+	override val maxBlacks: Int = 16
 }

@@ -2,9 +2,10 @@ package ai.tablut.adversarial
 
 import java.util
 
-import ai.tablut.state.CellContent.{CellContent => _, _}
+import ai.tablut.state.CellContent.{CellContent => _}
 import ai.tablut.state._
 import aima.core.search.adversarial.Game
+
 import scala.collection.JavaConverters._
 
 class TablutGame(val stateFactory: StateFactory, initialState: State) extends Game[State, Action, Player.Value] {
@@ -16,7 +17,7 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 	/**
 	  * The transition model, which defines the result of a move.
 	  */
-	override def getResult(state: State, action: Action): State = state.copy(board = state.board.applyAction(action))
+	override def getResult(state: State, action: Action): State = state.copy(board = state.board.apply(action))
 
 	/**
 	  * Defines which player has the move in a state.
@@ -25,15 +26,22 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 
 	override def getPlayers: Array[Player.Value] = Player.values.toArray
 
-	override def getActions(state: State): util.List[Action] = state.board.grid.flatMap( row => row
+	override def getActions(state: State): util.List[Action] =
+		state.board.grid.flatMap( row => row
 				.filter(c => c.cellContent match {
 					case CellContent.WHITE | CellContent.KING => state.turn == Player.WHITE
 					case CellContent.BLACK => state.turn == Player.BLACK
 					case _ => false
 				}).flatMap(cell =>
-				(for (x <- 0 until state.board.rows; a = Action(state.turn, cell, state.board.grid(x)(cell.coords._2)) if a.validate(stateFactory.context, state.board)) yield a)
-					++
-					(for (y <- 0 until state.board.cols; a = Action(state.turn, cell, state.board.grid(cell.coords._1)(y)) if a.validate(stateFactory.context, state.board)) yield a))
+					(for (x <- 0 until state.board.rows;
+					      a = Action(state.turn, cell, state.board.grid(x)(cell.coords._2))
+					      if a.validate(stateFactory.context, state.board))
+						yield a)
+						++
+					(for (y <- 0 until state.board.cols;
+					      a = Action(state.turn, cell, state.board.grid(cell.coords._1)(y))
+					      if a.validate(stateFactory.context, state.board))
+						yield a))
 		).asJava
 
 	/**
@@ -48,12 +56,16 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 	  * better term, but zero-sum is traditional and makes sense if you imagine each
 	  * player is charged an entry fee of 1/2.
 	  */
-	override def getUtility(state: State, player: Player.Value): Double = 0f
+	override def getUtility(state: State, player: Player.Value): Double =
+		if (stateFactory.context.isWinner(state))
+			if (player == state.turn) 1f else -1f
+		else 0f
 
 	/**
 	  * A terminal test (as goal test as in the informed), which is true when the game is over
 	  * and false TERMINAL STATES otherwise.
 	  * States where the game has ended are called terminal states
 	  */
-	override def isTerminal(state: State): Boolean = stateFactory.context.isWinner(state)
+	override def isTerminal(state: State): Boolean =
+		stateFactory.context.isWinner(state.copy(turn = Player.WHITE)) || stateFactory.context.isWinner(state.copy(turn = Player.BLACK))
 }
