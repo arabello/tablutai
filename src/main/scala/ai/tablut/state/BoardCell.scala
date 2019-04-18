@@ -15,7 +15,12 @@ case class BoardCell(coords: (Int, Int), cellType: CellType, cellContent: CellCo
 	/**
 	  * @return True if it meets the game rules. False otherwise.
 	  */
-	override def isGameRulesComplied(gameRules: GameContext): Boolean = ???
+	override def isGameRulesComplied(gameRules: GameContext): Boolean = {
+		import GameRulesComplied.CoordComplies
+
+		(coords isGameRulesComplied gameRules) &&
+		!gameRules.invalidBoardCell.contains((cellType, cellContent))
+	}
 
 	/**
 	  * Board grid is a matrix. Considering the upper left corner as the origin point,

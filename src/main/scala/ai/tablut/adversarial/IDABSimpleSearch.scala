@@ -16,7 +16,12 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, utilMin: Double, 
 	  * @param player
 	  * @return
 	  */
-	override def eval(state: State, player: Player.Value): Double = scala.math.random()/*{
+	override def eval(state: State, player: Player.Value): Double = player match {
+		case Player.WHITE => HeuristicFunction.random
+		case Player.BLACK => HeuristicFunction.random
+	}
+
+	/*{
 		val utility = super.eval(state, player)
 		if (game.isTerminal(state))
 			utility
@@ -50,15 +55,4 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, utilMin: Double, 
 	  */
 	override def isSignificantlyBetter(newUtility: Double, utility: Double): Boolean =
 		super.isSignificantlyBetter(newUtility, utility)
-
-	/**
-	  *
-	  * @param state
-	  * @param actions
-	  * @param player
-	  * @param depth
-	  * @return
-	  */
-	override def orderActions(state: State, actions: util.List[Action], player: Player.Value, depth: Int): util.List[Action] =
-		actions
 }

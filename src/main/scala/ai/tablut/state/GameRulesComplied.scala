@@ -10,3 +10,10 @@ trait GameRulesComplied {
 	  */
 	def isGameRulesComplied(gameRules: GameContext): Boolean
 }
+
+object GameRulesComplied{
+	implicit class CoordComplies(coord: (Int, Int)){
+		def isGameRulesComplied(gameRules: GameContext): Boolean =
+			coord._1 >= 0 && coord._1 < gameRules.nRows && coord._2 >= 0 && coord._2 < gameRules.nCols
+	}
+}

@@ -36,6 +36,14 @@ case class Board(rows: Int, cols: Int, grid: Vector[Vector[BoardCell]]) extends 
 	def getCells: Vector[BoardCell] = grid.flatMap(row => row.map(c => c))
 
 	/**
+	  * Retrieve all the cells considering only the valid coordinates given
+	  * @param where
+	  */
+	def getCells(coords: (Int, Int)*) = {
+
+	}
+
+	/**
 	  * Synthesize a new board with [[ai.tablut.state.BoardCell#cellContent]] equals to [[ai.tablut.state.CellContent#EMPTY]]
 	  * for the given coordinates
 	  * @param coords

@@ -1,5 +1,6 @@
 package ai.tablut.state
 
+import ai.tablut.state
 import ai.tablut.state.Player.Player
 
 /**
@@ -23,6 +24,7 @@ case class Action(who: Player, from: BoardCell, to: BoardCell) extends GameRules
 	  * @return True if it meets the game rules. False otherwise.
 	  */
 	override def isGameRulesComplied(gameRules: GameContext): Boolean = {
+		import GameRulesComplied.CoordComplies
 		val fromX = from.coords._1
 		val fromY = from.coords._2
 		val toX = to.coords._1
@@ -32,8 +34,8 @@ case class Action(who: Player, from: BoardCell, to: BoardCell) extends GameRules
 		from.cellContent != CellContent.EMPTY &&
 		to.cellContent == CellContent.EMPTY &&
 		(to.cellType == CellType.NOTHING || to.cellType == CellType.ESCAPE_POINT) // TODO("Enhance to allow BLACK re-entering camps")
-		fromX >= 0 && fromX < gameRules.nRows && fromY >= 0 && fromY < gameRules.nCols &&
-		toX >= 0 && toX < gameRules.nRows && toY >= 0 && toY < gameRules.nCols &&
+		((fromX, fromY) isGameRulesComplied gameRules) &&
+		((toX, toY) isGameRulesComplied gameRules) &&
 		((fromX == toX && fromY != toY) || (fromY == toY && fromX != toX))
 	}
 
