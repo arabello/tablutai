@@ -1,11 +1,10 @@
 package ai.tablut.adversarial
 
-import java.util
-
 import ai.tablut.state._
 import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch
 
 class IDABSimpleSearch(context: GameContext, game: TablutGame, utilMin: Double, utilMax: Double, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, utilMin, utilMax, time){
+	val heuristicFunction = new HeuristicFunction(context, utilMin, utilMax)
 
 	private def normalizeHeuristicValue(value: Double, min: Double, max: Double): Double =
 		value - min / max - min
@@ -17,8 +16,8 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, utilMin: Double, 
 	  * @return
 	  */
 	override def eval(state: State, player: Player.Value): Double = player match {
-		case Player.WHITE => HeuristicFunction.random
-		case Player.BLACK => HeuristicFunction.random
+		case Player.WHITE => heuristicFunction.random
+		case Player.BLACK => heuristicFunction.blockEscapePoints(state)
 	}
 
 	/*{

@@ -24,7 +24,7 @@ object Main {
 
 		val worstStateValue = 0.0
 		val bestStateValue = 1.0
-		val maxComputationSeconds = 1
+		val maxComputationSeconds = 3
 
 		val stateFactory = StateFacade.normalStateFactory()
 
