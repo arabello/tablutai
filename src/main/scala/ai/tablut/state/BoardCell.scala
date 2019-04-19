@@ -2,6 +2,7 @@ package ai.tablut.state
 
 import ai.tablut.state.CellContent.CellContent
 import ai.tablut.state.CellType.CellType
+import implicits._
 
 /**
   * Coordinates are a pair of integer representing the position of a cell
@@ -16,8 +17,6 @@ case class BoardCell(coords: (Int, Int), cellType: CellType, cellContent: CellCo
 	  * @return True if it meets the game rules. False otherwise.
 	  */
 	override def isGameRulesComplied(gameRules: GameContext): Boolean = {
-		import GameRulesComplied.CoordComplies
-
 		(coords isGameRulesComplied gameRules) &&
 		!gameRules.invalidBoardCell.contains((cellType, cellContent))
 	}

@@ -111,6 +111,14 @@ class BoardTest extends WordSpec{
 				val result = state.copy(board = startState.board.apply(action))
 				assert(TablutSerializer.toJson(result) == expected)
 			}
+
+			"getCells with coordinates" in{
+				val cells = state.board.get((2,4),(3,4),(15,15))(factory.context)
+
+				assert(cells.size == 2)
+				assert(cells.contains(state.board(2)(4)))
+				assert(cells.contains(state.board(3)(4)))
+			}
 		}
 	}
 }

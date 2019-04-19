@@ -2,6 +2,7 @@ package ai.tablut.state
 
 import ai.tablut.state
 import ai.tablut.state.Player.Player
+import ai.tablut.state.implicits._
 
 /**
   * Data structure to handle a player game move
@@ -24,7 +25,6 @@ case class Action(who: Player, from: BoardCell, to: BoardCell) extends GameRules
 	  * @return True if it meets the game rules. False otherwise.
 	  */
 	override def isGameRulesComplied(gameRules: GameContext): Boolean = {
-		import GameRulesComplied.CoordComplies
 		val fromX = from.coords._1
 		val fromY = from.coords._2
 		val toX = to.coords._1

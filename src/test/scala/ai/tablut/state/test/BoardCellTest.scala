@@ -3,7 +3,7 @@ package ai.tablut.state.test
 import ai.tablut.serialization.TablutSerializer
 import ai.tablut.state._
 import org.scalatest.WordSpec
-import ai.tablut.state.Board.BoardCellImplicits
+import ai.tablut.state.implicits._
 
 class BoardCellTest extends WordSpec{
 
