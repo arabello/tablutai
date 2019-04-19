@@ -29,6 +29,8 @@ object Main {
 		val stateFactory = StateFacade.normalStateFactory()
 
 		client.writeTeamName()
+		if (clientType == "b") // bad protocol: black player have to read twice, because the first time the init state is given before the white move
+			client.readState()
 		val jsonInitState = client.readState()
 		val initState = TablutSerializer.fromJson(jsonInitState, stateFactory)
 
