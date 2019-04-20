@@ -1,9 +1,8 @@
 package ai.tablut.state.test
 
-import ai.tablut.serialization.TablutSerializer
 import ai.tablut.state._
-import org.scalatest.WordSpec
 import ai.tablut.state.implicits._
+import org.scalatest.WordSpec
 
 class BoardCellTest extends WordSpec{
 
@@ -56,21 +55,7 @@ class BoardCellTest extends WordSpec{
 			}
 
 			"synthesize segments" in{
-				val json = """
-				             |{"board":[
-				             |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"],
-				             |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-				             |	["EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","EMPTY"],
-				             |	["BLACK","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","BLACK"],
-				             |	["BLACK","BLACK","WHITE","WHITE","KING","WHITE","WHITE","BLACK","BLACK"],
-				             |	["BLACK","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","BLACK"],
-				             |	["EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","EMPTY"],
-				             |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-				             |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
-				             |	],
-				             |	"turn":"WHITE"}""".stripMargin
-
-				val state = TablutSerializer.fromJson(json, factory)
+				val state = factory.createInitialState
 
 				implicit val board: Board = state.board
 				val start1 = board(2)(4)

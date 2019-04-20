@@ -9,6 +9,8 @@ import ai.tablut.state.Player.Player
 trait StateFactory {
 	val context: GameContext
 
+	def createInitialState: State
+
 	def createState(grid: Seq[Seq[CellContent]], turn: Player): State
 
 	def createBoardCell(coords: (Int, Int), cellContent: CellContent): Option[BoardCell]
