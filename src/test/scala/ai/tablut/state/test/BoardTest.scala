@@ -24,7 +24,7 @@ class BoardTest extends WordSpec{
 				                 |["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
 				                 |],
 				                 |"turn":"WHITE"}""".stripMargin.replace("\n", "").trim
-				val action = Action(Player.WHITE, state.board(3)(4), state.board(3)(7))
+				val action = Action(Turn.WHITE, state.board(3)(4), state.board(3)(7))
 				val result = state.copy(board = state.board.apply(action))
 				assert(TablutSerializer.toJson(result) == expected)
 
@@ -41,8 +41,8 @@ class BoardTest extends WordSpec{
 				                 |["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
 				                 |],
 				                 |"turn":"BLACK"}""".stripMargin.replace("\n", "").trim
-				val a1 = Action(Player.BLACK, state.board(4)(7), state.board(0)(7))
-				val r1 = state.copy(board = state.board.apply(a1), turn = Player.BLACK)
+				val a1 = Action(Turn.BLACK, state.board(4)(7), state.board(0)(7))
+				val r1 = state.copy(board = state.board.apply(a1), turn = Turn.BLACK)
 				assert(TablutSerializer.toJson(r1) == e1)
 
 				val e2 = """
@@ -58,8 +58,8 @@ class BoardTest extends WordSpec{
 				           |["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
 				           |],
 				           |"turn":"BLACK"}""".stripMargin.replace("\n", "").trim
-				val a2 = Action(Player.BLACK, r1.board(0)(7), r1.board(0)(8))
-				val r2 = r1.copy(board = r1.board.apply(a2), turn = Player.BLACK)
+				val a2 = Action(Turn.BLACK, r1.board(0)(7), r1.board(0)(8))
+				val r2 = r1.copy(board = r1.board.apply(a2), turn = Turn.BLACK)
 				assert(TablutSerializer.toJson(r2) == e2)
 			}
 
@@ -93,7 +93,7 @@ class BoardTest extends WordSpec{
 				              |],
 				              |"turn":"WHITE"}""".stripMargin.replace("\n", "").trim
 
-				val action = Action(Player.WHITE, state.board(4)(6), state.board(3)(6))
+				val action = Action(Turn.WHITE, state.board(4)(6), state.board(3)(6))
 				val result = state.copy(board = startState.board.apply(action))
 				assert(TablutSerializer.toJson(result) == expected)
 			}

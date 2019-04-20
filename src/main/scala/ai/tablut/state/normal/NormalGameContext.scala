@@ -39,7 +39,7 @@ private object NormalGameContext extends GameContext{
 		) yield c).headOption
 
 		if (findKing.isEmpty){
-			if (state.turn == Player.WHITE)
+			if (state.turn == Turn.WHITE)
 				return false
 			else
 				return true
@@ -47,7 +47,7 @@ private object NormalGameContext extends GameContext{
 
 		val kingCell = findKing.get
 
-		if (state.turn == Player.WHITE){
+		if (state.turn == Turn.WHITE){
 			escapePoints.contains(kingCell.coords)
 		}else{
 			val (x,y) = kingCell.coords

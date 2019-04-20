@@ -20,7 +20,7 @@ object TablutSerializer {
 	def fromJson(json: String, factory: StateFactory): State = {
 		val obj = Json.parse(json)
 		val contentRows: Seq[Seq[CellContent]] = obj("board").as[Seq[Seq[String]]].map(row => row.map(value => CellContent.withName(value)))
-		val player = Player.withName(obj("turn").as[String])
+		val player = Turn.withName(obj("turn").as[String])
 
 		factory.createState(contentRows, player)
 	}

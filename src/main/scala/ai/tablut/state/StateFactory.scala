@@ -1,7 +1,7 @@
 package ai.tablut.state
 
 import ai.tablut.state.CellContent.CellContent
-import ai.tablut.state.Player.Player
+import ai.tablut.state.Turn.Player
 
 /**
   * Entry point to create state components

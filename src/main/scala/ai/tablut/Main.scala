@@ -22,9 +22,7 @@ object Main {
 
 		val client = if (clientType == "w") ConnFactory.createWhiteClient() else ConnFactory.createBlackClient()
 
-		val worstStateValue = 0.0
-		val bestStateValue = 1.0
-		val maxComputationSeconds = 3
+		val maxComputationSeconds = 30
 
 		val stateFactory = StateFacade.normalStateFactory()
 
@@ -35,7 +33,7 @@ object Main {
 		val initState = TablutSerializer.fromJson(jsonInitState, stateFactory)
 
 		val game = new TablutGame(stateFactory, initState)
-		val search = new IDABSimpleSearch(stateFactory.context, game, worstStateValue, bestStateValue, maxComputationSeconds)
+		val search = new IDABSimpleSearch(stateFactory.context, game, maxComputationSeconds)
 		//val search = new IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
 
 		var currState = initState

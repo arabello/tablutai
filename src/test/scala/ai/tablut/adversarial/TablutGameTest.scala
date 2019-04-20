@@ -1,7 +1,7 @@
 package ai.tablut.adversarial
 
 import ai.tablut.serialization.TablutSerializer
-import ai.tablut.state.{Action, Player, StateFacade}
+import ai.tablut.state.{Action, Turn, StateFacade}
 import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch
 import org.scalatest.{FlatSpec, WordSpec}
 import scala.collection.JavaConverters._
