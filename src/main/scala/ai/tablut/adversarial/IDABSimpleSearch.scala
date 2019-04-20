@@ -1,13 +1,11 @@
 package ai.tablut.adversarial
 
+import ai.tablut.adversarial.heuristic.{HFAdapter, HFFactory}
 import ai.tablut.state._
 import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch
 
-class IDABSimpleSearch(context: GameContext, game: TablutGame, utilMin: Double, utilMax: Double, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, utilMin, utilMax, time){
-	val heuristicFunction = new HeuristicFunction(context, utilMin, utilMax)
-
-	private def normalizeHeuristicValue(value: Double, min: Double, max: Double): Double =
-		value - min / max - min
+class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, 0, 1, time){
+	val hfunction = new HFFactory(context)
 
 	/**
 	  * Heuristic evaluation of non-terminal states
@@ -15,9 +13,14 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, utilMin: Double, 
 	  * @param player
 	  * @return
 	  */
-	override def eval(state: State, player: Player.Value): Double = player match {
-		case Player.WHITE => heuristicFunction.random
-		case Player.BLACK => heuristicFunction.blockEscapePoints(state)
+	// IMPORTANT: When overriding, first call the super implementation!
+	override def eval(state: State, player: Turn.Value): Double = {
+		super.eval(state, player)
+		val blockEscapePointsHeuristic = hfunction.createBlockEscapePoints
+		val hfAdapter = new HFAdapter(blockEscapePointsHeuristic, this.utilMin, this.utilMax)
+		val hfValue = hfAdapter.adjustEval(state, player)
+		getMetrics.set("hfValue", hfValue)
+		hfValue
 	}
 
 	/*{

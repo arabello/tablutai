@@ -22,7 +22,7 @@ object Main {
 
 		val client = if (clientType == "w") ConnFactory.createWhiteClient() else ConnFactory.createBlackClient()
 
-		val maxComputationSeconds = 30
+		val maxComputationSeconds = 1
 
 		val stateFactory = StateFacade.normalStateFactory()
 
