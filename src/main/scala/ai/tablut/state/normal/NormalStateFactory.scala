@@ -1,7 +1,7 @@
 package ai.tablut.state.normal
 
 import ai.tablut.state.CellContent._
-import ai.tablut.state.Turn.Player
+import ai.tablut.state.Turn.Turn
 import ai.tablut.state._
 
 object NormalStateFactory extends StateFactory{
@@ -20,7 +20,7 @@ object NormalStateFactory extends StateFactory{
 		Vector(EMPTY, EMPTY, EMPTY, BLACK, BLACK, BLACK, EMPTY, EMPTY, EMPTY)
 	), Turn.WHITE)
 
-	override def createState(grid: Seq[Seq[CellContent]], turn: Player): State = State(
+	override def createState(grid: Seq[Seq[CellContent]], turn: Turn): State = State(
 		Board(grid.length, grid.head.length,
 			(for(x <- grid.indices) yield (for(y <- grid.head.indices) yield createBoardCell((x,y), grid(x)(y)).get).toVector).toVector),
 		turn

@@ -4,10 +4,10 @@ import java.net.Socket
 import java.util.Properties
 
 import ai.tablut.serialization.TablutSerializer
-import ai.tablut.state.Turn.Player
+import ai.tablut.state.Turn.Turn
 import ai.tablut.state.{Action, Turn}
 
-private abstract class Client(configFile: FileInputStream, player: Player) extends CompetitionClient {
+private abstract class Client(configFile: FileInputStream, player: Turn) extends CompetitionClient {
 	lazy val props = {
 		val conf = new Properties()
 		conf.load(configFile)

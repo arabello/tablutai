@@ -105,6 +105,14 @@ class BoardTest extends WordSpec{
 				assert(cells.contains(state.board(2)(4)))
 				assert(cells.contains(state.board(3)(4)))
 			}
+
+			"clearCell with coordinates" in{
+				val initState = factory.createInitialState()
+				val newBoard = initState.board.clearCells((2,4),(3,4),(4,5))
+				assert(newBoard(2)(4).cellContent == CellContent.EMPTY)
+				assert(newBoard(3)(4).cellContent == CellContent.EMPTY)
+				assert(newBoard(4)(5).cellContent == CellContent.EMPTY)
+			}
 		}
 	}
 }

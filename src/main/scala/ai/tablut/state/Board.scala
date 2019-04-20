@@ -33,7 +33,7 @@ case class Board(rows: Int, cols: Int, grid: Seq[Seq[BoardCell]]) extends GameRu
 		allies.map(c => (action.to until c).drop(1).head).foldLeft[Board](afterMove)((acc, enemy) =>
 			if ((enemy.cellContent == BLACK && action.who.toCellContent == WHITE) ||
 				( (enemy.cellContent == WHITE || enemy.cellContent == KING) && action.who.toCellContent == BLACK))
-				acc.clearCell(enemy.coords)
+				acc.clearCells(enemy.coords)
 			else
 				acc
 		)
@@ -51,8 +51,8 @@ case class Board(rows: Int, cols: Int, grid: Seq[Seq[BoardCell]]) extends GameRu
 	  * @param coords
 	  * @return
 	  */
-	def clearCell(coords: (Int, Int)): Board = copy(grid = grid.map(row => row.map(cell => cell.coords match{
-		case (coords._1, coords._2) => cell.copy(cellContent = EMPTY)
+	def clearCells(coords: (Int, Int)*): Board = copy(grid = grid.map(row => row.map(cell => cell.coords match{
+		case coord => cell.copy(cellContent = if (coords.contains(coord)) EMPTY else cell.cellContent)
 		case _ => cell
 	})))
 

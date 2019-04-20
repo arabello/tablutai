@@ -1,7 +1,7 @@
 package ai.tablut.state
 
 import ai.tablut.state
-import ai.tablut.state.Turn.Player
+import ai.tablut.state.Turn.Turn
 import ai.tablut.state.implicits._
 
 /**
@@ -11,7 +11,7 @@ import ai.tablut.state.implicits._
   * @param from
   * @param to
   */
-case class Action(who: Player, from: BoardCell, to: BoardCell) extends GameRulesComplied with Legal {
+case class Action(who: Turn, from: BoardCell, to: BoardCell) extends GameRulesComplied with Legal {
 
 	/**
 	  * Check if game rules complied and legal within the current game rules and board
