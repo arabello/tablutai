@@ -31,12 +31,7 @@ private object NormalGameContext extends GameContext{
 	)
 
 	override def isWinner(state: State): Boolean = {
-		val findKing = (for(
-			x <- state.board.grid.indices;
-			y <- state.board.grid.head.indices;
-			c = state.board.grid(x)(y)
-			if c.cellContent == KING
-		) yield c).headOption
+		val findKing = state.board.getCellsWithFilter(c => c.cellContent == KING).headOption
 
 		if (findKing.isEmpty){
 			if (state.turn == Turn.WHITE)

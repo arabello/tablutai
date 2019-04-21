@@ -62,6 +62,8 @@ case class Board(rows: Int, cols: Int, grid: Seq[Seq[BoardCell]]) extends GameRu
 		copy(grid = newGrid)
 	}
 
+	def getCellsWithFilter(filter: BoardCell => Boolean): Seq[BoardCell] = grid.flatMap(row => row.filter(filter))
+
 	override def isGameRulesComplied(gameRules: GameContext): Boolean = ???
 
 	override def toString: String = {
