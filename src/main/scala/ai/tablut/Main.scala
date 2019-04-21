@@ -45,7 +45,7 @@ object Main {
 		while(true) {
 			val nextAction = search.makeDecision(currState)
 			val metrics = search.getMetrics
-			println(metrics)
+			println(s"$metrics $nextAction")
 			client.writeAction(nextAction)
 
 			client.readState() // my state from server

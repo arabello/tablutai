@@ -18,7 +18,8 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extend
 
 		val heuristic = new HeuristicBuilder()
     		.adaptDomain(this.utilMin, this.utilMax)
-			.add(NormalGameHeuristicFactory.createBlockEscapePoints(), 9)
+    		.add(NormalGameHeuristicFactory.createKingAssasination(), 10)
+			.add(NormalGameHeuristicFactory.createBlockEscapePoints(), 5)
     		.add(NormalGameHeuristicFactory.createPawsMajority(), 1)
     		.build
 

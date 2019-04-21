@@ -25,6 +25,6 @@ private class HFPawsMajority(context: GameContext) extends HeuristicFunction {
 			case _ => return 0.5
 		}
 
-		(delta - min) / (max - min).toDouble
+		Normalizer.createNormalizer(min, max)(delta)
 	}
 }
