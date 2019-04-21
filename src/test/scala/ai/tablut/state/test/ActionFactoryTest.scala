@@ -1,13 +1,14 @@
 package ai.tablut.state.test
 
-import ai.tablut.state.{Action, StateFacade}
+import ai.tablut.state.{Action, ActionFactory, StateFacade}
 import org.scalatest.WordSpec
 
-class StateTest extends WordSpec{
-	"State" when {
+class ActionFactoryTest extends WordSpec{
+	"ActionFactory" when {
 		"using normal game rules" should {
 			val factory = StateFacade.normalStateFactory()
 			val initState = factory.createInitialState()
+			val actionsFactory = new ActionFactory(initState, factory.context)
 
 			"list all initial actions for WHITE" in {
 				val b = initState.board
@@ -39,7 +40,7 @@ class StateTest extends WordSpec{
 					Action(p, b(4)(6), b(5)(6)), Action(p, b(4)(6), b(6)(6)), Action(p, b(4)(6), b(7)(6)), Action(p, b(4)(6), b(8)(6)),
 				)
 
-				val actions = initState.allActions(factory.context)
+				val actions = actionsFactory.allActions
 				assert(actions.toSet == expected)
 			}
 		}

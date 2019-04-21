@@ -26,7 +26,10 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 
 	override def getPlayers: Array[Turn.Value] = Turn.values.toArray
 
-	override def getActions(state: State): util.List[Action] = state.allActions(stateFactory.context).asJava
+	override def getActions(state: State): util.List[Action] = {
+		val factory = new ActionFactory(state, stateFactory.context)
+		factory.allActions.asJava
+	}
 
 	/**
 	  * A utility function (also called an objective function or
