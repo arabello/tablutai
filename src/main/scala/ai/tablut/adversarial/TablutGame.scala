@@ -26,23 +26,7 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 
 	override def getPlayers: Array[Turn.Value] = Turn.values.toArray
 
-	override def getActions(state: State): util.List[Action] =
-		state.board.grid.flatMap( row => row
-				.filter(c => c.cellContent match {
-					case CellContent.WHITE | CellContent.KING => state.turn == Turn.WHITE
-					case CellContent.BLACK => state.turn == Turn.BLACK
-					case _ => false
-				}).flatMap(cell =>
-					(for (x <- 0 until state.board.rows;
-					      a = Action(state.turn, cell, state.board.grid(x)(cell.coords._2))
-					      if a.validate(stateFactory.context, state.board))
-						yield a)
-						++
-					(for (y <- 0 until state.board.cols;
-					      a = Action(state.turn, cell, state.board.grid(cell.coords._1)(y))
-					      if a.validate(stateFactory.context, state.board))
-						yield a))
-		).asJava
+	override def getActions(state: State): util.List[Action] = state.allActions(stateFactory.context).asJava
 
 	/**
 	  * A utility function (also called an objective function or

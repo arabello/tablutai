@@ -15,7 +15,7 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extend
 	// IMPORTANT: When overriding, first call the super implementation!
 	override def eval(state: State, player: Turn.Value): Double = {
 		super.eval(state, player)
-		val heuristic = NormalGameHeuristicFactory.createBlockEscapePoints()
+		val heuristic = NormalGameHeuristicFactory.createPawsMajority()
 		val adapter = new HFAdapter(heuristic, this.utilMin, this.utilMax)
 		val value = adapter.adjustEval(state, player)
 		getMetrics.set("hfValue", value)
