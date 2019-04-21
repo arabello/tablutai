@@ -8,21 +8,21 @@ class HeuristicBuilder {
 	private var utilMin = 0.toDouble
 	private var utilMax = 1.toDouble
 
+	object avg extends HeuristicFunction{
+		override def eval(state: State, player: Turn): Double =
+			functions.foldLeft[Double](0)((acc, f) => acc + (f._1.eval(state, player) * f._2)) / functions.foldLeft[Double](0)((acc, f) => acc + f._2)
+	}
+
 	def add(heuristicFunction: HeuristicFunction, weight: Int): HeuristicBuilder = {
 		functions ++= Map(heuristicFunction -> weight)
 		this
 	}
 
-	def setDomain(utilMin: Double, utilMax: Double): HeuristicBuilder = {
+	def adaptDomain(utilMin: Double, utilMax: Double): HeuristicBuilder = {
 		this.utilMin = utilMin
 		this.utilMax = utilMax
 		this
 	}
 
-	def build = (state: State, player: Turn) =>  {
-		val fadjusted = functions.map{ case (f, w) =>
-			new HFAdapter(f, utilMin, utilMax) -> w
-		}
-		fadjusted.foldLeft[Double](0)((acc, f) => acc + (f._1.adjustEval(state, player) * f._2)) / functions.foldLeft[Double](0)((acc, f) => acc + f._2)
-	}
+	def build: (State, Turn) => Double = (state: State, player: Turn) => new HFAdapter(avg, utilMin, utilMax).adjustEval(state, player)
 }

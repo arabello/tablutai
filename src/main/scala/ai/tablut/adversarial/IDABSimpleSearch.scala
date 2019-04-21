@@ -17,8 +17,9 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extend
 		super.eval(state, player)
 
 		val heuristic = new HeuristicBuilder()
-    		.setDomain(this.utilMin, this.utilMax)
-    		.add(NormalGameHeuristicFactory.createPawsMajority(), 9)
+    		.adaptDomain(this.utilMin, this.utilMax)
+			.add(NormalGameHeuristicFactory.createBlockEscapePoints(), 9)
+    		.add(NormalGameHeuristicFactory.createPawsMajority(), 1)
     		.build
 
 		val hValue = heuristic(state, player)
