@@ -1,10 +1,8 @@
 package ai.tablut.connectivity
 
-import java.io.FileInputStream
+import java.util.Properties
 
-object ConnFactory {
-	val configFile = new FileInputStream("config.properties")
-
-	def createWhiteClient(): CompetitionClient = new WhiteClient(configFile)
-	def createBlackClient(): CompetitionClient = new BlackClient(configFile)
+class ConnFactory(props: Properties) {
+	def createWhiteClient(): CompetitionClient = new WhiteClient(props)
+	def createBlackClient(): CompetitionClient = new BlackClient(props)
 }

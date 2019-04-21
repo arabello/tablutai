@@ -1,5 +1,5 @@
 package ai.tablut.connectivity
-import java.io.{DataInputStream, DataOutputStream, FileInputStream}
+import java.io.{DataInputStream, DataOutputStream}
 import java.net.Socket
 import java.util.Properties
 
@@ -7,15 +7,10 @@ import ai.tablut.serialization.TablutSerializer
 import ai.tablut.state.Turn.Turn
 import ai.tablut.state.{Action, Turn}
 
-private abstract class Client(configFile: FileInputStream, player: Turn) extends CompetitionClient {
-	lazy val props = {
-		val conf = new Properties()
-		conf.load(configFile)
-		conf
-	}
-	val teamName = props.getProperty("TEAM_NAME")
-	val serverIp = props.getProperty("SERVER_IP")
-	val port = player match {
+private abstract class Client(props: Properties, player: Turn) extends CompetitionClient {
+	val teamName: String = props.getProperty("TEAM_NAME")
+	val serverIp: String = props.getProperty("SERVER_IP")
+	val port: Int = player match {
 		case Turn.WHITE => props.getProperty("WHITE_PORT").toInt
 		case Turn.BLACK => props.getProperty("BLACK_PORT").toInt
 	}

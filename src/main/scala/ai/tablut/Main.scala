@@ -1,5 +1,8 @@
 package ai.tablut
 
+import java.io.FileInputStream
+import java.util.Properties
+
 import ai.tablut.adversarial.{IDABSimpleSearch, TablutGame}
 import ai.tablut.connectivity.ConnFactory
 import ai.tablut.serialization.TablutSerializer
@@ -20,11 +23,13 @@ object Main {
 				System.exit(1)
 		}
 
-		val client = if (clientType == "w") ConnFactory.createWhiteClient() else ConnFactory.createBlackClient()
+		val conf = new Properties()
+		conf.load(new FileInputStream("config.properties"))
 
-		val maxComputationSeconds = 1
-
+		val connFactory = new ConnFactory(conf)
+		val client = if (clientType == "w") connFactory.createWhiteClient() else connFactory.createBlackClient()
 		val stateFactory = StateFacade.normalStateFactory()
+		val maxComputationTime = conf.getProperty("MAX_COMPUTATION_TIME", "57").toInt
 
 		client.writeTeamName()
 		if (clientType == "b") // bad protocol: black player have to read twice, because the first time the init state is given before the white move
@@ -33,7 +38,7 @@ object Main {
 		val initState = TablutSerializer.fromJson(jsonInitState, stateFactory)
 
 		val game = new TablutGame(stateFactory, initState)
-		val search = new IDABSimpleSearch(stateFactory.context, game, maxComputationSeconds)
+		val search = new IDABSimpleSearch(stateFactory.context, game, maxComputationTime)
 		//val search = new IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
 
 		var currState = initState
