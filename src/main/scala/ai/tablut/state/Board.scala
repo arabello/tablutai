@@ -51,10 +51,16 @@ case class Board(rows: Int, cols: Int, grid: Seq[Seq[BoardCell]]) extends GameRu
 	  * @param coords
 	  * @return
 	  */
-	def clearCells(coords: (Int, Int)*): Board = copy(grid = grid.map(row => row.map(cell => cell.coords match{
-		case coord => cell.copy(cellContent = if (coords.contains(coord)) EMPTY else cell.cellContent)
-		case _ => cell
-	})))
+	def clearCells(coords: (Int, Int)*): Board = {
+		val newGrid = grid.map(row => row.map( cell =>
+			if (coords.contains(cell.coords))
+				cell.copy(cellContent = EMPTY)
+			else
+				cell
+		))
+
+		copy(grid = newGrid)
+	}
 
 	override def isGameRulesComplied(gameRules: GameContext): Boolean = ???
 
