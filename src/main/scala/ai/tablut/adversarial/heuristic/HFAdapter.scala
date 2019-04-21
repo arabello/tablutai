@@ -3,7 +3,7 @@ package ai.tablut.adversarial.heuristic
 import ai.tablut.state.Turn.Turn
 import ai.tablut.state.State
 
-class HFAdapter(hf: HeuristicFunction, utilMin: Double, utilMax: Double) {
+private class HFAdapter(hf: HeuristicFunction, utilMin: Double, utilMax: Double) {
 	private val epsilon = 0.0000001
 
 	private def excludeBoundaries(value: Double): Double = if (value == utilMin) value + epsilon else if (value == utilMax) value - epsilon else value

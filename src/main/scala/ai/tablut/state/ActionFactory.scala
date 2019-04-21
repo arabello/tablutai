@@ -45,4 +45,34 @@ class ActionFactory(state: State, gameContext: GameContext) {
 
 		Way.values.foldLeft[Seq[Action]](Seq())((acc, way) => acc ++ actions(cells, way))
 	}
+
+	/*
+		val cells = state.board.getCells.filter(c => c.cellContent match {
+			case CellContent.WHITE | CellContent.KING => state.turn == Turn.WHITE
+			case CellContent.BLACK => state.turn == Turn.BLACK
+			case _ => false
+		})
+
+		Way.values.foldLeft[Seq[Action]](Seq())((acc, way) => acc ++ actions(cells, way))
+	 */
+
+
+	/*
+		val cells = state.board.getCells.filter(c => c.cellContent match {
+			case CellContent.WHITE | CellContent.KING => state.turn == Turn.WHITE
+			case CellContent.BLACK => state.turn == Turn.BLACK
+			case _ => false
+		})
+
+		val promises = for (w <- Way.values) yield w -> Promise[Seq[Action]]()
+		val futures = for (p <- promises) yield p._2.future
+
+		promises.foreach { case (w, p) =>
+			Future{
+				p success actions(cells, w)
+			}
+		}
+
+		futures.foldLeft[Seq[Action]](Vector())((acc, f) => acc ++ Await.result(f, 500 millis))
+	 */
 }
