@@ -2,7 +2,7 @@ package ai.tablut.adversarial.heuristic.test
 
 import ai.tablut.adversarial.heuristic.NormalGameHeuristicFactory
 import ai.tablut.serialization.TablutSerializer
-import ai.tablut.state.{StateFacade, Turn}
+import ai.tablut.state.{CellContent, StateFacade, Turn}
 import ai.tablut.state.Turn._
 import org.scalatest.WordSpec
 
@@ -87,8 +87,20 @@ class HFBlockEscapePoints extends WordSpec{
 				assert(heuristic.eval(block4, BLACK) == 1f)
 			}
 
-			"increase for WHITE player when KING is over blocker cells" in{
+			"for WHITE player" in{
+				val withKing = initState.copy(board = initState.board.transform(Map(
+					(4,4) -> CellContent.EMPTY,
+					(2,2) -> CellContent.KING
+				)))
 
+				assert(heuristic.eval(withKing, Turn.WHITE) == 1)
+
+				val withKingAndBlack = initState.copy(board = withKing.board.transform(Map(
+					(8, 3) -> CellContent.EMPTY,
+					(6, 2) -> CellContent.BLACK
+				)))
+
+				assert(heuristic.eval(withKing, Turn.WHITE) > heuristic.eval(withKingAndBlack, Turn.WHITE))
 			}
 		}
 	}
