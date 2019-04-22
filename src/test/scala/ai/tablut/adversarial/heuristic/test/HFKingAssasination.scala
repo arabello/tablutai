@@ -7,7 +7,7 @@ import ai.tablut.state.Turn.{BLACK, DRAW, WHITE}
 import org.scalatest.WordSpec
 
 class HFKingAssasination extends WordSpec{
-	"HFPawsMajority" when {
+	"HFKingAssasination" when {
 		"using normal game rules" should {
 			val factory = StateFacade.normalStateFactory()
 			val heuristic = NormalGameHeuristicFactory.createKingAssasination()

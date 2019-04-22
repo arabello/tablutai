@@ -45,6 +45,13 @@ case class Board(rows: Int, cols: Int, grid: Seq[Seq[BoardCell]]) extends GameRu
 	  */
 	def getCells: Seq[BoardCell] = grid.flatMap(row => row.map(c => c))
 
+
+	/**
+	  * List of filtered cells flatten via row than column
+	  * @return
+	  */
+	def getCellsWithFilter(filter: BoardCell => Boolean): Seq[BoardCell] = grid.flatMap(row => row.filter(filter))
+
 	/**
 	  * Synthesize a new board with [[ai.tablut.state.BoardCell#cellContent]] equals to [[ai.tablut.state.CellContent#EMPTY]]
 	  * for the given coordinates
@@ -62,7 +69,21 @@ case class Board(rows: Int, cols: Int, grid: Seq[Seq[BoardCell]]) extends GameRu
 		copy(grid = newGrid)
 	}
 
-	def getCellsWithFilter(filter: BoardCell => Boolean): Seq[BoardCell] = grid.flatMap(row => row.filter(filter))
+	/**
+	  * Synthesize a new board with [[ai.tablut.state.BoardCell#cellContent]] equals to the given content
+	  * for the given coordinates.
+	  * @param coords
+	  * @param content
+	  * @return
+	  */
+	def transform(coordsAndConent: Map[(Int, Int), CellContent]): Board = {
+		copy( grid = grid.map(row => row.map{cell =>
+			if (!coordsAndConent.contains(cell.coords))
+				cell
+			else
+				cell.copy(cellContent = coordsAndConent(cell.coords))
+		}))
+	}
 
 	override def isGameRulesComplied(gameRules: GameContext): Boolean = ???
 

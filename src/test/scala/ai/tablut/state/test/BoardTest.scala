@@ -113,6 +113,18 @@ class BoardTest extends WordSpec{
 				assert(newBoard(3)(4).cellContent == CellContent.EMPTY)
 				assert(newBoard(4)(5).cellContent == CellContent.EMPTY)
 			}
+
+			"transform with coordinates and content" in {
+				val initState = factory.createInitialState()
+				val newBoard = initState.board.transform(Map(
+					(4,4) -> CellContent.EMPTY,
+					(2,4) -> CellContent.KING
+					)
+				)
+
+				assert(newBoard(4)(4).cellContent == CellContent.EMPTY)
+				assert(newBoard(2)(4).cellContent == CellContent.KING)
+			}
 		}
 	}
 }
