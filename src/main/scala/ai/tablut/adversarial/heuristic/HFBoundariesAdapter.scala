@@ -3,12 +3,12 @@ package ai.tablut.adversarial.heuristic
 import ai.tablut.state.Turn.Turn
 import ai.tablut.state.State
 
-private class HFAdapter(hf: HeuristicFunction, utilMin: Double, utilMax: Double) {
+class HFBoundariesAdapter(hf: HeuristicFunction, utilMin: Double, utilMax: Double) extends HeuristicFunction {
 	private val epsilon = 0.0000001
 
 	private def excludeBoundaries(value: Double): Double = if (value == utilMin) value + epsilon else if (value == utilMax) value - epsilon else value
 
-	def adjustEval(state: State, player: Turn): Double = {
+	override def eval(state: State, player: Turn): Double = {
 		val output = utilMin + ((utilMax - utilMin) / (1f - 0f)) * (hf.eval(state, player) - 0f)
 		excludeBoundaries(output)
 	}

@@ -24,5 +24,5 @@ class HeuristicBuilder {
 		this
 	}
 
-	def build: (State, Turn) => Double = (state: State, player: Turn) => new HFAdapter(avg, utilMin, utilMax).adjustEval(state, player)
+	def build: (State, Turn) => Double = (state: State, player: Turn) => new HFBoundariesAdapter(avg, utilMin, utilMax).eval(state, player)
 }
