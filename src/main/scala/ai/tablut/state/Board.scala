@@ -2,7 +2,7 @@ package ai.tablut.state
 import ai.tablut.state.CellContent._
 import ai.tablut.state.implicits._
 
-case class Board(rows: Int, cols: Int, grid: Seq[Seq[BoardCell]]) extends GameRulesComplied {
+case class Board(rows: Int, cols: Int, grid: Vector[Vector[BoardCell]]) extends GameRulesComplied {
 
 	def apply(coord: (Int, Int)): BoardCell = grid(coord._1)(coord._2)
 

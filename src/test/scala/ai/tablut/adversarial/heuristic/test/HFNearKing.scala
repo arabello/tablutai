@@ -6,7 +6,7 @@ import ai.tablut.state.StateFacade
 import ai.tablut.state.Turn.{BLACK, DRAW, WHITE}
 import org.scalatest.WordSpec
 
-class HFKingAssasination extends WordSpec{
+class HFNearKing extends WordSpec{
 	"HFKingAssasination" when {
 		"using normal game rules" should {
 			val factory = StateFacade.normalStateFactory()

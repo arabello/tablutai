@@ -12,5 +12,5 @@ object NormalGameHeuristicFactory{
 
 	def createPawsMajority(): HeuristicFunction = new HFPawsMajority(context)
 
-	def createKingAssasination(): HeuristicFunction = new HFKingAssasination(stateFactory)
+	def createKingAssasination(): HeuristicFunction = new HFNearKing(stateFactory)
 }
