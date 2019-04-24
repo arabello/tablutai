@@ -4,9 +4,8 @@ import java.util
 
 import aima.core.search.adversarial.{AdversarialSearch, Game}
 import aima.core.search.framework.Metrics
-import scala.collection.JavaConverters._
 
-import scala.collection.mutable
+import scala.collection.JavaConverters._
 
 
 /**
@@ -52,9 +51,8 @@ object IDABSearch {
 	/**
 	  * Orders actions by utility.
 	  */
-	private class ActionStore[A] {
-		var actions = List[A]()
-		var utilValues = List[Double]()
+	private class OrderedActions[A] {
+		private var data = List[(A, Double)]()
 
 		private def insert[T](list: List[T], i: Int, value: T): List[T] = list match {
 			case head :: tail if i > 0 => head :: insert(tail, i-1, value)
@@ -63,16 +61,16 @@ object IDABSearch {
 
 		def add(action: A, utilValue: Double): Unit = {
 			var idx = 0
-			while ( {
-				idx < actions.size && utilValue <= utilValues(idx)
-			}) {
-				idx += 1; idx - 1
-			}
-			actions = insert(actions, idx, action)
-			utilValues = insert(utilValues, idx, utilValue)
+			while (idx < data.size && utilValue <= data(idx)._2)
+				idx += 1
+
+			data = insert(data, idx, (action, utilValue))
 		}
 
-		def size = actions.size
+		def size: Int = data.size
+
+		lazy val actions: List[A] = data.map(e => e._1)
+		lazy val utilValues: List[Double] = data.map(e => e._2)
 	}
 
 }
@@ -99,23 +97,38 @@ class IDABSearch[S, A, P](var game: Game[S, A, P], var utilMin: Double, var util
 	  */
 	override def makeDecision(state: S): A = {
 		metrics = new Metrics
+
 		val player = game.getPlayer(state)
 		var results = orderActions(state, game.getActions(state), player, 0)
+
 		timer.start()
 		currDepthLimit = 0
 		do {
-			incrementDepthLimit()
+			currDepthLimit += 1
 
 			heuristicEvaluationUsed = false
+			val now = System.currentTimeMillis()
 
-			val newResults = new IDABSearch.ActionStore[A]
+			val newResults = new IDABSearch.OrderedActions[A]
 
-			for (action <- results) {
+			for (action <- results) { // Constant relative to depth
 				val value = minValue(game.getResult(state, action), player, Double.NegativeInfinity, Double.PositiveInfinity, 1)
 				if (timer.timeOutOccurred)
 					return results(0)
 				newResults.add(action, value)
 			}
+			/*
+			val actions = mutable.HashMap[A, Double]()
+			for(action <- results;
+				value = minValue(game.getResult(state, action), player, Double.NegativeInfinity, Double.PositiveInfinity, 1)
+			) if (timer.timeOutOccurred)
+				return results(0)
+			else actions.put(action, value)
+
+			val newResults = actions.toVector.sortWith((first, second) => first._2 < second._2)
+
+			*/
+			println(s"${System.currentTimeMillis() - now}")
 
 			if (newResults.size > 0) {
 				results = newResults.actions
@@ -152,7 +165,8 @@ class IDABSearch[S, A, P](var game: Game[S, A, P], var utilMin: Double, var util
 
 	def minValue(state: S, player: P, alpha: Double, inBeta: Double, depth: Int): Double = {
 		updateMetrics(depth)
-		if (game.isTerminal(state) || depth >= currDepthLimit || timer.timeOutOccurred) eval(state, player)
+		if (game.isTerminal(state) || depth >= currDepthLimit || timer.timeOutOccurred)
+			eval(state, player)
 		else {
 			var value = Double.PositiveInfinity
 			var beta = inBeta
@@ -175,13 +189,6 @@ class IDABSearch[S, A, P](var game: Game[S, A, P], var utilMin: Double, var util
 	  */
 	override def getMetrics: Metrics = metrics
 
-
-	/**
-	  * Primitive operation which is called at the beginning of one depth limited
-	  * search step. This implementation increments the current depth limit by
-	  * one.
-	  */
-	protected def incrementDepthLimit(): Unit = currDepthLimit += 1
 
 	/**
 	  * Primitive operation which is used to stop iterative deepening search in
@@ -217,5 +224,5 @@ class IDABSearch[S, A, P](var game: Game[S, A, P], var utilMin: Double, var util
 	  * Primitive operation for action ordering. This implementation preserves
 	  * the original order (provided by the game).
 	  */
-	def orderActions(state: S, actions: util.List[A], player: P, depth: Int): List[A] = actions.asScala.toList
+	protected def orderActions(state: S, actions: util.List[A], player: P, depth: Int): List[A] = actions.asScala.toList
 }
