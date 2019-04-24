@@ -6,6 +6,7 @@ import ai.tablut.adversarial.heuristic.{HeuristicBuilder, HeuristicFunction, Nor
 import ai.tablut.state.{Turn, _}
 import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch
 import scala.collection.JavaConverters._
+import ai.tablut.state.implicits._
 
 class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, 0, 1, time){
 
@@ -26,9 +27,9 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extend
 		super.eval(state, player)
 
 		val heuristic = hBuilder
-    		.add(hPawsMajority, 6)
+    		.add(hPawsMajority, 4)
 			.add(hBlockEscapePoints, 4)
-    		.add(hKingAssasination, 2)
+    		.add(hKingAssasination, 4)
     		.build
 
 		val hValue = heuristic(state, player)
@@ -36,19 +37,15 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extend
 		hValue
 	}
 
-	override def orderActions(state: State, actions: util.List[Action], player: Turn.Value, depth: Int): util.List[Action] = {
-		val res = actions.asScala.sortWith{(a1, a2) =>
-			val (fromX1, fromY1) = a1.from.coords
-			val (fromX2, fromY2) = a2.from.coords
-			val (toX1, toY1) = a1.to.coords
-			val (toX2, toY2) = a2.to.coords
+	override def orderActions(state: State, actions: util.List[Action], player: Turn.Value, depth: Int): util.List[Action] = player match {
+		case Turn.WHITE => actions.asScala.sortWith((a1, a2) => a2.who == CellContent.KING).asJava
+		case Turn.BLACK =>
+			val king = state.findKing
+			if (king.isEmpty)
+				return actions
 
-			val distance1 = math.abs(if (fromX1 == toX1) fromY1 - toY1 else fromX1 - toX1)
-			val distance2 = math.abs(if (fromX2 == toX2) fromY2 - toY2 else fromX2 - toX2)
-
-			distance1 > distance2
-		}
-		println(s"${res.head.distance} - ${res.last.distance}")
-		res.asJava
+			val kingSurrounding = king.get.surroundingAt(1)(state.board).filter(c => c.isDefined && c.get.cellContent == CellContent.EMPTY).map(c => c.get)
+			actions.asScala.sortWith((a1, a2) => kingSurrounding.contains(a2.to)).asJava
 	}
+
 }

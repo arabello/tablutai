@@ -9,7 +9,7 @@ class HFNearKing(stateFactory: StateFactory) extends HeuristicFunction {
 		scala.math.sqrt(math.pow(king._1 - black._1, 2) + math.pow(king._2 - black._2, 2))
 
 	override def eval(state: State, player: Turn): Double = {
-		val findKing = state.board.getCellsWithFilter(c => c.cellContent == KING).headOption
+		val findKing = state.findKing
 		if (findKing.isEmpty)
 			return 1
 		val king = findKing.get
