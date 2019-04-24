@@ -2,9 +2,8 @@ package ai.tablut.adversarial
 
 import ai.tablut.adversarial.heuristic.{HeuristicBuilder, HeuristicFunction, NormalGameHeuristicFactory}
 import ai.tablut.state._
-import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch
 
-class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, 0, 1, time){
+class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extends IDABSearch(game, 0, 1, time){
 
 	val hKingAssasination: HeuristicFunction = NormalGameHeuristicFactory.createKingAssasination()
 	val hBlockEscapePoints: HeuristicFunction = NormalGameHeuristicFactory.createBlockEscapePoints()
