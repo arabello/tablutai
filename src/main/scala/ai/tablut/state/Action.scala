@@ -1,6 +1,5 @@
 package ai.tablut.state
 
-import ai.tablut.state
 import ai.tablut.state.Turn.Turn
 import ai.tablut.state.implicits._
 
@@ -12,6 +11,13 @@ import ai.tablut.state.implicits._
   * @param to
   */
 case class Action(who: Turn, from: BoardCell, to: BoardCell) extends GameRulesComplied with Legal {
+
+	def distance: Int = {
+		val (fromX, fromY) = from.coords
+		val (toX, toY) = to.coords
+
+		math.abs(if (fromX == toX) fromY - toY else fromX - toX)
+	}
 
 	/**
 	  * Check if game rules complied and legal within the current game rules and board

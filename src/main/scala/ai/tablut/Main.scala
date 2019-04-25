@@ -39,13 +39,14 @@ object Main {
 
 		val game = new TablutGame(stateFactory, initState)
 		val search = new IDABSimpleSearch(stateFactory.context, game, maxComputationTime)
-		//val search = new IDABSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
+		search.setLogEnabled(true)
+		//val search = new IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
 
 		var currState = initState
 		while(true) {
 			val nextAction = search.makeDecision(currState)
 			val metrics = search.getMetrics
-			println(s"$metrics $nextAction")
+			println(s"$metrics")
 			client.writeAction(nextAction)
 
 			client.readState() // my state from server

@@ -1,9 +1,14 @@
 package ai.tablut.adversarial
 
-import ai.tablut.adversarial.heuristic.{HeuristicBuilder, HeuristicFunction, NormalGameHeuristicFactory}
-import ai.tablut.state._
+import java.util
 
-class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extends IDABSearch(game, 0, 1, time){
+import ai.tablut.adversarial.heuristic.{HeuristicBuilder, HeuristicFunction, NormalGameHeuristicFactory}
+import ai.tablut.state.{Turn, _}
+import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch
+import scala.collection.JavaConverters._
+import ai.tablut.state.implicits._
+
+class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, 0, 1, time){
 
 	val hKingAssasination: HeuristicFunction = NormalGameHeuristicFactory.createKingAssasination()
 	val hBlockEscapePoints: HeuristicFunction = NormalGameHeuristicFactory.createBlockEscapePoints()
@@ -22,14 +27,25 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extend
 		super.eval(state, player)
 
 		val heuristic = hBuilder
-    		.add(hPawsMajority, 6)
+    		.add(hPawsMajority, 4)
 			.add(hBlockEscapePoints, 4)
-    		.add(hKingAssasination, 2)
+    		.add(hKingAssasination, 4)
     		.build
 
 		val hValue = heuristic(state, player)
 		getMetrics.set("hfValue", hValue)
 		hValue
+	}
+
+	override def orderActions(state: State, actions: util.List[Action], player: Turn.Value, depth: Int): util.List[Action] = player match {
+		case Turn.WHITE => actions.asScala.sortWith((a1, a2) => a2.who == CellContent.KING).asJava
+		case Turn.BLACK =>
+			val king = state.findKing
+			if (king.isEmpty)
+				return actions
+
+			val kingSurrounding = king.get.surroundingAt(1)(state.board).filter(c => c.isDefined && c.get.cellContent == CellContent.EMPTY).map(c => c.get)
+			actions.asScala.sortWith((a1, a2) => kingSurrounding.contains(a2.to)).asJava
 	}
 
 }
