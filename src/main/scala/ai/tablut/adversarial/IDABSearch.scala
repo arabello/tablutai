@@ -99,7 +99,7 @@ class IDABSearch[S, A, P](var game: Game[S, A, P], var utilMin: Double, var util
 		metrics = new Metrics
 
 		val player = game.getPlayer(state)
-		var results = orderActions(state, game.getActions(state), player, 0)
+		var orderedActions = orderActions(state, game.getActions(state), player, 0)
 
 		timer.start()
 		currDepthLimit = 0
@@ -110,12 +110,14 @@ class IDABSearch[S, A, P](var game: Game[S, A, P], var utilMin: Double, var util
 
 			val newResults = new IDABSearch.OrderedActions[A]
 
-			for (action <- results) { // Constant relative to depth
+			// TODO("Simplify OrderedAction adding and add sequential collection for first depth")
+			orderedActions.toParArray.map{action =>
 				val value = minValue(game.getResult(state, action), player, Double.NegativeInfinity, Double.PositiveInfinity, 1)
 				if (timer.timeOutOccurred)
-					return results(0)
-				newResults.add(action, value)
-			}
+					return orderedActions.head
+				(action, value)
+			}.seq.foreach(t => newResults.add(t._1, t._2))
+
 			/*
 			val actions = mutable.HashMap[A, Double]()
 			for(action <- results;
@@ -129,19 +131,19 @@ class IDABSearch[S, A, P](var game: Game[S, A, P], var utilMin: Double, var util
 			*/
 
 			if (newResults.size > 0) {
-				results = newResults.actions
+				orderedActions = newResults.actions
 
 				if (!timer.timeOutOccurred)
 					if (hasSafeWinner(newResults.utilValues.head))
-						return results(0)
+						return orderedActions(0)
 					else
 					if (newResults.size > 1 && isSignificantlyBetter(newResults.utilValues.head, newResults.utilValues(1)))
-						return results(0)
+						return orderedActions(0)
 			}
 
 		}while (!timer.timeOutOccurred && heuristicEvaluationUsed)
 
-		results(0)
+		orderedActions(0)
 	}
 
 	// returns an utility value
