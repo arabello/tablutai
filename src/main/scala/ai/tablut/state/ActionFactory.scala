@@ -10,26 +10,26 @@ object Way extends Enumeration {
 private class ActionFactory(state: State, gameContext: GameContext) {
 
 	private def upActions(cells: Seq[BoardCell]): Seq[Action] =cells.flatMap(c =>
-		for ( x <- (c.coords._1 - 1 to 0 by -1).takeWhile(x => state(x)(c.coords._2).cellContent == CellContent.EMPTY);
-		      a = Action(state.turn, c, state(x)(c.coords._2))
+		for ( x <- (c.coords._1 - 1 to 0 by -1).takeWhile(x => state(x)(c.coords._2).exists(c => c.cellContent == CellContent.EMPTY));
+		      a = Action(state.turn, c, state(x)(c.coords._2).get)
 		      if a.validate(gameContext, state)
 		) yield a)
 
 	private def downActions(cells: Seq[BoardCell]): Seq[Action] = cells.flatMap(c =>
-		for ( x <- (c.coords._1 +1 until state.rows).takeWhile(x => state(x)(c.coords._2).cellContent == CellContent.EMPTY);
-			a = Action(state.turn, c, state(x)(c.coords._2))
+		for ( x <- (c.coords._1 +1 until state.rows).takeWhile(x => state(x)(c.coords._2).exists(c => c.cellContent == CellContent.EMPTY));
+			a = Action(state.turn, c, state(x)(c.coords._2).get)
 			if a.validate(gameContext, state)
 		) yield a)
 
 	private def rightActions(cells: Seq[BoardCell]): Seq[Action] = cells.flatMap(c =>
-		for (y <- (c.coords._2 +1  until state.cols).takeWhile(y => state(c.coords._1)(y).cellContent == CellContent.EMPTY);
-		     a = Action(state.turn, c, state(c.coords._1)(y))
+		for (y <- (c.coords._2 +1  until state.cols).takeWhile(y => state(c.coords._1)(y).exists(c => c.cellContent == CellContent.EMPTY));
+		     a = Action(state.turn, c, state(c.coords._1)(y).get)
 		     if a.validate(gameContext, state)
 		) yield a)
 
 	private def leftActions(cells: Seq[BoardCell]): Seq[Action] = cells.flatMap(c =>
-		for ( y <- (c.coords._2 -1 to 0 by -1).takeWhile(y => state(c.coords._1)(y).cellContent == CellContent.EMPTY);
-		      a = Action(state.turn, c, state(c.coords._1)(y))
+		for ( y <- (c.coords._2 -1 to 0 by -1).takeWhile(y => state(c.coords._1)(y).exists(c => c.cellContent == CellContent.EMPTY));
+		      a = Action(state.turn, c, state(c.coords._1)(y).get)
 		      if a.validate(gameContext, state)
 		) yield a)
 

@@ -24,7 +24,7 @@ class StateTest extends WordSpec{
 				                 |["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
 				                 |],
 				                 |"turn":"BLACK"}""".stripMargin.replace("\n", "").trim
-				val action = Action(Player.WHITE, state(3)(4), state(3)(7))
+				val action = Action(Player.WHITE, state(3)(4).get, state(3)(7).get)
 				val result = state.applyAction(action)
 				assert(TablutSerializer.toJson(result) == expected)
 
@@ -41,7 +41,7 @@ class StateTest extends WordSpec{
 				                 |["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
 				                 |],
 				                 |"turn":"BLACK"}""".stripMargin.replace("\n", "").trim
-				val a1 = Action(Player.WHITE, state(4)(7), state(0)(7))
+				val a1 = Action(Player.WHITE, state(4)(7).get, state(0)(7).get)
 				val r1 = state.applyAction(a1)
 				assert(TablutSerializer.toJson(r1) == e1)
 
@@ -58,7 +58,7 @@ class StateTest extends WordSpec{
 				           |["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
 				           |],
 				           |"turn":"WHITE"}""".stripMargin.replace("\n", "").trim
-				val a2 = Action(Player.BLACK, r1(0)(7), r1(0)(8))
+				val a2 = Action(Player.BLACK, r1(0)(7).get, r1(0)(8).get)
 				val r2 = r1.applyAction(a2)
 				assert(TablutSerializer.toJson(r2) == e2)
 			}
@@ -93,7 +93,7 @@ class StateTest extends WordSpec{
 				              |],
 				              |"turn":"BLACK"}""".stripMargin.replace("\n", "").trim
 
-				val action = Action(Player.WHITE, state(4)(6), state(3)(6))
+				val action = Action(Player.WHITE, state(4)(6).get, state(3)(6).get)
 				val result = startState.applyAction(action)
 				assert(TablutSerializer.toJson(result) == expected)
 			}
@@ -102,16 +102,16 @@ class StateTest extends WordSpec{
 				val cells = state.get((2,4),(3,4),(15,15))(factory.context)
 
 				assert(cells.size == 2)
-				assert(cells.contains(state(2)(4)))
-				assert(cells.contains(state(3)(4)))
+				assert(cells.contains(state(2)(4).get))
+				assert(cells.contains(state(3)(4).get))
 			}
 
 			"clearCell with coordinates" in{
 				val initState = factory.createInitialState()
 				val newBoard = initState.clearCells((2,4),(3,4),(4,5))
-				assert(newBoard(2)(4).cellContent == CellContent.EMPTY)
-				assert(newBoard(3)(4).cellContent == CellContent.EMPTY)
-				assert(newBoard(4)(5).cellContent == CellContent.EMPTY)
+				assert(newBoard(2)(4).exists(c=>c.cellContent == CellContent.EMPTY))
+				assert(newBoard(3)(4).exists(c=>c.cellContent == CellContent.EMPTY))
+				assert(newBoard(4)(5).exists(c=>c.cellContent == CellContent.EMPTY))
 			}
 
 			"transform with coordinates and content" in {
@@ -122,8 +122,8 @@ class StateTest extends WordSpec{
 					)
 				)
 
-				assert(newBoard(4)(4).cellContent == CellContent.EMPTY)
-				assert(newBoard(2)(4).cellContent == CellContent.KING)
+				assert(newBoard(4)(4).exists(c=>c.cellContent == CellContent.EMPTY))
+				assert(newBoard(2)(4).exists(c=>c.cellContent == CellContent.KING))
 			}
 		}
 	}

@@ -7,27 +7,27 @@ object implicits {
 	}
 
 	implicit class BoardCellImplicits(from: BoardCell){
-		private def segment(from: (Int, Int), to: (Int, Int), board: State): Seq[BoardCell] = {
+		private def segment(from: (Int, Int), to: (Int, Int), state: State): Seq[BoardCell] = {
 			val direction = if (from._1 == to._1) Direction.HORIZONTAL else if (from._2 == to._2) Direction.VERTICAL else return Vector()
 
 			direction match {
 				case Direction.HORIZONTAL =>
 					if (from._2 >= to._2)
-						(for(y <- from._2 to to._2 by -1) yield board(from._1)(y)).toVector
+						(for(y <- from._2 to to._2 by -1) yield state(from._1)(y)).flatten.toVector
 					else
-						(for(y <- from._2 to to._2) yield board(from._1)(y)).toVector
+						(for(y <- from._2 to to._2) yield state(from._1)(y)).flatten.toVector
 
 				case Direction.VERTICAL =>
 					if (from._1 >= to._1)
-						(for(x <- from._1 to to._1 by -1) yield board(x)(from._2)).toVector
+						(for(x <- from._1 to to._1 by -1) yield state(x)(from._2)).flatten.toVector
 					else
-						(for(x <- from._1 to to._1) yield board(x)(from._2)).toVector
+						(for(x <- from._1 to to._1) yield state(x)(from._2)).flatten.toVector
 			}
 		}
 
 		/**
 		  * Create a Vector cells iterating horizontally or vertically from this cell to the given one excluded
-		  * within the implicit board
+		  * within the implicit state
 		  * @param to
 		  * @param state
 		  * @return
@@ -36,7 +36,7 @@ object implicits {
 
 		/**
 		  * Create a Vector cells iterating horizontally or vertically from this cell to the given one included
-		  * within the implicit board
+		  * within the implicit state
 		  * @param to
 		  * @param state
 		  * @return
@@ -52,7 +52,7 @@ object implicits {
 		  */
 		def surroundingAt(distance: Int)(implicit state: State): Seq[Option[BoardCell]] = {
 			val (x, y) = from.coords
-			Vector(state.get(x - distance)(y), state.get(x)(y + distance), state.get(x + distance)(y), state.get(x)(y - distance))
+			Vector(state(x - distance)(y), state(x)(y + distance), state(x + distance)(y), state(x)(y - distance))
 		}
 	}
 }

@@ -52,49 +52,49 @@ private object NormalGameContext extends GameContext{
 				// King in the castle
 				case (throne._1, throne._2) =>
 
-					state(x - 1)(y).cellContent == BLACK &&
-					state(x)(y + 1).cellContent == BLACK &&
-					state(x + 1)(y).cellContent == BLACK &&
-					state(x)(y - 1).cellContent == BLACK
+					state(x - 1)(y).exists(c => c.cellContent == BLACK) &&
+					state(x)(y + 1).exists(c => c.cellContent == BLACK) &&
+					state(x + 1)(y).exists(c => c.cellContent == BLACK) &&
+					state(x)(y - 1).exists(c => c.cellContent == BLACK)
 
 				// Near Castle (down)
 				case (3,4) =>
-					state(x - 1)(y).cellContent == BLACK &&
-					state(x)(y + 1).cellContent == BLACK &&
-					state(x)(y - 1).cellContent == BLACK
+					state(x - 1)(y).exists(c => c.cellContent == BLACK) &&
+					state(x)(y + 1).exists(c => c.cellContent == BLACK) &&
+					state(x)(y - 1).exists(c => c.cellContent == BLACK)
 
 				// Near Castle (right)
 				case (4,5) =>
-					state(x - 1)(y).cellContent == BLACK &&
-					state(x + 1)(y).cellContent == BLACK &&
-					state(x)(y + 1).cellContent == BLACK
+					state(x - 1)(y).exists(c => c.cellContent == BLACK) &&
+					state(x + 1)(y).exists(c => c.cellContent == BLACK) &&
+					state(x)(y + 1).exists(c => c.cellContent == BLACK)
 
 
 				// Near Castle (up)
 				case (5,4) =>
-					state(x + 1)(y).cellContent == BLACK &&
-					state(x)(y + 1).cellContent == BLACK &&
-					state(x)(y - 1).cellContent == BLACK
+					state(x + 1)(y).exists(c => c.cellContent == BLACK) &&
+					state(x)(y + 1).exists(c => c.cellContent == BLACK) &&
+					state(x)(y - 1).exists(c => c.cellContent == BLACK)
 
 				// Near Castle (left)
 				case (4,3) =>
-					state(x - 1)(y).cellContent == BLACK &&
-					state(x + 1)(y).cellContent == BLACK &&
-					state(x)(y - 1).cellContent == BLACK
+					state(x - 1)(y).exists(c => c.cellContent == BLACK) &&
+					state(x + 1)(y).exists(c => c.cellContent == BLACK) &&
+					state(x)(y - 1).exists(c => c.cellContent == BLACK)
 
 
 				// Nearc up camp
-				case (1,3) | (2,4) | (1,5) => state(x + 1)(y).cellContent == BLACK
+				case (1,3) | (2,4) | (1,5) => state(x + 1)(y).exists(c => c.cellContent == BLACK)
 				// Nearc left camp
-				case (3,1) | (4,2) | (5,1) => state(x)(y + 1).cellContent == BLACK
+				case (3,1) | (4,2) | (5,1) => state(x)(y + 1).exists(c => c.cellContent == BLACK)
 				// Nearc right camp
-				case (3,7) | (4,6) | (5,7) => state(x)(y - 1).cellContent == BLACK
+				case (3,7) | (4,6) | (5,7) => state(x)(y - 1).exists(c => c.cellContent == BLACK)
 				// Nearc down camp
-				case (7,3) | (6,4) | (7,5) => state(x - 1)(y).cellContent == BLACK
+				case (7,3) | (6,4) | (7,5) => state(x - 1)(y).exists(c => c.cellContent == BLACK)
 
 				case _ =>
-					(state(x - 1)(y).cellContent == BLACK && state(x + 1)(y).cellContent == BLACK) ||
-					(state(x)(y - 1).cellContent == BLACK && state(x)(y - 1).cellContent == BLACK)
+					(state(x - 1)(y).exists(c => c.cellContent == BLACK) && state(x + 1)(y).exists(c => c.cellContent == BLACK)) ||
+					(state(x)(y - 1).exists(c => c.cellContent == BLACK) && state(x)(y - 1).exists(c => c.cellContent == BLACK))
 			}
 		}
 	}
