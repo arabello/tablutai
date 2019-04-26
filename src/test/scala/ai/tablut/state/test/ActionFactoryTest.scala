@@ -39,10 +39,7 @@ class ActionFactoryTest extends WordSpec{
 					Action(p, b(4)(6), b(0)(6)), Action(p, b(4)(6), b(1)(6)), Action(p, b(4)(6), b(2)(6)), Action(p, b(4)(6), b(3)(6)),
 					Action(p, b(4)(6), b(5)(6)), Action(p, b(4)(6), b(6)(6)), Action(p, b(4)(6), b(7)(6)), Action(p, b(4)(6), b(8)(6)),
 				)
-
-				val now = System.currentTimeMillis()
 				val actions = actionsFactory.allActions
-				println(s"${System.currentTimeMillis() - now}")
 				assert(actions.toSet == expected)
 			}
 		}

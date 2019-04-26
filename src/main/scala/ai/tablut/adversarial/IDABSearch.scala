@@ -107,7 +107,6 @@ class IDABSearch[S, A, P](var game: Game[S, A, P], var utilMin: Double, var util
 			currDepthLimit += 1
 
 			heuristicEvaluationUsed = false
-			val now = System.currentTimeMillis()
 
 			val newResults = new IDABSearch.OrderedActions[A]
 
@@ -128,7 +127,6 @@ class IDABSearch[S, A, P](var game: Game[S, A, P], var utilMin: Double, var util
 			val newResults = actions.toVector.sortWith((first, second) => first._2 < second._2)
 
 			*/
-			println(s"${System.currentTimeMillis() - now}")
 
 			if (newResults.size > 0) {
 				results = newResults.actions
