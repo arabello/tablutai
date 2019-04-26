@@ -3,12 +3,12 @@ package ai.tablut.adversarial
 import java.util
 
 import ai.tablut.adversarial.heuristic.{HeuristicBuilder, HeuristicFunction, NormalGameHeuristicFactory}
-import ai.tablut.state.{Turn, _}
-import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch
-import scala.collection.JavaConverters._
 import ai.tablut.state.implicits._
+import ai.tablut.state.{Player, _}
 
-class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, 0, 1, time){
+import scala.collection.JavaConverters._
+
+class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extends IDABSearch(game, 0, 1, time){
 
 	val hKingAssasination: HeuristicFunction = NormalGameHeuristicFactory.createKingAssasination()
 	val hBlockEscapePoints: HeuristicFunction = NormalGameHeuristicFactory.createBlockEscapePoints()
@@ -23,7 +23,7 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extend
 	  * @return
 	  */
 	// IMPORTANT: When overriding, first call the super implementation!
-	override def eval(state: State, player: Turn.Value): Double = {
+	override def eval(state: State, player: Player.Value): Double = {
 		super.eval(state, player)
 
 		val heuristic = hBuilder
@@ -37,15 +37,15 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extend
 		hValue
 	}
 
-	override def orderActions(state: State, actions: util.List[Action], player: Turn.Value, depth: Int): util.List[Action] = player match {
-		case Turn.WHITE => actions.asScala.sortWith((a1, a2) => a2.who == CellContent.KING).asJava
-		case Turn.BLACK =>
+	override def orderActions(state: State, actions: util.List[Action], player: Player.Value, depth: Int): List[Action] = player match {
+		case Player.WHITE => actions.asScala.sortWith((a1, a2) => a2.who == CellContent.KING).toList
+		case Player.BLACK =>
 			val king = state.findKing
 			if (king.isEmpty)
-				return actions
+				return actions.asScala.toList
 
-			val kingSurrounding = king.get.surroundingAt(1)(state.board).filter(c => c.isDefined && c.get.cellContent == CellContent.EMPTY).map(c => c.get)
-			actions.asScala.sortWith((a1, a2) => kingSurrounding.contains(a2.to)).asJava
+			val kingSurrounding = king.get.surroundingAt(1)(state).filter(c => c.isDefined && c.get.cellContent == CellContent.EMPTY).map(c => c.get)
+			actions.asScala.sortWith((a1, a2) => kingSurrounding.contains(a2.to)).toList
 	}
 
 }

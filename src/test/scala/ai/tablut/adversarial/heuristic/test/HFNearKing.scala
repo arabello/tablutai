@@ -2,8 +2,8 @@ package ai.tablut.adversarial.heuristic.test
 
 import ai.tablut.adversarial.heuristic.NormalGameHeuristicFactory
 import ai.tablut.serialization.TablutSerializer
+import ai.tablut.state.Player.{BLACK, WHITE}
 import ai.tablut.state.StateFacade
-import ai.tablut.state.Turn.{BLACK, DRAW, WHITE}
 import org.scalatest.WordSpec
 
 class HFNearKing extends WordSpec{

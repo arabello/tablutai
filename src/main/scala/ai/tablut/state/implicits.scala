@@ -7,7 +7,7 @@ object implicits {
 	}
 
 	implicit class BoardCellImplicits(from: BoardCell){
-		private def segment(from: (Int, Int), to: (Int, Int), board: Board): Seq[BoardCell] = {
+		private def segment(from: (Int, Int), to: (Int, Int), board: State): Seq[BoardCell] = {
 			val direction = if (from._1 == to._1) Direction.HORIZONTAL else if (from._2 == to._2) Direction.VERTICAL else return Vector()
 
 			direction match {
@@ -29,19 +29,19 @@ object implicits {
 		  * Create a Vector cells iterating horizontally or vertically from this cell to the given one excluded
 		  * within the implicit board
 		  * @param to
-		  * @param board
+		  * @param state
 		  * @return
 		  */
-		def until(to: BoardCell)(implicit board: Board): Seq[BoardCell] = segment(from.coords, to.coords, board).dropRight(1)
+		def until(to: BoardCell)(implicit state: State): Seq[BoardCell] = segment(from.coords, to.coords, state).dropRight(1)
 
 		/**
 		  * Create a Vector cells iterating horizontally or vertically from this cell to the given one included
 		  * within the implicit board
 		  * @param to
-		  * @param board
+		  * @param state
 		  * @return
 		  */
-		def to(to: BoardCell)(implicit board: Board): Seq[BoardCell] = segment(from.coords, to.coords, board)
+		def to(to: BoardCell)(implicit state: State): Seq[BoardCell] = segment(from.coords, to.coords, state)
 
 		/**
 		  * List of the 4 cells surrounding the given coordinates at the specified distance in the order of
@@ -50,9 +50,9 @@ object implicits {
 		  * @param distance
 		  * @return
 		  */
-		def surroundingAt(distance: Int)(implicit board: Board): Seq[Option[BoardCell]] = {
+		def surroundingAt(distance: Int)(implicit state: State): Seq[Option[BoardCell]] = {
 			val (x, y) = from.coords
-			Vector(board.get(x - distance)(y), board.get(x)(y + distance), board.get(x + distance)(y), board.get(x)(y - distance))
+			Vector(state.get(x - distance)(y), state.get(x)(y + distance), state.get(x + distance)(y), state.get(x)(y - distance))
 		}
 	}
 }

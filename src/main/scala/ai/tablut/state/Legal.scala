@@ -1,7 +1,7 @@
 package ai.tablut.state
 
 /**
-  * Define a legal behaviour within a given [[ai.tablut.state.Board]]
+  * Define a legal behaviour within a given [[ai.tablut.state.State]]
   */
 trait Legal {
 	/**
@@ -9,5 +9,5 @@ trait Legal {
 	  * @param board
 	  * @return True if this element is legitimate according the given board. False otherwise
 	  */
-	def isLegal(board: Board): Boolean
+	def isLegal(board: State): Boolean
 }

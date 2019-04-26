@@ -2,14 +2,14 @@ package ai.tablut.state
 
 import ai.tablut.state.CellContent.CellContent
 import ai.tablut.state.CellType.CellType
-import implicits._
+import ai.tablut.state.implicits._
 
 /**
   * Coordinates are a pair of integer representing the position of a cell
-  * within a [[ai.tablut.state.Board]].
+  * within a [[ai.tablut.state.State]].
   * The first value must be represent the row index and
   * the second value the column index by the implementation in order to maintain
-  * consistency to [[ai.tablut.state.Board]]
+  * consistency to [[ai.tablut.state.State]]
   */
 case class BoardCell(coords: (Int, Int), cellType: CellType, cellContent: CellContent) extends GameRulesComplied {
 
@@ -34,7 +34,7 @@ case class BoardCell(coords: (Int, Int), cellType: CellType, cellContent: CellCo
 		s"$decASCII$adjustedRow"
 	}
 }
-
+/*
 object BoardCell{
 	def unapply(arg: BoardCell): Option[((Int, Int), CellType, CellContent)] = Some(arg.coords, arg.cellType, arg.cellContent)
-}
+}*/

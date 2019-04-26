@@ -55,11 +55,9 @@ class BoardCellTest extends WordSpec{
 			}
 
 			"synthesize segments" in{
-				val state = factory.createInitialState
-
-				implicit val board: Board = state.board
-				val start1 = board(2)(4)
-				val end1 = board(0)(4)
+				implicit val state = factory.createInitialState()
+				val start1 = state(2)(4)
+				val end1 = state(0)(4)
 
 				val b1 = start1 to end1
 
@@ -75,14 +73,14 @@ class BoardCellTest extends WordSpec{
 				assert(b2.contains(start1))
 				assert(!b2.contains(end1))
 
-				val start2 = board(4)(6)
-				val end2 = board(4)(0)
+				val start2 = state(4)(6)
+				val end2 = state(4)(0)
 
 				val b3 = start2 to end2
 
 				assert(b3.head == start2)
 				assert(b3.size == 7)
-				assert(b3.contains(board(4)(3)))
+				assert(b3.contains(state(4)(3)))
 
 				val b4 = start2 until end2
 
@@ -91,14 +89,14 @@ class BoardCellTest extends WordSpec{
 				assert(b4.contains(start2))
 				assert(!b4.contains(end2))
 
-				val start3 = board(1)(4)
-				val end3 = board(7)(4)
+				val start3 = state(1)(4)
+				val end3 = state(7)(4)
 
 				val b5 = start3 to end3
 
 				assert(b5.head == start3)
 				assert(b5.size == 7)
-				assert(b5.contains(board(5)(4)))
+				assert(b5.contains(state(5)(4)))
 
 				val b6 = start3 until end3
 

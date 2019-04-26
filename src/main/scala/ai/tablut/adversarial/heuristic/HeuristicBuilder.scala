@@ -1,7 +1,7 @@
 package ai.tablut.adversarial.heuristic
 
+import ai.tablut.state.Player.Player
 import ai.tablut.state.State
-import ai.tablut.state.Turn.Turn
 
 class HeuristicBuilder {
 	private var functions = Map[HeuristicFunction, Int]()
@@ -9,7 +9,7 @@ class HeuristicBuilder {
 	private var utilMax = 1.toDouble
 
 	object avg extends HeuristicFunction{
-		override def eval(state: State, player: Turn): Double =
+		override def eval(state: State, player: Player): Double =
 			functions.foldLeft[Double](0)((acc, f) => acc + (f._1.eval(state, player) * f._2)) / functions.foldLeft[Double](0)((acc, f) => acc + f._2)
 	}
 
@@ -24,5 +24,5 @@ class HeuristicBuilder {
 		this
 	}
 
-	def build: (State, Turn) => Double = (state: State, player: Turn) => new HFBoundariesAdapter(avg, utilMin, utilMax).eval(state, player)
+	def build: (State, Player) => Double = (state: State, player: Player) => new HFBoundariesAdapter(avg, utilMin, utilMax).eval(state, player)
 }
