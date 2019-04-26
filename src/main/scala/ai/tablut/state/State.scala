@@ -11,9 +11,8 @@ trait State extends GameRulesComplied {
 	val ending: Option[Ending]
 	val board: Seq[Seq[BoardCell]]
 
-	def apply(coord: (Int, Int)): BoardCell
-	def apply(x: Int)(y: Int): BoardCell
-	def get(x: Int)(y: Int): Option[BoardCell]
+	def apply(coord: (Int, Int)): Option[BoardCell]
+	def apply(x: Int)(y: Int): Option[BoardCell]
 
 	def findKing: Option[BoardCell]
 

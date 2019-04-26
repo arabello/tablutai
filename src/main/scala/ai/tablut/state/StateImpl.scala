@@ -11,18 +11,16 @@ private case class StateImpl(
 	                            turn: Player,
 	                            ending: Option[Ending] = None) extends State with GameRulesComplied {
 
-	def apply(coord: (Int, Int)): BoardCell = board(coord._1)(coord._2)
+	def apply(coord: (Int, Int)): Option[BoardCell] = apply(coord._1)(coord._2)
 
-	def apply(x: Int)(y: Int): BoardCell = board(x)(y)
-
-	def get(x: Int)(y: Int): Option[BoardCell] = try{ Some(board(x)(y)) } catch { case _: Throwable => None }
+	def apply(x: Int)(y: Int): Option[BoardCell] = try{ Some(board(x)(y)) } catch { case _: Throwable => None }
 
 	/**
 	  * Retrieve all the cells considering only the valid coordinates given
 	  * @param coords
 	  */
 	def get(coords: (Int, Int)*)(implicit gameContext: GameContext): Seq[BoardCell] = {
-		coords.filter(coord => coord isGameRulesComplied gameContext).map(coord => this(coord))
+		coords.filter(coord => coord isGameRulesComplied gameContext).flatMap(coord => this (coord))
 	}
 
 	def findKing: Option[BoardCell] = getCellsWithFilter(c => c.cellContent == KING).headOption
