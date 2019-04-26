@@ -8,7 +8,7 @@ import aima.core.search.adversarial.Game
 
 import scala.collection.JavaConverters._
 
-class TablutGame(val stateFactory: StateFactory, initialState: State) extends Game[State, Action, Turn.Value] {
+class TablutGame(val stateFactory: StateFactory, initialState: State) extends Game[State, Action, Player.Value] {
 	/**
 	  * The initial state, which specifies how the game is set up at the start
 	  */
@@ -17,19 +17,16 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 	/**
 	  * The transition model, which defines the result of a move.
 	  */
-	override def getResult(state: State, action: Action): State = state.copy(board = state.board.apply(action))
+	override def getResult(state: State, action: Action): State = state.applyAction(action)
 
 	/**
 	  * Defines which player has the move in a state.
 	  */
-	override def getPlayer(state: State): Turn.Value = state.turn
+	override def getPlayer(state: State): Player.Value = state.turn
 
-	override def getPlayers: Array[Turn.Value] = Turn.values.toArray
+	override def getPlayers: Array[Player.Value] = Player.values.toArray
 
-	override def getActions(state: State): util.List[Action] = {
-		val factory = new ActionFactory(state, stateFactory.context)
-		factory.allActions.asJava
-	}
+	override def getActions(state: State): util.List[Action] = state.allActions(stateFactory.context).asJava
 
 	/**
 	  * A utility function (also called an objective function or
@@ -43,7 +40,8 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 	  * better term, but zero-sum is traditional and makes sense if you imagine each
 	  * player is charged an entry fee of 1/2.
 	  */
-	override def getUtility(state: State, player: Turn.Value): Double = if (state.turn == Turn.DRAW) 0.5f else if (player == state.turn) 1f else 0f
+	override def getUtility(state: State, player: Player.Value): Double =
+		if (state.ending.orNull == Ending.DRAW) 0.5f else if (player == state.turn) 1f else 0f
 
 	/**
 	  * A terminal test (as goal test as in the informed), which is true when the game is over
@@ -51,5 +49,5 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 	  * States where the game has ended are called terminal states
 	  */
 	override def isTerminal(state: State): Boolean =
-		state.turn == Turn.DRAW || stateFactory.context.isWinner(state.copy(turn = Turn.WHITE)) || stateFactory.context.isWinner(state.copy(turn = Turn.BLACK))
+		state.ending.orNull == Ending.DRAW || stateFactory.context.isWinner(state) || stateFactory.context.isWinner(state.nextPlayer)
 }

@@ -2,8 +2,8 @@ package ai.tablut.adversarial.heuristic.test
 
 import ai.tablut.adversarial.heuristic.NormalGameHeuristicFactory
 import ai.tablut.serialization.TablutSerializer
-import ai.tablut.state.{CellContent, StateFacade, Turn}
-import ai.tablut.state.Turn._
+import ai.tablut.state.Player._
+import ai.tablut.state.{CellContent, Player, StateFacade}
 import org.scalatest.WordSpec
 
 class HFBlockEscapePoints extends WordSpec{
@@ -88,19 +88,19 @@ class HFBlockEscapePoints extends WordSpec{
 			}
 
 			"for WHITE player" in{
-				val withKing = initState.copy(board = initState.board.transform(Map(
+				val withKing = initState.transform(Map(
 					(4,4) -> CellContent.EMPTY,
 					(2,2) -> CellContent.KING
-				)))
+				))
 
-				assert(heuristic.eval(withKing, Turn.WHITE) == 1)
+				assert(heuristic.eval(withKing, Player.WHITE) == 1)
 
-				val withKingAndBlack = initState.copy(board = withKing.board.transform(Map(
+				val withKingAndBlack = initState.transform(Map(
 					(8, 3) -> CellContent.EMPTY,
 					(6, 2) -> CellContent.BLACK
-				)))
+				))
 
-				assert(heuristic.eval(withKing, Turn.WHITE) > heuristic.eval(withKingAndBlack, Turn.WHITE))
+				assert(heuristic.eval(withKing, Player.WHITE) > heuristic.eval(withKingAndBlack, Player.WHITE))
 			}
 		}
 	}

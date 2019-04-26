@@ -1,6 +1,6 @@
 package ai.tablut.state
 
-import ai.tablut.state.Turn.Turn
+import ai.tablut.state.Player.Player
 import ai.tablut.state.implicits._
 
 /**
@@ -10,14 +10,7 @@ import ai.tablut.state.implicits._
   * @param from
   * @param to
   */
-case class Action(who: Turn, from: BoardCell, to: BoardCell) extends GameRulesComplied with Legal {
-
-	def distance: Int = {
-		val (fromX, fromY) = from.coords
-		val (toX, toY) = to.coords
-
-		math.abs(if (fromX == toX) fromY - toY else fromX - toX)
-	}
+case class Action(who: Player, from: BoardCell, to: BoardCell) extends GameRulesComplied with Legal {
 
 	/**
 	  * Check if game rules complied and legal within the current game rules and board
@@ -25,7 +18,7 @@ case class Action(who: Turn, from: BoardCell, to: BoardCell) extends GameRulesCo
 	  * @param board
 	  * @return
 	  */
-	def validate(gameRules: GameContext, board: Board): Boolean = isGameRulesComplied(gameRules) && isLegal(board)
+	def validate(gameRules: GameContext, board: State): Boolean = isGameRulesComplied(gameRules) && isLegal(board)
 
 	/**
 	  * @return True if it meets the game rules. False otherwise.
@@ -36,7 +29,7 @@ case class Action(who: Turn, from: BoardCell, to: BoardCell) extends GameRulesCo
 		val toX = to.coords._1
 		val toY = to.coords._2
 
-		((from.cellContent == CellContent.WHITE && who == Turn.WHITE) || (from.cellContent == CellContent.BLACK && who == Turn.BLACK)) &&
+		((from.cellContent == CellContent.WHITE && who == Player.WHITE) || (from.cellContent == CellContent.BLACK && who == Player.BLACK)) &&
 		from.cellContent != CellContent.EMPTY &&
 		to.cellContent == CellContent.EMPTY &&
 		(to.cellType == CellType.NOTHING || to.cellType == CellType.ESCAPE_POINT) // TODO("Enhance to allow BLACK re-entering camps")
@@ -50,7 +43,7 @@ case class Action(who: Turn, from: BoardCell, to: BoardCell) extends GameRulesCo
 	  * @param board
 	  * @return True if this element is legitimate according the given board. False otherwise
 	  */
-	override def isLegal(board: Board): Boolean = {
+	override def isLegal(board: State): Boolean = {
 		import scala.math.{max, min}
 
 		if (from == to)
@@ -78,7 +71,7 @@ case class Action(who: Turn, from: BoardCell, to: BoardCell) extends GameRulesCo
 
 		val between = if (isXFixed) for (y <- f to t) yield (fromX, y) else for(x <- f to t) yield (x, fromY)
 
-		for(coords <- between; cell = board.grid(coords._1)(coords._2))
+		for(coords <- between; cell = board.board(coords._1)(coords._2))
 			if (cell.cellContent != CellContent.EMPTY || cell.cellType == CellType.CASTLE || cell.cellType == CellType.CAMP)
 				return false
 

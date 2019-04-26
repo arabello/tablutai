@@ -4,15 +4,15 @@ import java.net.Socket
 import java.util.Properties
 
 import ai.tablut.serialization.TablutSerializer
-import ai.tablut.state.Turn.Turn
-import ai.tablut.state.{Action, Turn}
+import ai.tablut.state.Player.Player
+import ai.tablut.state.{Action, Player}
 
-private abstract class Client(props: Properties, player: Turn) extends CompetitionClient {
+private abstract class Client(props: Properties, player: Player) extends CompetitionClient {
 	val teamName: String = props.getProperty("TEAM_NAME")
 	val serverIp: String = props.getProperty("SERVER_IP")
 	val port: Int = player match {
-		case Turn.WHITE => props.getProperty("WHITE_PORT").toInt
-		case Turn.BLACK => props.getProperty("BLACK_PORT").toInt
+		case Player.WHITE => props.getProperty("WHITE_PORT").toInt
+		case Player.BLACK => props.getProperty("BLACK_PORT").toInt
 	}
 	private val socket = new Socket(serverIp, port)
 
