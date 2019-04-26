@@ -9,7 +9,7 @@ object NormalStateFactory extends StateFactory{
 
 	override val context: GameContext = NormalGameContext
 
-	override def createInitialState(): State = createState(Vector(
+	private val initContent = Vector(
 		Vector(EMPTY, EMPTY, EMPTY, BLACK, BLACK, BLACK, EMPTY, EMPTY, EMPTY),
 		Vector(EMPTY, EMPTY, EMPTY, EMPTY, BLACK, EMPTY, EMPTY, EMPTY, EMPTY),
 		Vector(EMPTY, EMPTY, EMPTY, EMPTY, WHITE, EMPTY, EMPTY, EMPTY, EMPTY),
@@ -19,7 +19,18 @@ object NormalStateFactory extends StateFactory{
 		Vector(EMPTY, EMPTY, EMPTY, EMPTY, WHITE, EMPTY, EMPTY, EMPTY, EMPTY),
 		Vector(EMPTY, EMPTY, EMPTY, EMPTY, BLACK, EMPTY, EMPTY, EMPTY, EMPTY),
 		Vector(EMPTY, EMPTY, EMPTY, BLACK, BLACK, BLACK, EMPTY, EMPTY, EMPTY)
-	), Player.WHITE)
+	)
+
+	private lazy val initState = StateImpl(
+		initContent.size,
+		initContent.head.size,
+		(for(x <- initContent.indices)
+			yield (for(y <- initContent.head.indices)
+				yield createBoardCell((x,y), initContent(x)(y)).get).toVector).toVector,
+		Player.WHITE
+	)
+
+	override def createInitialState(): State = initState.copy()
 
 	override def createState(grid: Seq[Seq[CellContent]], turn: Player, ending: Option[Ending] = None): State = StateImpl(
 		grid.length,

@@ -3,6 +3,7 @@ package ai.tablut.adversarial
 import java.util
 
 import ai.tablut.adversarial.heuristic.{HeuristicBuilder, HeuristicFunction, NormalGameHeuristicFactory}
+import ai.tablut.state.Player.Player
 import ai.tablut.state.implicits._
 import ai.tablut.state.{Player, _}
 import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch
@@ -11,11 +12,17 @@ import scala.collection.JavaConverters._
 
 class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, 0, 1, time){
 
-	val hKingAssasination: HeuristicFunction = NormalGameHeuristicFactory.createKingAssasination()
-	val hBlockEscapePoints: HeuristicFunction = NormalGameHeuristicFactory.createBlockEscapePoints()
-	val hPawsMajority: HeuristicFunction = NormalGameHeuristicFactory.createPawsMajority()
-
+	private val hKingAssasination: HeuristicFunction = NormalGameHeuristicFactory.createKingAssasination()
+	private val hBlockEscapePoints: HeuristicFunction = NormalGameHeuristicFactory.createBlockEscapePoints()
+	private val hPawsMajority: HeuristicFunction = NormalGameHeuristicFactory.createPawsMajority()
 	private val hBuilder = new HeuristicBuilder().adaptDomain(this.utilMin, this.utilMax)
+
+	val heuristic: (State, Player) => Double = hBuilder
+		.add(hPawsMajority, 4)
+		.add(hBlockEscapePoints, 4)
+		.add(hKingAssasination, 4)
+		.build
+
 
 	/**
 	  * Heuristic evaluation of non-terminal states
@@ -24,14 +31,8 @@ class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extend
 	  * @return
 	  */
 	// IMPORTANT: When overriding, first call the super implementation!
-	override def eval(state: State, player: Player.Value): Double = {
+	override def eval(state: State, player: Player.Value): Double = { // CRITICAL called 161.000 with 20 seconds thinking
 		super.eval(state, player)
-
-		val heuristic = hBuilder
-    		.add(hPawsMajority, 4)
-			.add(hBlockEscapePoints, 4)
-    		.add(hKingAssasination, 4)
-    		.build
 
 		val hValue = heuristic(state, player)
 		getMetrics.set("hfValue", hValue)

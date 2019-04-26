@@ -39,7 +39,6 @@ object Main {
 
 		val game = new TablutGame(stateFactory, initState)
 		val search = new IDABSimpleSearch(stateFactory.context, game, maxComputationTime)
-		search.setLogEnabled(true)
 		//val search = new IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
 
 		var currState = initState
