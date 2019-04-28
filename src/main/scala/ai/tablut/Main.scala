@@ -26,6 +26,8 @@ object Main {
 		val conf = new Properties()
 		conf.load(new FileInputStream("config.properties"))
 
+		LogInterceptor.init(conf)
+
 		val connFactory = new ConnFactory(conf)
 		val client = if (clientType == "w") connFactory.createWhiteClient() else connFactory.createBlackClient()
 		val stateFactory = StateFacade.normalStateFactory()
@@ -45,7 +47,9 @@ object Main {
 		while(true) {
 			val nextAction = search.makeDecision(currState)
 			val metrics = search.getMetrics
-			println(s"$metrics")
+			LogInterceptor{
+				println(s"$metrics")
+			}
 			client.writeAction(nextAction)
 
 			client.readState() // my state from server
