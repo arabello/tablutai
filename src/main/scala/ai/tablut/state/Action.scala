@@ -32,7 +32,7 @@ case class Action(who: Player, from: BoardCell, to: BoardCell) extends GameRules
 		((from.cellContent == CellContent.WHITE && who == Player.WHITE) || (from.cellContent == CellContent.BLACK && who == Player.BLACK)) &&
 		from.cellContent != CellContent.EMPTY &&
 		to.cellContent == CellContent.EMPTY &&
-		(to.cellType == CellType.NOTHING || to.cellType == CellType.ESCAPE_POINT) // TODO("Enhance to allow BLACK re-entering camps")
+		(to.cellType == CellType.NOTHING || to.cellType == CellType.ESCAPE_POINT) && // TODO("Enhance to allow BLACK re-entering camps")
 		((fromX, fromY) isGameRulesComplied gameRules) &&
 		((toX, toY) isGameRulesComplied gameRules) &&
 		((fromX == toX && fromY != toY) || (fromY == toY && fromX != toX))
