@@ -3,7 +3,7 @@ package ai.tablut
 import java.io.FileInputStream
 import java.util.Properties
 
-import ai.tablut.adversarial.{IDABSimpleSearch, TablutGame}
+import ai.tablut.adversarial.{TablutSearch, TablutGame}
 import ai.tablut.connectivity.ConnFactory
 import ai.tablut.serialization.TablutSerializer
 import ai.tablut.state.StateFacade
@@ -40,7 +40,7 @@ object Main {
 		val initState = TablutSerializer.fromJson(jsonInitState, stateFactory)
 
 		val game = new TablutGame(stateFactory, initState)
-		val search = new IDABSimpleSearch(stateFactory.context, game, maxComputationTime)
+		val search = new TablutSearch(stateFactory.context, game, maxComputationTime)
 		//val search = new IterativeDeepeningAlphaBetaSearch(game, worstStateValue, bestStateValue, maxComputationSeconds)
 
 		var currState = initState

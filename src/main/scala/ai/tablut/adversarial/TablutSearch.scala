@@ -9,7 +9,7 @@ import ai.tablut.state.{Player, _}
 
 import scala.collection.JavaConverters._
 
-class IDABSimpleSearch(context: GameContext, game: TablutGame, time: Int) extends IDABSearch(game, 0, 1, time){
+class TablutSearch(context: GameContext, game: TablutGame, time: Int) extends IterativeDeepingAlphaBetaSearch(game, 0, 1, time){
 
 	private val hKingAssasination: HeuristicFunction = NormalGameHeuristicFactory.createKingAssasination()
 	private val hBlockEscapePoints: HeuristicFunction = NormalGameHeuristicFactory.createBlockEscapePoints()
