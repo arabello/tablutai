@@ -9,7 +9,7 @@ object Way extends Enumeration {
 
 class ActionFactory(state: State, gameContext: GameContext) {
 
-	private def upActions(cells: Seq[BoardCell]): Seq[Action] =cells.flatMap(c =>
+	private def upActions(cells: Seq[BoardCell]): Seq[Action] = cells.flatMap(c =>
 		for ( x <- (c.coords._1 - 1 to 0 by -1).takeWhile(x => state(x)(c.coords._2).exists(c => c.cellContent == CellContent.EMPTY));
 		      a = Action(state.turn, c, state(x)(c.coords._2).get)
 		      if a.validate(gameContext, state)
@@ -41,6 +41,8 @@ class ActionFactory(state: State, gameContext: GameContext) {
 		case _ => Seq()
 	}
 
+	def actions(cells: Seq[BoardCell]): Seq[Action] = Way.values.toParArray.foldLeft[Seq[Action]](Seq())((acc, way) => acc ++ actions(cells, way))
+
 	def allActions: Seq[Action] = {
 		val cells = state.getCells.filter(c => c.cellContent match {
 			case CellContent.WHITE | CellContent.KING => state.turn == Player.WHITE
@@ -48,9 +50,8 @@ class ActionFactory(state: State, gameContext: GameContext) {
 			case _ => false
 		})
 
-		Way.values.foldLeft[Seq[Action]](Seq())((acc, way) => acc ++ actions(cells, way))
+		actions(cells)
 	}
 
-	def allActions(boardCell: BoardCell): Seq[Action] =
-		Way.values.foldLeft[Seq[Action]](Seq())((acc, way) => acc ++ actions(Seq(boardCell), way))
+	def allActions(boardCell: BoardCell): Seq[Action] = actions(Seq(boardCell))
 }
