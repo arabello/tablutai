@@ -27,19 +27,24 @@ object NormalStateFactory extends StateFactory{
 		(for(x <- initContent.indices)
 			yield (for(y <- initContent.head.indices)
 				yield createBoardCell((x,y), initContent(x)(y)).get).toVector).toVector,
-		Player.WHITE
+		Player.WHITE,
+		Some((4,4))
 	)
 
 	override def createInitialState(): State = initState.copy()
 
-	override def createState(grid: Seq[Seq[CellContent]], turn: Player, ending: Option[Ending] = None): State = StateImpl(
-		grid.length,
-		grid.head.length,
-		(for(x <- grid.indices)
-			yield (for(y <- grid.head.indices)
-				yield createBoardCell((x,y), grid(x)(y)).get).toVector).toVector,
-		turn
-	)
+	override def createState(grid: Seq[Seq[CellContent]], turn: Player, ending: Option[Ending] = None): State = {
+		val state = StateImpl(
+			grid.length,
+			grid.head.length,
+			(for(x <- grid.indices)
+				yield (for(y <- grid.head.indices)
+					yield createBoardCell((x,y), grid(x)(y)).get).toVector).toVector,
+			turn
+		)
+		state.kingCoords = Some(state.getCellsWithFilter(c => c.cellContent == CellContent.KING).head.coords)
+		state
+	}
 
 	override def createBoardCell(coords: (Int, Int), cellContent: CellContent.Value): Option[BoardCell] = {
 

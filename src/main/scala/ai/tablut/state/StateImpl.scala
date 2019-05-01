@@ -9,6 +9,7 @@ private case class StateImpl(
 	                            cols: Int,
 	                            board: Vector[Vector[BoardCell]],
 	                            turn: Player,
+	                            var kingCoords: Option[(Int, Int)] = None,
 	                            ending: Option[Ending] = None) extends State with GameRulesComplied {
 
 	def apply(coord: (Int, Int)): Option[BoardCell] = apply(coord._1)(coord._2)
@@ -23,13 +24,15 @@ private case class StateImpl(
 		coords.filter(coord => coord isGameRulesComplied gameContext).flatMap(coord => this (coord))
 	}
 
-	def findKing: Option[BoardCell] = getCellsWithFilter(c => c.cellContent == KING).headOption
+	def findKing: Option[BoardCell] = if (kingCoords.isDefined) apply(kingCoords.get) else None
+	//getCellsWithFilter(c => c.cellContent == KING).headOption
 
 	override def nextPlayer: State =
 		if (turn == Player.WHITE) copy(turn = Player.BLACK) else copy(turn = Player.WHITE)
 
 	def applyAction(action: Action): State = {
 		val contentMoved = board(action.from.coords._1)(action.from.coords._2).cellContent
+
 		implicit val afterMove: State = copy(board = board.map(row => row.map(cell =>
 			cell.coords match {
 				case action.from.coords => cell.copy(cellContent = EMPTY)
@@ -37,6 +40,9 @@ private case class StateImpl(
 				case _ => cell
 			}
 		))).asInstanceOf[State]
+
+		if (contentMoved == CellContent.KING)
+			kingCoords = Some(action.to.coords)
 
 		val allies = (action.to surroundingAt 2).filter(c => c.orNull != null && c.get.cellContent == action.who.toCellContent).map(c => c.get)
 		allies.map(c => (action.to until c).drop(1).head).foldLeft[State](afterMove)((acc, enemy) =>
@@ -59,6 +65,7 @@ private case class StateImpl(
 	  * List of filtered cells flatten via row than column
 	  * @return
 	  */
+	// TODO ("Optimize this")
 	def getCellsWithFilter(filter: BoardCell => Boolean): Seq[BoardCell] = board.flatMap(row => row.filter(filter))
 
 	/**
