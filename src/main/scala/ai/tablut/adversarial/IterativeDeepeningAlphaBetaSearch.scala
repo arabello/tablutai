@@ -19,7 +19,7 @@ import scala.collection.JavaConverters._
   * @param < P> Type which is used for players in the game.
   * @author Ruediger Lunde
   */
-object IterativeDeepingAlphaBetaSearch {
+object IterativeDeepeningAlphaBetaSearch {
 	val METRICS_NODES_EXPANDED = "nodesExpanded"
 	val METRICS_MAX_DEPTH = "maxDepth"
 
@@ -35,7 +35,7 @@ object IterativeDeepingAlphaBetaSearch {
 	  *                situations with a safe winner.
 	  * @param time    Maximal computation time in seconds.
 	  */
-	def createFor[STATE, ACTION, PLAYER](game: Game[STATE, ACTION, PLAYER], utilMin: Double, utilMax: Double, time: Int) = new IterativeDeepingAlphaBetaSearch[STATE, ACTION, PLAYER](game, utilMin, utilMax, time)
+	def createFor[STATE, ACTION, PLAYER](game: Game[STATE, ACTION, PLAYER], utilMin: Double, utilMax: Double, time: Int) = new IterativeDeepeningAlphaBetaSearch[STATE, ACTION, PLAYER](game, utilMin, utilMax, time)
 
 	private class Timer private[adversarial](val maxSeconds: Int) {
 		private var duration = 1000 * maxSeconds
@@ -75,13 +75,13 @@ object IterativeDeepingAlphaBetaSearch {
 
 }
 
-class IterativeDeepingAlphaBetaSearch[S, A, P](var game: Game[S, A, P], var utilMin: Double, var utilMax: Double, val time: Int) extends AdversarialSearch[S, A] {
+class IterativeDeepeningAlphaBetaSearch[S, A, P](var game: Game[S, A, P], var utilMin: Double, var utilMax: Double, val time: Int) extends AdversarialSearch[S, A] {
 	protected var currDepthLimit = 0
 	private var heuristicEvaluationUsed = false // indicates that non-terminal
 
 	// nodes
 	// have been evaluated.
-	private val timer = new IterativeDeepingAlphaBetaSearch.Timer(time)
+	private val timer = new IterativeDeepeningAlphaBetaSearch.Timer(time)
 	private var logEnabled = false
 	private var metrics = new Metrics
 
@@ -108,7 +108,7 @@ class IterativeDeepingAlphaBetaSearch[S, A, P](var game: Game[S, A, P], var util
 
 			heuristicEvaluationUsed = false
 
-			val newResults = new IterativeDeepingAlphaBetaSearch.OrderedActions[A]
+			val newResults = new IterativeDeepeningAlphaBetaSearch.OrderedActions[A]
 
 			// TODO("Simplify OrderedAction adding and add sequential collection for first depth")
 			orderedActions.toParArray.map{action =>
@@ -180,8 +180,8 @@ class IterativeDeepingAlphaBetaSearch[S, A, P](var game: Game[S, A, P], var util
 	}
 
 	private def updateMetrics(depth: Int): Unit = {
-		metrics.incrementInt(IterativeDeepingAlphaBetaSearch.METRICS_NODES_EXPANDED)
-		metrics.set(IterativeDeepingAlphaBetaSearch.METRICS_MAX_DEPTH, Math.max(metrics.getInt(IterativeDeepingAlphaBetaSearch.METRICS_MAX_DEPTH), depth))
+		metrics.incrementInt(IterativeDeepeningAlphaBetaSearch.METRICS_NODES_EXPANDED)
+		metrics.set(IterativeDeepeningAlphaBetaSearch.METRICS_MAX_DEPTH, Math.max(metrics.getInt(IterativeDeepeningAlphaBetaSearch.METRICS_MAX_DEPTH), depth))
 	}
 
 	/**

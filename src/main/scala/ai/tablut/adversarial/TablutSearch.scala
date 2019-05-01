@@ -9,7 +9,7 @@ import ai.tablut.state.{Player, _}
 import scala.collection.JavaConverters._
 import scala.language.postfixOps
 
-class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extends IterativeDeepingAlphaBetaSearch(game, 0, 1, time){
+class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, 0, 1, time){
 	private object Normalizer {
 		def createNormalizer(min: Double, max: Double): Double => Double = (value: Double) => {
 			val res = (value - min) / (max - min)
