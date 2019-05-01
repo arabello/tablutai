@@ -5,13 +5,8 @@ import java.util
 import ai.tablut.adversarial.heuristic._
 import ai.tablut.state.implicits._
 import ai.tablut.state.{Player, _}
-import akka.actor.{ActorSystem, Props}
-import akka.util.Timeout
-import akka.pattern.ask
 
 import scala.collection.JavaConverters._
-import scala.concurrent.Await
-import scala.concurrent.duration._
 import scala.language.postfixOps
 
 class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extends IterativeDeepingAlphaBetaSearch(game, 0, 1, time){
@@ -22,22 +17,15 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 		}
 	}
 
-	private implicit val timeout: Timeout = Timeout(1 seconds)
-	private val system = ActorSystem("HeuristicActorSystem")
-
-	private val hotspotStrategy = new HotspotStrategy(gameContext)
-	private val pawsMajorityStrategy = new PawsMajorityStrategy()
-
-	private val heuristics = Seq(
-		HeuristicBox(hotspotStrategy, system.actorOf(HeuristicActorImpl.props(hotspotStrategy)), 6),
-		HeuristicBox(pawsMajorityStrategy, system.actorOf(HeuristicActorImpl.props(pawsMajorityStrategy)), 4)
+	private val whiteHF = new HeuristicFactory(Player.WHITE, gameContext)
+	private val blackHF = new HeuristicFactory(Player.BLACK, gameContext)
+	private val whiteNormalizer = Normalizer.createNormalizer(
+		whiteHF.strategies.foldLeft[Int](0)((acc, h) => acc + h._1.minValue),
+		whiteHF.strategies.foldLeft[Int](0)((acc, h) => acc + h._1.maxValue)
 	)
-
-	private val totWeight = heuristics.foldLeft[Int](0)((acc, hb) => acc + hb.weight)
-
-	private val normalizer = Normalizer.createNormalizer(
-		heuristics.foldLeft[Int](0)((acc, hb) => acc + hb.strategy.minValue),
-		heuristics.foldLeft[Int](0)((acc, hb) => acc + hb.strategy.maxValue)
+	private val blackNormalizer = Normalizer.createNormalizer(
+		blackHF.strategies.foldLeft[Int](0)((acc, h) => acc + h._1.minValue),
+		blackHF.strategies.foldLeft[Int](0)((acc, h) => acc + h._1.maxValue)
 	)
 
 	/**
@@ -51,25 +39,27 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 	override def eval(state: State, player: Player.Value): Double = {
 		super.eval(state, player)
 
-		// Send msg and map relative weights
-		val futuresAndWeights = heuristics.map( hb => (hb.actor ? Message(state, player), hb.weight))
-
-		// Wait results and sum weighting them
-		val num = futuresAndWeights.foldLeft[Int](0)((acc, futureAndWeight) =>
-			(Await.result(futureAndWeight._1, timeout.duration).asInstanceOf[Int] * futureAndWeight._2) + acc)
-
-		// Heuristic strategies average
-		val avg = num.toDouble / totWeight
+		val num = (player match {
+			case Player.WHITE => whiteHF.strategies
+			case Player.BLACK => blackHF.strategies
+			case _ => Seq()
+		}).foldLeft[Int](0)((acc, s) => (s._1.eval(state, player) * s._2) + acc)
 
 		// Normalization to 0 - 1 range
-		val hValue = normalizer(avg)
+		val hValue = player match {
+			case Player.WHITE => whiteNormalizer(num.toDouble / whiteHF.totWeight)
+			case Player.BLACK => blackNormalizer(num.toDouble / blackHF.totWeight)
+			case _ => 0
+		}
 		getMetrics.set("hfValue", hValue)
 		hValue
 	}
 
 	// RUNTIME
 	override def orderActions(state: State, actions: util.List[Action], player: Player.Value, depth: Int): List[Action] = player match {
-		case Player.WHITE => actions.asScala.sortWith((a1, a2) => a2.who == CellContent.KING).toList
+		case Player.WHITE => actions.asScala.sortWith{(a1, a2) =>
+			a2.who == CellContent.KING && state.distance(a1.from.coords, a1.to.coords) < state.distance(a2.from.coords, a2.to.coords)
+		}.toList
 		case Player.BLACK =>
 			val king = state.findKing
 			if (king.isEmpty)

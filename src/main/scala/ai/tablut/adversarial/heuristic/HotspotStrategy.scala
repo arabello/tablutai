@@ -4,7 +4,7 @@ import ai.tablut.state.Player.Player
 import ai.tablut.state._
 
 
-class HotspotStrategy(gameContext: GameContext) extends HeuristicStrategy {
+private class HotspotStrategy(gameContext: GameContext) extends HeuristicStrategy {
 	override val minValue: Int = -4
 	override val maxValue: Int = 10
 

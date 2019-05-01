@@ -4,7 +4,7 @@ import ai.tablut.state.CellContent._
 import ai.tablut.state.Player.Player
 import ai.tablut.state.{Player, State}
 
-class PawsMajorityStrategy extends HeuristicStrategy {
+private class PawsMajorityStrategy extends HeuristicStrategy {
 
 	override val minValue: Int = -9
 	override val maxValue: Int = 16
