@@ -2,14 +2,14 @@ package ai.tablut.adversarial.heuristic
 
 import ai.tablut.state.CellContent._
 import ai.tablut.state.Player.Player
-import ai.tablut.state.{GameContext, Player, State}
+import ai.tablut.state.{Player, State}
 
-private class HFPawsMajority(context: GameContext) extends HeuristicFunction {
+class PawsMajorityStrategy extends HeuristicStrategy {
 
-	private val max = context.maxBlacks // 16
-	private val min = - context.maxWhites // -9
+	override val minValue: Int = -9
+	override val maxValue: Int = 16
 
-	override def eval(state: State, player: Player): Double = {
+	override def eval(state: State, player: Player): Int = {
 		val (whites, blacks) = state.board.flatMap(row => row.map(c => c)).foldLeft[(Int, Int)]((0,0))((acc, cell) =>
 			if (cell.cellContent == WHITE || cell.cellContent == KING)
 				acc.copy(_1 = acc._1 + 1)
@@ -19,12 +19,11 @@ private class HFPawsMajority(context: GameContext) extends HeuristicFunction {
 				acc
 		)
 
-		val delta = player match {
+		player match {
 			case Player.BLACK => blacks - whites
 			case Player.WHITE => whites - blacks
-			case _ => return 0.5
+			case _ => 0
 		}
-
-		Normalizer.createNormalizer(min, max)(delta)
 	}
+
 }
