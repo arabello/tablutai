@@ -8,8 +8,9 @@ class HeuristicFactory(player: Player, gameContext: GameContext) {
 		(new PawsMajorityStrategy, 1)
 	)
 	private val blackStrategies = Seq(
-		(new HotspotStrategy(gameContext), 6),
-		(new PawsMajorityStrategy, 2)
+		(new BlockKingEscape(gameContext), 7),
+		(new PawsMajorityStrategy, 2),
+		(new HotspotStrategy(gameContext), 1)
 	)
 
 	val strategies: Seq[(HeuristicStrategy, Int)] = player match {

@@ -50,4 +50,7 @@ class ActionFactory(state: State, gameContext: GameContext) {
 
 		Way.values.foldLeft[Seq[Action]](Seq())((acc, way) => acc ++ actions(cells, way))
 	}
+
+	def allActions(boardCell: BoardCell): Seq[Action] =
+		Way.values.foldLeft[Seq[Action]](Seq())((acc, way) => acc ++ actions(Seq(boardCell), way))
 }
