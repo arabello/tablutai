@@ -40,8 +40,8 @@ object Main {
 		val initState = TablutSerializer.fromJson(jsonInitState, stateFactory)
 
 		val game = new TablutGame(stateFactory, initState)
-		//val search = new TablutSearch(stateFactory.context, game, maxComputationTime)
-		val search = new IterativeDeepeningAlphaBetaSearch(game, 0, 1, 40)
+		val search = new TablutSearch(stateFactory.context, game, maxComputationTime)
+		///val search = new IterativeDeepeningAlphaBetaSearch(game, 0, 1, 40)
 
 		var currState = initState
 		while(true) {

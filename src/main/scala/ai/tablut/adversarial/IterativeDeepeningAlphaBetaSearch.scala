@@ -110,7 +110,6 @@ class IterativeDeepeningAlphaBetaSearch[S, A, P](var game: Game[S, A, P], var ut
 
 			val newResults = new IterativeDeepeningAlphaBetaSearch.OrderedActions[A]
 
-			// TODO("Simplify OrderedAction adding and add sequential collection for first depth")
 			orderedActions.toParArray.map{action =>
 				val value = minValue(game.getResult(state, action), player, Double.NegativeInfinity, Double.PositiveInfinity, 1)
 				if (timer.timeOutOccurred)
@@ -118,32 +117,20 @@ class IterativeDeepeningAlphaBetaSearch[S, A, P](var game: Game[S, A, P], var ut
 				(action, value)
 			}.seq.foreach(t => newResults.add(t._1, t._2))
 
-			/*
-			val actions = mutable.HashMap[A, Double]()
-			for(action <- results;
-				value = minValue(game.getResult(state, action), player, Double.NegativeInfinity, Double.PositiveInfinity, 1)
-			) if (timer.timeOutOccurred)
-				return results(0)
-			else actions.put(action, value)
-
-			val newResults = actions.toVector.sortWith((first, second) => first._2 < second._2)
-
-			*/
-
 			if (newResults.size > 0) {
 				orderedActions = newResults.actions
 
 				if (!timer.timeOutOccurred)
 					if (hasSafeWinner(newResults.utilValues.head))
-						return orderedActions(0)
+						return orderedActions.head
 					else
 					if (newResults.size > 1 && isSignificantlyBetter(newResults.utilValues.head, newResults.utilValues(1)))
-						return orderedActions(0)
+						return orderedActions.head
 			}
 
 		}while (!timer.timeOutOccurred && heuristicEvaluationUsed)
 
-		orderedActions(0)
+		orderedActions.head
 	}
 
 	// returns an utility value
