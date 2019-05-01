@@ -12,3 +12,6 @@ libraryDependencies += "com.googlecode.aima-java" % "aima-core" % "3.0.0"
 // http://www.scalatest.org
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.5"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+
+// AKKA Actors
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.22"
