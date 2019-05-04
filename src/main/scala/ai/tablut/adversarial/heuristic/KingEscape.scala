@@ -15,6 +15,9 @@ class KingEscape(gameContext: GameContext) extends HeuristicStrategy {
 		val king = kingPosition.get
 		val actionFactory = new ActionFactory(state, gameContext)
 		val actions = actionFactory.allActions(king)
-		actions.foldLeft[Int](0)((acc, a) => if (a.to.cellType == CellType.ESCAPE_POINT) acc + 1 else acc - 1)
+
+		val advMult = if (player == Player.WHITE) 1 else -1
+
+		actions.foldLeft[Int](0)((acc, a) => if (a.to.cellType == CellType.ESCAPE_POINT) acc + (advMult*1) else acc - (advMult*1))
 	}
 }

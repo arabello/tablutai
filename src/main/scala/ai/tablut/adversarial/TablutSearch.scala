@@ -17,15 +17,10 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 		}
 	}
 
-	private val whiteHF = new HeuristicFactory(Player.WHITE, gameContext)
-	private val blackHF = new HeuristicFactory(Player.BLACK, gameContext)
-	private val whiteNormalizer = Normalizer.createNormalizer(
-		whiteHF.strategies.foldLeft[Int](0)((acc, h) => acc + h._1.minValue),
-		whiteHF.strategies.foldLeft[Int](0)((acc, h) => acc + h._1.maxValue)
-	)
-	private val blackNormalizer = Normalizer.createNormalizer(
-		blackHF.strategies.foldLeft[Int](0)((acc, h) => acc + h._1.minValue),
-		blackHF.strategies.foldLeft[Int](0)((acc, h) => acc + h._1.maxValue)
+	private val heuristics = new HeuristicFacade(gameContext)
+	private val normalizer = Normalizer.createNormalizer(
+		heuristics.strategies.foldLeft[Int](0)((acc, h) => acc + h._1.minValue),
+		heuristics.strategies.foldLeft[Int](0)((acc, h) => acc + h._1.maxValue)
 	)
 
 	/**
@@ -39,18 +34,10 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 	override def eval(state: State, player: Player.Value): Double = {
 		super.eval(state, player)
 
-		val num = (player match {
-			case Player.WHITE => whiteHF.strategies
-			case Player.BLACK => blackHF.strategies
-			case _ => Seq()
-		}).foldLeft[Int](0)((acc, s) => (s._1.eval(state, player) * s._2) + acc)
+		val num = heuristics.strategies.foldLeft[Int](0)((acc, s) => (s._1.eval(state, player) * s._2) + acc)
 
 		// Normalization to 0 - 1 range
-		val hValue = player match {
-			case Player.WHITE => whiteNormalizer(num.toDouble / whiteHF.totWeight)
-			case Player.BLACK => blackNormalizer(num.toDouble / blackHF.totWeight)
-			case _ => 0
-		}
+		val hValue = normalizer(num.toDouble / heuristics.totWeight)
 		getMetrics.set("hfValue", hValue)
 		hValue
 	}
