@@ -5,7 +5,8 @@ import ai.tablut.state.Player.Player
 
 class HeuristicFactory(player: Player, gameContext: GameContext) {
 	private val whiteStrategies = Seq(
-		(new PawsMajorityStrategy, 1)
+		(new KingEscape(gameContext), 9),
+		(new PawsMajorityStrategy(), 1)
 	)
 	private val blackStrategies = Seq(
 		(new BlockKingEscape(gameContext), 7),

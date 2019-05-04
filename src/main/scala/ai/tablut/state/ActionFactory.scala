@@ -44,7 +44,7 @@ class ActionFactory(state: State, gameContext: GameContext) {
 	def actions(cells: Seq[BoardCell]): Seq[Action] = Way.values.toParArray.foldLeft[Seq[Action]](Seq())((acc, way) => acc ++ actions(cells, way))
 
 	def allActions: Seq[Action] = {
-		val cells = state.getCells.filter(c => c.cellContent match {
+		val cells = state.getCellsWithFilter(c => c.cellContent match {
 			case CellContent.WHITE | CellContent.KING => state.turn == Player.WHITE
 			case CellContent.BLACK => state.turn == Player.BLACK
 			case _ => false

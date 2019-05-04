@@ -21,7 +21,7 @@ private case class StateImpl(
 	  * @param coords
 	  */
 	def get(coords: (Int, Int)*)(implicit gameContext: GameContext): Seq[BoardCell] = {
-		coords.filter(coord => coord isGameRulesComplied gameContext).flatMap(coord => this (coord))
+		coords.withFilter(coord => coord isGameRulesComplied gameContext).flatMap(coord => this (coord))
 	}
 
 	def findKing: Option[BoardCell] = if (kingCoords.isDefined) apply(kingCoords.get) else None
@@ -44,7 +44,7 @@ private case class StateImpl(
 		if (contentMoved == CellContent.KING)
 			kingCoords = Some(action.to.coords)
 
-		val allies = (action.to surroundingAt 2).filter(c => c.orNull != null && c.get.cellContent == action.who.toCellContent).map(c => c.get)
+		val allies = (action.to surroundingAt 2).withFilter(c => c.orNull != null && c.get.cellContent == action.who.toCellContent).map(c => c.get)
 		allies.map(c => (action.to until c).drop(1).head).foldLeft[State](afterMove)((acc, enemy) =>
 			if ((enemy.cellContent == BLACK && action.who.toCellContent == WHITE) ||
 				( (enemy.cellContent == WHITE || enemy.cellContent == KING) && action.who.toCellContent == BLACK))
@@ -58,15 +58,14 @@ private case class StateImpl(
 	  * List of all cells flatten via row than column
 	  * @return
 	  */
-	def getCells: Seq[BoardCell] = board.flatMap(row => row.map(c => c))
+	def getCells: Seq[BoardCell] = for (row <- board; cell <- row) yield cell
 
 
 	/**
 	  * List of filtered cells flatten via row than column
 	  * @return
 	  */
-	// TODO ("Optimize this")
-	def getCellsWithFilter(filter: BoardCell => Boolean): Seq[BoardCell] = board.flatMap(row => row.filter(filter))
+	def getCellsWithFilter(filter: BoardCell => Boolean): Seq[BoardCell] = for (row <- board; cell <- row; if filter(cell)) yield cell
 
 	/**
 	  * Synthesize a new state with [[ai.tablut.state.BoardCell#cellContent]] equals to [[ai.tablut.state.CellContent#EMPTY]]
