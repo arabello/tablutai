@@ -10,13 +10,6 @@ import scala.collection.JavaConverters._
 import scala.language.postfixOps
 
 class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, 0, 1, time){
-	private object Normalizer {
-		def createNormalizer(min: Double, max: Double): Double => Double = (value: Double) => {
-			val res = (value - min) / (max - min)
-			if (res < 0) 0 else if (res > 1) 1 else res
-		}
-	}
-
 	private val heuristicFunction = HeuristicFactory.createHeuristicFunction(gameContext)
 
 	/**
