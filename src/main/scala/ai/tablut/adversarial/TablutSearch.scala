@@ -2,6 +2,7 @@ package ai.tablut.adversarial
 
 import java.util
 
+import ai.tablut.adversarial.heuristic.Phase.Phase
 import ai.tablut.adversarial.heuristic._
 import ai.tablut.state.implicits._
 import ai.tablut.state.{Player, _}
@@ -10,8 +11,14 @@ import scala.collection.JavaConverters._
 import scala.language.postfixOps
 
 class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, 0, 1, time){
-	private val whiteHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.WHITE)
-	private val blackHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.BLACK)
+	private var phase: Phase = Phase.START
+	private var whiteHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.WHITE, phase)
+	private var blackHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.BLACK, phase)
+
+	def setPhase(phase: Phase): Unit = {
+		whiteHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.WHITE, phase)
+		blackHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.BLACK, phase)
+	}
 
 	/**
 	  * Heuristic evaluation of non-terminal states

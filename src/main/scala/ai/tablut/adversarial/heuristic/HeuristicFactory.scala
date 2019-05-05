@@ -1,5 +1,6 @@
 package ai.tablut.adversarial.heuristic
 
+import ai.tablut.adversarial.heuristic.Phase.Phase
 import ai.tablut.state.{GameContext, Player}
 import ai.tablut.state.Player.Player
 
@@ -18,7 +19,7 @@ object HeuristicFactory{
 		(new HotspotStrategy(gameContext), 1)
 	)
 
-	def createHeuristicFunction(gameContext: GameContext, player: Player): HeuristicFunction =
+	def createHeuristicFunction(gameContext: GameContext, player: Player, phase: Phase): HeuristicFunction =
 		new HeuristicFunctionImpl(player match{
 			case Player.WHITE => whiteStrategies(gameContext)
 			case Player.BLACK => blackStrategies(gameContext)

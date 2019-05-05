@@ -3,6 +3,7 @@ package ai.tablut
 import java.io.FileInputStream
 import java.util.Properties
 
+import ai.tablut.adversarial.heuristic.Phase
 import ai.tablut.adversarial.{IterativeDeepeningAlphaBetaSearch, TablutGame, TablutSearch}
 import ai.tablut.connectivity.ConnFactory
 import ai.tablut.serialization.TablutSerializer
@@ -28,6 +29,9 @@ object Main {
 
 		LogInterceptor.init(conf)
 
+		val midPhaseFrom = conf.getProperty("MID_PHASE_FROM", "6").toInt
+		val endPhaseFrom = conf.getProperty("END_PHASE_FROM", "12").toInt
+
 		val connFactory = new ConnFactory(conf)
 		val client = if (clientType == "w") connFactory.createWhiteClient() else connFactory.createBlackClient()
 		val stateFactory = StateFacade.normalStateFactory()
@@ -44,6 +48,7 @@ object Main {
 		///val search = new IterativeDeepeningAlphaBetaSearch(game, 0, 1, 40)
 
 		var currState = initState
+		var nTurn = 0
 		while(true) {
 			val nextAction = search.makeDecision(currState)
 			val metrics = search.getMetrics
@@ -56,6 +61,12 @@ object Main {
 
 			val jsonState = client.readState()
 			currState = TablutSerializer.fromJson(jsonState, stateFactory)
+
+			nTurn += 1
+			if (nTurn > midPhaseFrom)
+				search.setPhase(Phase.MID)
+			if (nTurn > endPhaseFrom)
+				search.setPhase(Phase.END)
 		}
 	}
 }
