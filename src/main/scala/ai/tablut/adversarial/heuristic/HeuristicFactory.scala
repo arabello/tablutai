@@ -5,9 +5,10 @@ import ai.tablut.state.Player.Player
 
 object HeuristicFactory{
 	private def createStrategies(gameContext: GameContext) = Seq(
-		//(new KingEscapeStrategy(gameContext), 55),
-		//(new PawsMajorityStrategy(), 25),
-		(new HotspotStrategy(gameContext), 20)
+		(new KingKillingStrategy, 60),
+		(new PawsMajorityStrategy(), 20),
+		(new KingEscapeStrategy(gameContext), 10),
+		(new HotspotStrategy(gameContext), 10)
 	)
 
 	def createHeuristicFunction(gameContext: GameContext): HeuristicFunction = new HeuristicFunctionImpl(createStrategies(gameContext))
