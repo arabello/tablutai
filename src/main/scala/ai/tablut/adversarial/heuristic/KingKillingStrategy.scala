@@ -4,7 +4,7 @@ import ai.tablut.state.{CellContent, CellType, Player, State}
 import ai.tablut.state.implicits._
 
 private class KingKillingStrategy extends HeuristicStrategy {
-	override val minValue: Int = -12
+	override val minValue: Int = 0
 	override val maxValue: Int = 12
 
 	override def eval(state: State, player: Player): Int = {
