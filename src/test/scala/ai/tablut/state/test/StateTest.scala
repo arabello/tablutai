@@ -96,6 +96,37 @@ class StateTest extends WordSpec{
 				val action = Action(Player.WHITE, state(4)(6).get, state(3)(6).get)
 				val result = startState.applyAction(action)
 				assert(TablutSerializer.toJson(result) == expected)
+
+
+			}
+
+			"remove a captured pawn against walls" in{
+				val initState = factory.createInitialState()
+				val nearCastleEating = initState.transform(Map(
+					(4,2) ->  CellContent.EMPTY
+				))
+				val expectedResult = nearCastleEating.transform(Map(
+					(4,1) -> CellContent.EMPTY,
+					(4,2) -> CellContent.BLACK,
+					(4,3) -> CellContent.EMPTY
+				)).nextPlayer
+
+				val action = Action(Player.BLACK, nearCastleEating(4)(1).get, nearCastleEating(4)(2).get)
+				assert(nearCastleEating.applyAction(action) == expectedResult)
+
+				val nearCampEating = initState.transform(Map(
+					(4,2) ->  CellContent.BLACK,
+					(4,3) ->  CellContent.EMPTY,
+					(3,3) ->  CellContent.WHITE,
+				))
+				val expectedResult2 = nearCampEating.transform(Map(
+					(4,2) -> CellContent.EMPTY,
+					(4,3) -> CellContent.WHITE,
+					(3,3) -> CellContent.EMPTY,
+				)).nextPlayer
+
+				val action2 = Action(Player.WHITE, nearCampEating(3)(3).get, nearCastleEating(4)(3).get)
+				assert(nearCampEating.applyAction(action2) == expectedResult2)
 			}
 
 			"getCells with coordinates" in{

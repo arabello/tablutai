@@ -44,7 +44,9 @@ private case class StateImpl(
 		if (contentMoved == CellContent.KING)
 			kingCoords = Some(action.to.coords)
 
-		val allies = (action.to surroundingAt 2).withFilter(c => c.orNull != null && c.get.cellContent == action.who.toCellContent).map(c => c.get)
+		val allies = (action.to surroundingAt 2).withFilter(c => c.orNull != null
+			&& (c.get.cellContent == action.who.toCellContent || c.get.cellType == CellType.CASTLE || c.get.cellType == CellType.CAMP)).map(c => c.get)
+
 		allies.map(c => (action.to until c).drop(1).head).foldLeft[State](afterMove)((acc, enemy) =>
 			if ((enemy.cellContent == BLACK && action.who.toCellContent == WHITE) ||
 				( (enemy.cellContent == WHITE || enemy.cellContent == KING) && action.who.toCellContent == BLACK))
