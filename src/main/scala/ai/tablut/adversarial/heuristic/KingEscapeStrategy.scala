@@ -3,7 +3,7 @@ package ai.tablut.adversarial.heuristic
 import ai.tablut.state.Player.Player
 import ai.tablut.state._
 
-class KingEscape(gameContext: GameContext) extends HeuristicStrategy {
+class KingEscapeStrategy(gameContext: GameContext) extends HeuristicStrategy {
 	override val minValue: Int = -81
 	override val maxValue: Int = 81
 

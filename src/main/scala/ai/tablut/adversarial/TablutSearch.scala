@@ -17,11 +17,7 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 		}
 	}
 
-	private val heuristics = new HeuristicFacade(gameContext)
-	private val normalizer = Normalizer.createNormalizer(
-		heuristics.strategies.foldLeft[Int](0)((acc, h) => acc + h._1.minValue),
-		heuristics.strategies.foldLeft[Int](0)((acc, h) => acc + h._1.maxValue)
-	)
+	private val heuristicFunction = HeuristicFactory.createHeuristicFunction(gameContext)
 
 	/**
 	  * Heuristic evaluation of non-terminal states
@@ -34,10 +30,7 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 	override def eval(state: State, player: Player.Value): Double = {
 		super.eval(state, player)
 
-		val num = heuristics.strategies.foldLeft[Int](0)((acc, s) => (s._1.eval(state, player) * s._2) + acc)
-
-		// Normalization to 0 - 1 range
-		val hValue = normalizer(num.toDouble / heuristics.totWeight)
+		val hValue = heuristicFunction.eval(state, player)
 		getMetrics.set("hfValue", hValue)
 		hValue
 	}
