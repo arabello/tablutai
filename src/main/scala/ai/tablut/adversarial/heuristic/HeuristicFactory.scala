@@ -4,12 +4,23 @@ import ai.tablut.state.{GameContext, Player}
 import ai.tablut.state.Player.Player
 
 object HeuristicFactory{
-	private def createStrategies(gameContext: GameContext) = Seq(
+	private def whiteStrategies(gameContext: GameContext) = Seq(
+		(new KingEscapeStrategy(gameContext), 60),
+		(new HotspotStrategy(gameContext), 30),
+		(new PawsMajorityStrategy(), 10)
+	)
+
+	private def blackStrategies(gameContext: GameContext) = Seq(
 		(new KingKillingStrategy, 60),
 		(new PawsMajorityStrategy(), 20),
 		(new KingEscapeStrategy(gameContext), 10),
 		(new HotspotStrategy(gameContext), 10)
 	)
 
-	def createHeuristicFunction(gameContext: GameContext): HeuristicFunction = new HeuristicFunctionImpl(createStrategies(gameContext))
+	def createHeuristicFunction(gameContext: GameContext, player: Player): HeuristicFunction =
+		new HeuristicFunctionImpl(player match{
+			case Player.WHITE => whiteStrategies(gameContext)
+			case Player.BLACK => blackStrategies(gameContext)
+			case _ => Seq()
+		})
 }

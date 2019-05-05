@@ -10,7 +10,8 @@ import scala.collection.JavaConverters._
 import scala.language.postfixOps
 
 class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, 0, 1, time){
-	private val heuristicFunction = HeuristicFactory.createHeuristicFunction(gameContext)
+	private val whiteHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.WHITE)
+	private val blackHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.BLACK)
 
 	/**
 	  * Heuristic evaluation of non-terminal states
@@ -23,7 +24,9 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 	override def eval(state: State, player: Player.Value): Double = {
 		super.eval(state, player)
 
-		val hValue = heuristicFunction.eval(state, player)
+		val heuristic = if (player == Player.WHITE) whiteHeuristic else blackHeuristic
+
+		val hValue = heuristic.eval(state, player)
 		getMetrics.set("hfValue", hValue)
 		hValue
 	}
