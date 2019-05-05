@@ -34,7 +34,7 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 	// RUNTIME
 	override def orderActions(state: State, actions: util.List[Action], player: Player.Value, depth: Int): List[Action] = player match {
 		case Player.WHITE => actions.asScala.sortWith{(a1, a2) =>
-			a2.who == CellContent.KING && state.distance(a1.from.coords, a1.to.coords) < state.distance(a2.from.coords, a2.to.coords)
+			a2.from.cellContent == CellContent.KING && state.distance(a1.from.coords, a1.to.coords) < state.distance(a2.from.coords, a2.to.coords)
 		}.toList
 		case Player.BLACK =>
 			val king = state.findKing

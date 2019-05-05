@@ -5,7 +5,7 @@ import ai.tablut.state.Player.Player
 
 object HeuristicFactory{
 	private def whiteStrategies(gameContext: GameContext) = Seq(
-		(new CellPriorityStrategy(gameContext), 60)
+		(new CellPriorityStrategy(gameContext), 60),
 		(new KingEscapeStrategy(gameContext), 20),
 		(new HotspotStrategy(gameContext), 10),
 		(new PawsMajorityStrategy(), 10)
