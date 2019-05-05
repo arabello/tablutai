@@ -95,8 +95,12 @@ private case class StateImpl(
 		copy( board = board.map(row => row.map{ cell =>
 			if (!coordsAndConent.contains(cell.coords))
 				cell
-			else
-				cell.copy(cellContent = coordsAndConent(cell.coords))
+			else {
+				val content = coordsAndConent(cell.coords)
+				if (content == CellContent.KING)
+					kingCoords = Some(cell.coords)
+				cell.copy(cellContent = content)
+			}
 		}))
 	}
 
