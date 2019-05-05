@@ -5,17 +5,17 @@ import ai.tablut.state.Player.Player
 
 object HeuristicFactory{
 	private def whiteStrategies(gameContext: GameContext) = Seq(
-		(new CellPriorityStrategy(gameContext), 60),
-		(new KingEscapeStrategy(gameContext), 20),
-		(new HotspotStrategy(gameContext), 10),
-		(new PawsMajorityStrategy(), 10)
+		(new CellPriorityStrategy(gameContext), 6),
+		//(new KingEscapeStrategy(gameContext), 3),
+		(new PawsMajorityStrategy(), 3),
+		(new StarterStrategy(gameContext), 10)
 	)
 
 	private def blackStrategies(gameContext: GameContext) = Seq(
-		(new KingKillingStrategy, 60),
-		(new PawsMajorityStrategy(), 20),
-		(new KingEscapeStrategy(gameContext), 10),
-		(new HotspotStrategy(gameContext), 10)
+		(new KingKillingStrategy, 6),
+		(new PawsMajorityStrategy(), 2),
+		(new KingEscapeStrategy(gameContext), 1),
+		(new HotspotStrategy(gameContext), 1)
 	)
 
 	def createHeuristicFunction(gameContext: GameContext, player: Player): HeuristicFunction =
