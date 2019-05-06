@@ -1,12 +1,7 @@
 package ai.tablut.adversarial
 
-import java.util
-
 import ai.tablut.state.CellContent.{CellContent => _}
 import ai.tablut.state._
-import aima.core.search.adversarial.Game
-
-import scala.collection.JavaConverters._
 
 class TablutGame(val stateFactory: StateFactory, initialState: State) extends Game[State, Action, Player.Value] {
 	/**
@@ -26,7 +21,7 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 
 	override def getPlayers: Array[Player.Value] = Player.values.toArray
 
-	override def getActions(state: State): util.List[Action] = state.allActions(stateFactory.context).asJava
+	override def getActions(state: State): Seq[Action] = state.allActions(stateFactory.context)
 
 	/**
 	  * A utility function (also called an objective function or

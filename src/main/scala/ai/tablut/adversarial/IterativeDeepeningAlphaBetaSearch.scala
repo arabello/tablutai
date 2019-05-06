@@ -1,6 +1,6 @@
 package ai.tablut.adversarial
 
-import aima.core.search.adversarial.{AdversarialSearch, Game}
+import aima.core.search.adversarial.AdversarialSearch
 import aima.core.search.framework.Metrics
 
 
@@ -209,5 +209,5 @@ class IterativeDeepeningAlphaBetaSearch[S, A, P](var game: Game[S, A, P], var ut
 	  * Primitive operation for action ordering. This implementation preserves
 	  * the original order (provided by the game).
 	  */
-	protected def orderActions(state: S, actions: List[A], player: P, depth: Int): List[A] = actions
+	protected def orderActions(state: S, actions: Seq[A], player: P, depth: Int): Seq[A] = actions
 }

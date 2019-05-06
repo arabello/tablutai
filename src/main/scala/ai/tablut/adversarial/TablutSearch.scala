@@ -38,7 +38,7 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 	}
 
 	// RUNTIME
-	override def orderActions(state: State, actions: List[Action], player: Player.Value, depth: Int): List[Action] = {
+	override def orderActions(state: State, actions: Seq[Action], player: Player.Value, depth: Int): Seq[Action] = {
 		if (depth < 4)
 			actions
 		else player match {
