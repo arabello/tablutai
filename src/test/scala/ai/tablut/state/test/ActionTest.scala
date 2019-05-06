@@ -11,14 +11,15 @@ class ActionTest extends WordSpec{
 
 			val state = factory.createInitialState()
 
-			"be game rules complied" in {
+			"game rules complied" in {
 				assert(!Action(Player.WHITE, state(2)(4).get, state(3)(2).get).isGameRulesComplied(rules))
 				assert(!Action(Player.WHITE, state(2)(4).get, state(3)(2).get).isGameRulesComplied(rules))
 			}
 
-			"a legal move" in{
+			"legal move" in{
 				assert(!Action(Player.WHITE, state(2)(4).get, state(6)(4).get).isLegal(state))
 				assert(!Action(Player.WHITE, state(3)(4).get, state(4)(4).get).isLegal(state))
+				assert(!Action(Player.WHITE, state(4)(6).get, state(4)(7).get).isLegal(state))
 			}
 		}
 	}
