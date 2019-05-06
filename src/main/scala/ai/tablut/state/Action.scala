@@ -29,7 +29,7 @@ case class Action(who: Player, from: BoardCell, to: BoardCell) extends GameRules
 		val toX = to.coords._1
 		val toY = to.coords._2
 
-		((from.cellContent == CellContent.WHITE && who == Player.WHITE) || (from.cellContent == CellContent.BLACK && who == Player.BLACK)) &&
+		(((from.cellContent == CellContent.WHITE || from.cellContent == CellContent.KING) && who == Player.WHITE) || (from.cellContent == CellContent.BLACK && who == Player.BLACK)) &&
 		from.cellContent != CellContent.EMPTY &&
 		to.cellContent == CellContent.EMPTY &&
 		(to.cellType == CellType.NOTHING || to.cellType == CellType.ESCAPE_POINT) && // TODO("Enhance to allow BLACK re-entering camps")

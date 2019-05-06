@@ -42,9 +42,14 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 		if (depth < 4)
 			actions
 		else player match {
-			case Player.WHITE => actions.sortWith{(a1, a2) =>
-				a2.from.cellContent == CellContent.KING && state.distance(a1.from.coords, a1.to.coords) < state.distance(a2.from.coords, a2.to.coords)
-			}
+			case Player.WHITE =>
+				val sorted = actions.sortWith{(a1, a2) =>
+					(a1.from.cellContent == CellContent.KING && a2.from.cellContent != CellContent.KING) ||
+					(a1.from.cellContent == CellContent.KING && a2.from.cellContent == CellContent.KING && state.distance(a1.from.coords, a1.to.coords) > state.distance(a2.from.coords, a2.to.coords))
+				}
+				println(s"$actions")
+				println(s"$sorted")
+				sorted
 			case Player.BLACK =>
 				val king = state.findKing
 				if (king.isEmpty)
