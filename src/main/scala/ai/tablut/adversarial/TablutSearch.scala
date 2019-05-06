@@ -12,12 +12,14 @@ import scala.language.postfixOps
 
 class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, 0, 1, time){
 	private var phase: Phase = Phase.START
+	getMetrics.set("phase", phase.id)
 	private var whiteHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.WHITE, phase)
 	private var blackHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.BLACK, phase)
 
 	def setPhase(phase: Phase): Unit = {
 		whiteHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.WHITE, phase)
 		blackHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.BLACK, phase)
+		getMetrics.set("phase", phase.id)
 	}
 
 	/**

@@ -10,12 +10,12 @@ private class CellPriorityStrategy(gameContext: GameContext) extends HeuristicSt
 		val mulp = if (player == Player.WHITE) 1 else -1
 		var value = if (player == Player.WHITE) minValue else maxValue
 
-		state.get( // camp angles
-			(1,3), (1,5),
-			(3,1), (3,7),
-			(5,1), (5,7),
-			(7,3), (7,5)
-		)(gameContext).foreach(c => if (c.cellContent == CellContent.WHITE) value += 1 * mulp)
+		state.get( // block escapes
+			(1,2), (1,6),
+			(2,1), (2,7),
+			(6,1), (6,7),
+			(7,2), (7,6)
+		)(gameContext).foreach(c => if (c.cellContent == CellContent.EMPTY) value += 1 * mulp)
 
 		state.get( // near castle
 			(4, 3), (4, 5),
