@@ -1,5 +1,6 @@
 package ai.tablut.adversarial
 
+import ai.tablut.LogInterceptor
 import ai.tablut.adversarial.heuristic.Phase.Phase
 import ai.tablut.adversarial.heuristic._
 import ai.tablut.state.implicits._
@@ -26,13 +27,20 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 	// IMPORTANT: When overriding, first call the super implementation!ù
 	// RUNTIME
 	override def eval(state: State, player: Player.Value): Double = {
-		super.eval(state, player)
+		val eval = super.eval(state, player)
+		LogInterceptor{
+			getMetrics.set("hfValue", eval)
+		}
+
+		if (eval == utilMin || eval == utilMax)
+			return eval
 
 		val heuristic = if (player == Player.WHITE) whiteHeuristic else blackHeuristic
 
 		val hValue = heuristic.eval(state, player)
-		getMetrics.set("hfValue", hValue)
-		getMetrics.set("phase", phase.id)
+		LogInterceptor{
+			getMetrics.set("hfValue", hValue)
+		}
 		hValue
 	}
 
