@@ -84,13 +84,13 @@ private object NormalGameContext extends GameContext{
 
 
 				// Nearc up camp
-				case (1,3) | (2,4) | (1,5) => state(x + 1)(y).exists(c => c.cellContent == BLACK)
+				case (1,3) | (2,4) | (1,5) | (5,1) | (5,7) => state(x + 1)(y).exists(c => c.cellContent == BLACK)
 				// Nearc left camp
-				case (3,1) | (4,2) | (5,1) => state(x)(y + 1).exists(c => c.cellContent == BLACK)
+				case (3,1) | (4,2) | (5,1) | (1,5) | (7,5) => state(x)(y + 1).exists(c => c.cellContent == BLACK)
 				// Nearc right camp
-				case (3,7) | (4,6) | (5,7) => state(x)(y - 1).exists(c => c.cellContent == BLACK)
+				case (3,7) | (4,6) | (5,7) | (1,3) | (7,3) => state(x)(y - 1).exists(c => c.cellContent == BLACK)
 				// Nearc down camp
-				case (7,3) | (6,4) | (7,5) => state(x - 1)(y).exists(c => c.cellContent == BLACK)
+				case (7,3) | (6,4) | (7,5) | (3,1) | (3,7) => state(x - 1)(y).exists(c => c.cellContent == BLACK)
 
 				case _ =>
 					(state(x - 1)(y).exists(c => c.cellContent == BLACK) && state(x + 1)(y).exists(c => c.cellContent == BLACK)) ||
