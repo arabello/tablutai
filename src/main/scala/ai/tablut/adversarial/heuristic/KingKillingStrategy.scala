@@ -1,7 +1,7 @@
 package ai.tablut.adversarial.heuristic
 import ai.tablut.state.Player.Player
-import ai.tablut.state.{CellContent, CellType, Player, State}
 import ai.tablut.state.implicits._
+import ai.tablut.state.{CellContent, CellType, Player, State}
 
 private class KingKillingStrategy extends HeuristicStrategy {
 	override val minValue: Int = 0

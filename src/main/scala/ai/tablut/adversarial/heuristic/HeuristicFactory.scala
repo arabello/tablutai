@@ -1,8 +1,8 @@
 package ai.tablut.adversarial.heuristic
 
 import ai.tablut.adversarial.heuristic.Phase.Phase
-import ai.tablut.state.{GameContext, Player}
 import ai.tablut.state.Player.Player
+import ai.tablut.state.{GameContext, Player}
 
 object HeuristicFactory{
 	private def whiteStrategies(gameContext: GameContext, phase: Phase) = phase match{

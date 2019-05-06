@@ -1,11 +1,7 @@
 package ai.tablut.adversarial
 
-import java.util
-
 import aima.core.search.adversarial.{AdversarialSearch, Game}
 import aima.core.search.framework.Metrics
-
-import scala.collection.JavaConverters._
 
 
 /**
@@ -75,7 +71,9 @@ object IterativeDeepeningAlphaBetaSearch {
 
 }
 
-class IterativeDeepeningAlphaBetaSearch[S, A, P](var game: Game[S, A, P], var utilMin: Double, var utilMax: Double, val time: Int) extends AdversarialSearch[S, A] {
+class IterativeDeepeningAlphaBetaSearch[S, A, P](var game: Game[S, A, P], var utilMin: Double, var utilMax: Double, val time: Int)
+	extends AdversarialSearch[S, A] {
+
 	protected var currDepthLimit = 0
 	private var heuristicEvaluationUsed = false // indicates that non-terminal
 
@@ -211,5 +209,5 @@ class IterativeDeepeningAlphaBetaSearch[S, A, P](var game: Game[S, A, P], var ut
 	  * Primitive operation for action ordering. This implementation preserves
 	  * the original order (provided by the game).
 	  */
-	protected def orderActions(state: S, actions: util.List[A], player: P, depth: Int): List[A] = actions.asScala.toList
+	protected def orderActions(state: S, actions: List[A], player: P, depth: Int): List[A] = actions
 }
