@@ -8,7 +8,7 @@ object HeuristicFactory{
 	private def whiteStrategies(gameContext: GameContext, phase: Phase) = phase match{
 		case Phase.START => Seq(
 			(new WhiteStarterStrategy(gameContext), 8),
-			(new CellPriorityStrategy(), 2)
+			(new CellPriorityStrategy(gameContext), 2)
 		)
 		case Phase.MID => Seq(
 			(new CellPriorityStrategy(gameContext), 6),

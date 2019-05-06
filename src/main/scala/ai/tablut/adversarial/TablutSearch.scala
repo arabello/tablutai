@@ -30,6 +30,7 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 		val eval = super.eval(state, player)
 		LogInterceptor{
 			getMetrics.set("hfValue", eval)
+			getMetrics.set("phase", phase.id)
 		}
 
 		if (eval == utilMin || eval == utilMax)
