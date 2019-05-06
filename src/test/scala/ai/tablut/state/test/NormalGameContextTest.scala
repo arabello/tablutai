@@ -1,14 +1,16 @@
 package ai.tablut.state.test
 
 import ai.tablut.serialization.TablutSerializer
-import ai.tablut.state.StateFacade
+import ai.tablut.state.{CellContent, StateFacade}
 import org.scalatest.WordSpec
 
 class NormalGameContextTest extends WordSpec{
 	"NormalGameContext" when{
 		"using normal game rules" should{
+			val factory = StateFacade.normalStateFactory()
+			val iniState = factory.createInitialState()
+
 			"detect WHITE winner" in{
-				val factory = StateFacade.normalStateFactory()
 				val jsonStateWhiteWinner =
 					"""
 					  |{"board":[
@@ -44,8 +46,17 @@ class NormalGameContextTest extends WordSpec{
 				assert(!factory.context.isWinner(TablutSerializer.fromJson(jsonState, factory)))
 			}
 
+			"detect WHITE lost" in{
+				val state = iniState.transform(Map(
+					(4,4) -> CellContent.EMPTY,
+					(4,5) -> CellContent.BLACK,
+					(4,6) -> CellContent.KING
+				))
+
+				assert(!factory.context.isWinner(state))
+			}
+
 			"detect BLACK winner" in{
-				val factory = StateFacade.normalStateFactory()
 				val doubleSideLeftRight =
 					"""
 					  |{"board":[
@@ -170,6 +181,23 @@ class NormalGameContextTest extends WordSpec{
                      |	],
                      |	"turn":"BLACK"}""".stripMargin, factory)
 				assert(factory.context.isWinner(s6))
+
+				val state = iniState.transform(Map(
+					(4,4) -> CellContent.EMPTY,
+					(4,5) -> CellContent.BLACK,
+					(4,6) -> CellContent.KING
+				)).nextPlayer
+
+				assert(factory.context.isWinner(state))
+			}
+
+			"detect BLACK lost" in{
+				val state = iniState.transform(Map(
+					(4,4) -> CellContent.EMPTY,
+					(7,2) -> CellContent.KING
+				)).nextPlayer
+
+				assert(!factory.context.isWinner(state))
 			}
 		}
 	}
