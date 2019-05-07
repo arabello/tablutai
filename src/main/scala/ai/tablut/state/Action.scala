@@ -78,5 +78,6 @@ case class Action(who: Player, from: BoardCell, to: BoardCell) extends GameRules
 		true
 	}
 
-	override def toString: String = s"$who : ${from.coords}[${from.cellContent}] -> ${to.coords}[${to.cellContent}]"
+	override def toString: String =
+		s"<${who.toString.head}${from.coords} -> ${to.coords}>"
 }

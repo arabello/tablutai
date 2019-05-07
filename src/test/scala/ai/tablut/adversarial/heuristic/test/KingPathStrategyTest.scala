@@ -11,14 +11,27 @@ class KingPathStrategyTest extends WordSpec{
 			val initState = factory.createInitialState()
 			val strategy = new KingPathStrategy(factory.context)
 
-			"evaluate strategy" in{
+			"see two steps forward" in{
 				val twoSteps = initState.transform(Map(
 					(4,2) -> CellContent.EMPTY,
 					(4,3) -> CellContent.EMPTY
 				))
 
-				assert(strategy.eval(twoSteps, Player.WHITE) == strategy.minValue + 1)
-				assert(strategy.eval(twoSteps, Player.WHITE) == strategy.maxValue - 1)
+				assert(strategy.eval(twoSteps, Player.WHITE) == strategy.maxValue)
+				assert(strategy.eval(twoSteps, Player.BLACK) == strategy.minValue)
+			}
+
+			"see one and two steps forward" in{
+				val oneAndTwoSteps = initState.transform(Map(
+					(2,4) -> CellContent.EMPTY,
+					(4,2) -> CellContent.EMPTY,
+					(4,3) -> CellContent.EMPTY,
+					(4,4) -> CellContent.EMPTY,
+					(3,3) -> CellContent.KING
+				))
+
+				assert(strategy.eval(oneAndTwoSteps, Player.WHITE) == strategy.maxValue)
+				assert(strategy.eval(oneAndTwoSteps, Player.BLACK) == strategy.minValue)
 			}
 		}
 	}

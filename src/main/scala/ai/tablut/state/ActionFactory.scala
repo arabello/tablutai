@@ -9,27 +9,27 @@ object Way extends Enumeration {
 
 class ActionFactory(state: State, gameContext: GameContext) {
 
-	private def upActions(cells: Seq[BoardCell]): Seq[Action] = cells.flatMap(c =>
-		for ( x <- (c.coords._1 - 1 to 0 by -1).takeWhile(x => state(x)(c.coords._2).exists(c => c.cellContent == CellContent.EMPTY));
-		      a = Action(state.turn, c, state(x)(c.coords._2).get)
+	private def upActions(cells: Seq[BoardCell]): Seq[Action] = cells.flatMap(current =>
+		for ( x <- (current.coords._1 - 1 to 0 by -1).takeWhile(x => state(x)(current.coords._2).exists(pathCell => pathCell.cellContent == CellContent.EMPTY));
+		      a = Action(state.turn, current, state(x)(current.coords._2).get)
 		      if a.validate(gameContext, state)
 		) yield a)
 
-	private def downActions(cells: Seq[BoardCell]): Seq[Action] = cells.flatMap(c =>
-		for ( x <- (c.coords._1 +1 until state.rows).takeWhile(x => state(x)(c.coords._2).exists(c => c.cellContent == CellContent.EMPTY));
-			a = Action(state.turn, c, state(x)(c.coords._2).get)
+	private def downActions(cells: Seq[BoardCell]): Seq[Action] = cells.flatMap(current =>
+		for ( x <- (current.coords._1 +1 until state.rows).takeWhile(x => state(x)(current.coords._2).exists(pathCell => pathCell.cellContent == CellContent.EMPTY));
+			a = Action(state.turn, current, state(x)(current.coords._2).get)
 			if a.validate(gameContext, state)
 		) yield a)
 
-	private def rightActions(cells: Seq[BoardCell]): Seq[Action] = cells.flatMap(c =>
-		for (y <- (c.coords._2 +1  until state.cols).takeWhile(y => state(c.coords._1)(y).exists(c => c.cellContent == CellContent.EMPTY));
-		     a = Action(state.turn, c, state(c.coords._1)(y).get)
+	private def rightActions(cells: Seq[BoardCell]): Seq[Action] = cells.flatMap(current =>
+		for (y <- (current.coords._2 +1  until state.cols).takeWhile(y => state(current.coords._1)(y).exists(pathCell => pathCell.cellContent == CellContent.EMPTY));
+		     a = Action(state.turn, current, state(current.coords._1)(y).get)
 		     if a.validate(gameContext, state)
 		) yield a)
 
-	private def leftActions(cells: Seq[BoardCell]): Seq[Action] = cells.flatMap(c =>
-		for ( y <- (c.coords._2 -1 to 0 by -1).takeWhile(y => state(c.coords._1)(y).exists(c => c.cellContent == CellContent.EMPTY));
-		      a = Action(state.turn, c, state(c.coords._1)(y).get)
+	private def leftActions(cells: Seq[BoardCell]): Seq[Action] = cells.flatMap(current =>
+		for ( y <- (current.coords._2 -1 to 0 by -1).takeWhile(y => state(current.coords._1)(y).exists(pathCell => pathCell.cellContent == CellContent.EMPTY));
+		      a = Action(state.turn, current, state(current.coords._1)(y).get)
 		      if a.validate(gameContext, state)
 		) yield a)
 
