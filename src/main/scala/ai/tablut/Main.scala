@@ -30,7 +30,7 @@ object Main {
 		LogInterceptor.init(conf)
 
 		val midPhaseFrom = conf.getProperty("MID_PHASE_FROM", "4").toInt
-		val endPhaseFrom = conf.getProperty("END_PHASE_FROM", "8").toInt
+		val endPhaseFrom = conf.getProperty("END_PHASE_FROM", "10").toInt
 
 		val connFactory = new ConnFactory(conf)
 		val client = if (clientType == "w") connFactory.createWhiteClient() else connFactory.createBlackClient()

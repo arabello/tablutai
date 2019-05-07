@@ -14,6 +14,7 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 	private var blackHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.BLACK, phase)
 
 	def setPhase(phase: Phase): Unit = {
+		this.phase = phase
 		whiteHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.WHITE, phase)
 		blackHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.BLACK, phase)
 	}
