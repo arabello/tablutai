@@ -62,7 +62,7 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 					return actions
 
 				val kingSurrounding = king.get.surroundingAt(1)(state).withFilter(c => c.isDefined && c.get.cellContent == CellContent.EMPTY).map(c => c.get)
-				actions.sortWith((a1, a2) => kingSurrounding.contains(a2.to))
+				actions.sortWith((a1, a2) => kingSurrounding.contains(a1.to))
 		}
 	}
 
