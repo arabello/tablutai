@@ -48,7 +48,7 @@ object Main {
 		///val search = new IterativeDeepeningAlphaBetaSearch(game, 0, 1, 40)
 
 		var currState = initState
-		var nTurn = 0
+		var nTurn = 1
 		while(true) {
 			val nextAction = search.makeDecision(currState)
 			val metrics = search.getMetrics

@@ -10,13 +10,13 @@ object HeuristicFactory{
 			(new WhiteStarterStrategy(gameContext), 10)
 		)
 		case Phase.MID => Seq(
-			(new CellPriorityStrategy(gameContext), 6),
-			(new HotspotStrategy(gameContext), 3),
+			(new KingPathStrategy(gameContext), 6),
+			(new CellPriorityStrategy(gameContext), 3),
 			(new PawsMajorityStrategy(), 1),
 		)
 		case Phase.END => Seq(
-			(new PawsMajorityStrategy(), 8),
-			(new HotspotStrategy(gameContext), 2),
+			(new KingPathStrategy(gameContext), 8),
+			(new PawsMajorityStrategy(), 2)
 		)
 	}
 
@@ -25,13 +25,12 @@ object HeuristicFactory{
 			(new CellPriorityStrategy(gameContext), 10)
 		)
 		case Phase.MID => Seq(
-			(new KingKillingStrategy, 5),
-			(new CellPriorityStrategy(gameContext), 3),
-			(new PawsMajorityStrategy(), 2)
+			(new CellPriorityStrategy(gameContext), 6),
+			(new PawsMajorityStrategy(), 4)
 		)
 		case Phase.END => Seq(
-			(new KingKillingStrategy, 8),
-			(new PawsMajorityStrategy(), 2)
+			(new KingPathStrategy(gameContext), 6),
+			(new KingKillingStrategy, 4),
 		)
 	}
 

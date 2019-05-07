@@ -2,7 +2,7 @@ package ai.tablut.adversarial.heuristic
 import java.util
 
 import ai.tablut.state.Player.Player
-import ai.tablut.state.{Action, ActionFactory, GameContext, State}
+import ai.tablut.state._
 import aima.core.agent
 import aima.core.agent.impl.DynamicAction
 import aima.core.search.uninformed.DepthLimitedSearch
@@ -10,7 +10,7 @@ import aima.core.search.framework.problem.{ActionsFunction, GoalTest, Problem, R
 
 import scala.collection.JavaConverters._
 
-class KingPathFinder(gameContext: GameContext) extends HeuristicStrategy {
+class KingPathStrategy(gameContext: GameContext) extends HeuristicStrategy {
 	override val minValue: Int = 0
 	override val maxValue: Int = 4
 
@@ -27,8 +27,10 @@ class KingPathFinder(gameContext: GameContext) extends HeuristicStrategy {
 
 			val king = findKing.get
 			val actionFactory = new ActionFactory(state, gameContext)
-
-			actionFactory.actions(Seq(king)).map(a => KingAction(a)).toSet[agent.Action].asJava
+			val actions = actionFactory.actions(king)
+			val set = new util.HashSet[agent.Action]()
+			actions.foreach(a => set.add(KingAction(a)))
+			set
 		}
 	}
 
@@ -57,9 +59,20 @@ class KingPathFinder(gameContext: GameContext) extends HeuristicStrategy {
 			return minValue
 
 		val problem = new Problem(state, new KingActionsFunction(), new KingResultFunction(), new KingGoalTest())
-
+		val (step, start) = if (player == Player.WHITE) (1, minValue) else (-1, maxValue)
 		val actionsToGoals = search.findActions(problem).asScala
 
-		actionsToGoals.foldLeft[Int](0)((acc, a) => acc + 1)
+		println(s"  $actionsToGoals")
+		println(s"  ${search.getMetrics}")
+
+		if (actionsToGoals.isEmpty)
+			return start
+
+		if (actionsToGoals.head.isNoOp)
+			return if (player == Player.WHITE) maxValue else minValue
+
+		val value = actionsToGoals.foldLeft[Int](start)((acc, a) => acc + step)
+		println(s"  $value")
+		value
 	}
 }

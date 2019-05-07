@@ -33,7 +33,7 @@ class ActionFactory(state: State, gameContext: GameContext) {
 		      if a.validate(gameContext, state)
 		) yield a)
 
-	def actions(cells: Seq[BoardCell], way: Way): Seq[Action] = way match {
+	private def actions(cells: Seq[BoardCell], way: Way): Seq[Action] = way match {
 		case Way.UP => upActions(cells)
 		case Way.RIGHT => rightActions(cells)
 		case Way.LEFT => leftActions(cells)
@@ -42,6 +42,8 @@ class ActionFactory(state: State, gameContext: GameContext) {
 	}
 
 	def actions(cells: Seq[BoardCell]): Seq[Action] = Way.values.toParArray.foldLeft[Seq[Action]](Seq())((acc, way) => acc ++ actions(cells, way))
+
+	def actions(boardCell: BoardCell): Seq[Action] = actions(Seq(boardCell))
 
 	def allActions: Seq[Action] = {
 		val cells = state.getCellsWithFilter(c => c.cellContent match {
@@ -53,5 +55,4 @@ class ActionFactory(state: State, gameContext: GameContext) {
 		actions(cells)
 	}
 
-	def allActions(boardCell: BoardCell): Seq[Action] = actions(Seq(boardCell))
 }
