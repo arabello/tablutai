@@ -29,7 +29,7 @@ object Main {
 
 		LogInterceptor.init(conf)
 
-		val midPhaseFrom = conf.getProperty("MID_PHASE_FROM", "4").toInt
+		val midPhaseFrom = conf.getProperty("MID_PHASE_FROM", "3").toInt
 		val endPhaseFrom = conf.getProperty("END_PHASE_FROM", "10").toInt
 
 		val connFactory = new ConnFactory(conf)

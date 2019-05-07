@@ -14,21 +14,21 @@ class KingPathFinder(gameContext: GameContext) extends HeuristicStrategy {
 	override val minValue: Int = 0
 	override val maxValue: Int = 4
 
-	private val search = new DepthLimitedSearch[State, Action](2)
+	private val search = new DepthLimitedSearch(2)
 
 	private case class KingAction(action: Action) extends DynamicAction(s"${action.from.coords} ${action.to.coords}")
 
 	private class KingActionsFunction extends ActionsFunction{
-		override def actions(s: Any): util.Set[KingAction] = {
+		override def actions(s: Any): util.Set[agent.Action] = {
 			val state = s.asInstanceOf[State]
 			val findKing = state.findKing
 			if (findKing.isEmpty)
-				return Set[KingAction]().asJava
+				return Set[agent.Action]().asJava
 
 			val king = findKing.get
 			val actionFactory = new ActionFactory(state, gameContext)
 
-			actionFactory.actions(Seq(king)).map(a => KingAction(a)).toSet.asJava
+			actionFactory.actions(Seq(king)).map(a => KingAction(a)).toSet[agent.Action].asJava
 		}
 	}
 
