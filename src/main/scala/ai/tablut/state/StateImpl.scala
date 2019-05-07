@@ -33,16 +33,16 @@ private case class StateImpl(
 	def applyAction(action: Action): State = {
 		val contentMoved = board(action.from.coords._1)(action.from.coords._2).cellContent
 
-		implicit val afterMove: State = copy(board = board.map(row => row.map(cell =>
+		implicit val afterMove: StateImpl = copy(board = board.map(row => row.map(cell =>
 			cell.coords match {
 				case action.from.coords => cell.copy(cellContent = EMPTY)
 				case action.to.coords => cell.copy(cellContent = contentMoved)
 				case _ => cell
 			}
-		))).asInstanceOf[State]
+		)))
 
 		if (contentMoved == CellContent.KING)
-			kingCoords = Some(action.to.coords)
+			afterMove.kingCoords = Some(action.to.coords)
 
 		val allies = (action.to surroundingAt 2).withFilter(c => c.orNull != null
 			&& (c.get.cellContent == action.who.toCellContent || c.get.cellType == CellType.CASTLE || c.get.cellType == CellType.CAMP)).map(c => c.get)
@@ -94,16 +94,22 @@ private case class StateImpl(
 	  * @return
 	  */
 	def transform(coordsAndConent: Map[(Int, Int), CellContent]): State = {
-		copy( board = board.map(row => row.map{ cell =>
+		var kcoords: Option[(Int, Int)] = None
+		val newBoard = board.map(row => row.map{ cell =>
 			if (!coordsAndConent.contains(cell.coords))
 				cell
 			else {
 				val content = coordsAndConent(cell.coords)
 				if (content == CellContent.KING)
-					kingCoords = Some(cell.coords)
+					kcoords = Some(cell.coords)
 				cell.copy(cellContent = content)
 			}
-		}))
+		})
+
+		if (kcoords.isDefined)
+			copy(board = newBoard, kingCoords = kcoords)
+		else
+			copy(board = newBoard)
 	}
 
 	override def allActions(context: GameContext): Seq[Action] = {

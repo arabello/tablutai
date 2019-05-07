@@ -156,6 +156,18 @@ class StateTest extends WordSpec{
 				assert(newBoard(4)(4).exists(c=>c.cellContent == CellContent.EMPTY))
 				assert(newBoard(2)(4).exists(c=>c.cellContent == CellContent.KING))
 			}
+
+			"king coords tracking" in {
+				val initState = factory.createInitialState()
+				val newBoard = initState.transform(Map(
+					(4,3) -> CellContent.EMPTY,
+					(4,2) -> CellContent.EMPTY
+				))
+
+				val after = newBoard.applyAction(Action(Player.WHITE, newBoard(4)(4).get, newBoard(4)(2).get))
+				assert(after(4)(2).exists(c => c.cellContent == CellContent.KING))
+				assert(after.findKing.exists(c => c.coords == (4,2)))
+			}
 		}
 	}
 }
