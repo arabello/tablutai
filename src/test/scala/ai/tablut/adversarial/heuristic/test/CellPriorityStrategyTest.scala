@@ -11,34 +11,23 @@ class CellPriorityStrategyTest extends WordSpec{
 			val initState = factory.createInitialState()
 			val strategy = new CellPriorityStrategy(factory.context)
 
-			"evaluate strategy" in{
-				assert(strategy.eval(initState, Player.WHITE) == strategy.minValue + 8)
-				assert(strategy.eval(initState, Player.BLACK) == strategy.maxValue - 16)
+			"evaluation BLACK" in{
+				val innerCircle = initState.transform(strategy.innerCircle.map(c => c -> CellContent.BLACK).toMap).nextPlayer
+				val outerCircle = initState.transform(strategy.outerCircle.map(c => c -> CellContent.BLACK).toMap).nextPlayer
 
-				val campAngles = initState.transform(Map(
-					(1,2) -> CellContent.WHITE,
-					(1,6) -> CellContent.WHITE,
-					(2,1) -> CellContent.WHITE,
-					(2,7) -> CellContent.WHITE
-				))
+				assert(strategy.eval(innerCircle, Player.BLACK) > strategy.eval(initState, Player.BLACK))
+				assert(strategy.eval(outerCircle, Player.BLACK) > strategy.eval(initState, Player.BLACK))
+			}
 
-				assert(strategy.eval(campAngles, Player.WHITE) == strategy.minValue + 4)
-				assert(strategy.eval(campAngles, Player.BLACK) == strategy.maxValue - 12)
+			"evaluation WHITE" in{
+				val hotpost = initState.transform(Map(strategy.hotspot.head -> CellContent.KING))
+				val escapePointFilled = initState.transform(factory.context.escapePoints.map(c => c -> CellContent.BLACK).toMap).nextPlayer
 
-				val hotspot = initState.transform(Map(
-					(4,4) -> CellContent.EMPTY,
-					(2,2) -> CellContent.KING
-				))
+				assert(strategy.eval(hotpost, Player.WHITE) > strategy.eval(escapePointFilled, Player.WHITE))
+				assert(strategy.eval(hotpost, Player.WHITE) > strategy.eval(initState, Player.WHITE))
 
-				assert(strategy.eval(hotspot, Player.WHITE) == strategy.minValue + 16)
-				assert(strategy.eval(hotspot, Player.BLACK) == strategy.minValue)
-
-				val nearCastle = initState.transform(Map(
-					(4,3) -> CellContent.KING
-				))
-
-				assert(strategy.eval(nearCastle, Player.WHITE) == strategy.minValue + 12)
-				assert(strategy.eval(nearCastle, Player.BLACK) == strategy.maxValue - 16)
+				val boardCorners = initState.transform(Map((0,0) -> CellContent.WHITE))
+				assert(strategy.eval(boardCorners, Player.WHITE) < strategy.eval(initState, Player.WHITE))
 			}
 		}
 	}
