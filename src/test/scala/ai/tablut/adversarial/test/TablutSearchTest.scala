@@ -12,6 +12,37 @@ class TablutSearchTest extends WordSpec{
 			val game = new TablutGame(factory, initState)
 			val search = new TablutSearch(factory.context, game, 1)
 
+			"eval WHITE winner" in {
+				val state = initState.transform(Map(
+					(4,4) -> CellContent.EMPTY,
+					(4,2) -> CellContent.KING
+				))
+
+				assert(search.eval(state, Player.WHITE) == search.utilMax)
+				assert(search.eval(state, Player.BLACK) == search.utilMin)
+			}
+
+			"eval BLACK winner" in {
+				val state = initState.transform(Map(
+					(4,4) -> CellContent.EMPTY,
+					(4,2) -> CellContent.KING,
+					(3,2) -> CellContent.BLACK,
+					(5,2) -> CellContent.BLACK
+				)).nextPlayer
+
+				assert(search.eval(state, Player.WHITE) == search.utilMin)
+				assert(search.eval(state, Player.BLACK) == search.utilMax)
+
+				val state2 = initState.transform(Map(
+					(4,4) -> CellContent.EMPTY,
+					(4,2) -> CellContent.KING,
+					(4,3) -> CellContent.BLACK,
+				)).nextPlayer
+
+				assert(search.eval(state2, Player.WHITE) == search.utilMin)
+				assert(search.eval(state2, Player.BLACK) == search.utilMax)
+			}
+
 			"sort action for WHITE player" in{
 				val state = initState.transform(Map(
 					(4,3) -> CellContent.EMPTY,
