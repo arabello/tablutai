@@ -36,7 +36,7 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 	  * player is charged an entry fee of 1/2.
 	  */
 	override def getUtility(state: State, player: Player.Value): Double =
-		if (state.ending.orNull == Ending.DRAW) 0.5f else if (player == state.turn) 1f else 0f // TODO Safe remove the first if
+		if (state.ending.contains(Ending.DRAW)) 0.5f else if (player == state.turn) 1f else 0f // TODO Safe remove the first if
 
 	/**
 	  * A terminal test (as goal test as in the informed), which is true when the game is over

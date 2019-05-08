@@ -25,7 +25,7 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 	  * @param player
 	  * @return
 	  */
-	// IMPORTANT: When overriding, first call the super implementation!ù
+	// IMPORTANT: When overriding, first call the super implementation!
 	// RUNTIME
 	override def eval(state: State, player: Player.Value): Double = {
 		val eval = super.eval(state, player)
@@ -48,7 +48,7 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 
 	// RUNTIME
 	override def orderActions(state: State, actions: Seq[Action], player: Player.Value, depth: Int): Seq[Action] = {
-		if (depth < 4)
+		if (depth < 3)
 			actions
 		else player match {
 			case Player.WHITE =>
