@@ -124,7 +124,13 @@ private case class StateImpl(
 
 		sb.append("\n")
 		board.foreach { row =>
-			row.foreach(cell => sb.append(s" (${cell.cellContent}) "))
+			row.foreach{cell =>
+				val char: Char = cell.cellContent match {
+					case EMPTY => '\u2591'
+					case _ => cell.cellContent.toString.head
+				}
+				sb.append(s" $char")
+			}
 			sb.append("\n")
 		}
 		sb.mkString

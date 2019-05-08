@@ -197,9 +197,9 @@ class IterativeDeepeningAlphaBetaSearch[S, A, P](var game: Game[S, A, P], var ut
 	  * states. When overriding, first call the super implementation!
 	  */
 	protected def eval(state: S, player: P): Double = {
-		if (game.isTerminal(state))
+		if (game.isTerminal(state)) {
 			game.getUtility(state, player)
-		else {
+		}else {
 			heuristicEvaluationUsed = true
 			(utilMin + utilMax) / 2
 		}
