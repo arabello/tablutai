@@ -88,7 +88,7 @@ private object NormalGameContext extends GameContext{
 
 			case _ =>
 				(state(x - 1)(y).exists(c => c.cellContent == BLACK || c.cellType == CAMP) && state(x + 1)(y).exists(c => c.cellContent == BLACK || c.cellType == CAMP)) ||
-				(state(x)(y - 1).exists(c => c.cellContent == BLACK || c.cellType == CAMP) && state(x)(y - 1).exists(c => c.cellContent == BLACK || c.cellType == CAMP))
+				(state(x)(y - 1).exists(c => c.cellContent == BLACK || c.cellType == CAMP) && state(x)(y + 1).exists(c => c.cellContent == BLACK || c.cellType == CAMP))
 		}
 
 		if (isKilled) state.turn match {

@@ -43,5 +43,6 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 	  * and false TERMINAL STATES otherwise.
 	  * States where the game has ended are called terminal states
 	  */
-	override def isTerminal(state: State): Boolean = stateFactory.context.isWinner(state) || stateFactory.context.isWinner(state.nextPlayer)
+	override def isTerminal(state: State): Boolean =
+		stateFactory.context.isWinner(state) || stateFactory.context.isWinner(state.nextPlayer)
 }

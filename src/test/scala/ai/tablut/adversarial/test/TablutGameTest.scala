@@ -35,6 +35,23 @@ class TablutGameTest extends WordSpec{
 				assert(game.getUtility(blackWinner, Player.BLACK) == 1f)
 			}
 
+			"terminal state" in{
+				val whiteWin = initState.transform(Map(
+					(4,4) -> CellContent.EMPTY,
+					(8,2) -> CellContent.KING
+				))
+
+				assert(game.isTerminal(whiteWin))
+
+				val blackWin = initState.transform(Map(
+					(4,4) -> CellContent.EMPTY,
+					(4,2) -> CellContent.KING,
+					(4,3) -> CellContent.BLACK
+				))
+
+				assert(game.isTerminal(blackWin))
+			}
+
 			"no terminal state" in{
 				assert(!game.isTerminal(initState))
 			}

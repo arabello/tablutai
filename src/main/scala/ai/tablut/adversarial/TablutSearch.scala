@@ -3,7 +3,6 @@ package ai.tablut.adversarial
 import ai.tablut.LogInterceptor
 import ai.tablut.adversarial.heuristic.Phase.Phase
 import ai.tablut.adversarial.heuristic._
-import ai.tablut.state.implicits._
 import ai.tablut.state.{Player, _}
 
 import scala.language.postfixOps
@@ -47,10 +46,13 @@ class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extend
 	}
 
 	// RUNTIME
-	override def orderActions(state: State, actions: Seq[Action], player: Player.Value, depth: Int): Seq[Action] = actions.sortWith((a1, a2) =>
+	override def orderActions(state: State, actions: Seq[Action], player: Player.Value, depth: Int): Seq[Action] =
+		actions.sortWith((a1, a2) =>
 			(a1.from.cellContent == CellContent.KING && a2.from.cellContent != CellContent.KING) ||
 			(a1.from.cellContent == CellContent.KING && a2.from.cellContent == CellContent.KING && state.distance(a1.from.coords, a1.to.coords) > state.distance(a2.from.coords, a2.to.coords))
 		)
+
+
 
 	/*
 	case Player.BLACK =>

@@ -15,7 +15,7 @@ class TablutSearchTest extends WordSpec{
 			"eval WHITE winner" in {
 				val state = initState.transform(Map(
 					(4,4) -> CellContent.EMPTY,
-					(4,2) -> CellContent.KING
+					(8,2) -> CellContent.KING
 				))
 
 				assert(search.eval(state, Player.WHITE) == search.utilMax)
