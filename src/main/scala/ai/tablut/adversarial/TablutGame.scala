@@ -35,14 +35,16 @@ class TablutGame(val stateFactory: StateFactory, initialState: State) extends Ga
 	  * better term, but zero-sum is traditional and makes sense if you imagine each
 	  * player is charged an entry fee of 1/2.
 	  */
-	override def getUtility(state: State, player: Player.Value): Double =
-		if (state.ending.contains(Ending.DRAW)) 0.5f else if (player == state.turn) 1f else 0f // TODO Safe remove the first if
+	override def getUtility(state: State, player: Player.Value): Double = {
+		val winner = stateFactory.context.getWinner(state)
+		if (winner.isEmpty) 0.5f
+		else if (winner.get == player) 1f else 0f
+	}
 
 	/**
 	  * A terminal test (as goal test as in the informed), which is true when the game is over
 	  * and false TERMINAL STATES otherwise.
 	  * States where the game has ended are called terminal states
 	  */
-	override def isTerminal(state: State): Boolean =
-		stateFactory.context.isWinner(state) || stateFactory.context.isWinner(state.nextPlayer)
+	override def isTerminal(state: State): Boolean = stateFactory.context.getWinner(state).isDefined
 }

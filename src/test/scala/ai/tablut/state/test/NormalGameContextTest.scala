@@ -1,7 +1,7 @@
 package ai.tablut.state.test
 
 import ai.tablut.serialization.TablutSerializer
-import ai.tablut.state.{CellContent, StateFacade}
+import ai.tablut.state.{Action, CellContent, Player, StateFacade}
 import org.scalatest.WordSpec
 
 class NormalGameContextTest extends WordSpec{
@@ -26,7 +26,7 @@ class NormalGameContextTest extends WordSpec{
 					  |	],
 					  |	"turn":"WHITE"}""".stripMargin
 
-				assert(factory.context.isWinner(TablutSerializer.fromJson(jsonStateWhiteWinner, factory)))
+				assert(factory.context.getWinner(TablutSerializer.fromJson(jsonStateWhiteWinner, factory)).contains(Player.WHITE))
 
 				val jsonState =
 					"""
@@ -43,7 +43,7 @@ class NormalGameContextTest extends WordSpec{
 					  |	],
 					  |	"turn":"WHITE"}""".stripMargin
 
-				assert(!factory.context.isWinner(TablutSerializer.fromJson(jsonState, factory)))
+				assert(!factory.context.getWinner(TablutSerializer.fromJson(jsonState, factory)).contains(Player.WHITE))
 			}
 
 			"detect WHITE lost" in{
@@ -53,142 +53,17 @@ class NormalGameContextTest extends WordSpec{
 					(4,6) -> CellContent.KING
 				))
 
-				assert(!factory.context.isWinner(state))
+				assert(!factory.context.getWinner(state).contains(Player.WHITE))
 			}
 
 			"detect BLACK winner" in{
-				val doubleSideLeftRight =
-					"""
-					  |{"board":[
-					  |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"],
-					  |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-					  |	["EMPTY","EMPTY","EMPTY","EMPTY","WHITE","BLACK","KING","BLACK","EMPTY"],
-					  |	["BLACK","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","EMPTY"],
-					  |	["BLACK","BLACK","WHITE","WHITE","EMPTY","WHITE","WHITE","BLACK","EMPTY"],
-					  |	["BLACK","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","BLACK"],
-					  |	["EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","EMPTY"],
-					  |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-					  |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
-					  |	],
-					  |	"turn":"BLACK"}""".stripMargin
-
-				assert(factory.context.isWinner(TablutSerializer.fromJson(doubleSideLeftRight, factory)))
-
-				val doubleSideUpDown =
-					"""
-					  |{"board":[
-					  |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"],
-					  |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","BLACK","EMPTY","EMPTY"],
-					  |	["EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","KING","EMPTY","EMPTY"],
-					  |	["BLACK","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","BLACK","EMPTY","EMPTY"],
-					  |	["BLACK","BLACK","WHITE","WHITE","EMPTY","WHITE","WHITE","BLACK","EMPTY"],
-					  |	["BLACK","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","BLACK"],
-					  |	["EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","EMPTY"],
-					  |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-					  |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
-					  |	],
-					  |	"turn":"BLACK"}""".stripMargin
-
-				assert(factory.context.isWinner(TablutSerializer.fromJson(doubleSideUpDown, factory)))
-
-				val s1 = TablutSerializer.fromJson("""
-                    |{"board":[
-                    |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"],
-                    |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                    |	["EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","EMPTY"],
-                    |	["BLACK","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","BLACK"],
-                    |	["BLACK","BLACK","WHITE","WHITE","EMPTY","WHITE","WHITE","BLACK","BLACK"],
-                    |	["BLACK","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","EMPTY"],
-                    |	["EMPTY","EMPTY","EMPTY","EMPTY","WHITE","BLACK","EMPTY","EMPTY","EMPTY"],
-                    |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","KING","EMPTY","EMPTY","EMPTY"],
-                    |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
-                    |	],
-                    |	"turn":"BLACK"}""".stripMargin, factory)
-				assert(factory.context.isWinner(s1))
-
-				val s2 = TablutSerializer.fromJson("""
-                     |{"board":[
-                     |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["BLACK","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","BLACK"],
-                     |	["BLACK","BLACK","WHITE","WHITE","EMPTY","WHITE","WHITE","BLACK","BLACK"],
-                     |	["BLACK","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","KING","WHITE","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
-                     |	],
-                     |	"turn":"BLACK"}""".stripMargin, factory)
-				assert(factory.context.isWinner(s2))
-
-				val s3 = TablutSerializer.fromJson("""
-                     |{"board":[
-                     |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["BLACK","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","BLACK"],
-                     |	["BLACK","BLACK","KING","BLACK","EMPTY","WHITE","WHITE","BLACK","BLACK"],
-                     |	["BLACK","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
-                     |	],
-                     |	"turn":"BLACK"}""".stripMargin, factory)
-				assert(factory.context.isWinner(s3))
-
-				val s4 = TablutSerializer.fromJson("""
-                     |{"board":[
-                     |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["BLACK","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY","BLACK"],
-                     |	["BLACK","BLACK","EMPTY","BLACK","EMPTY","BLACK","KING","BLACK","BLACK"],
-                     |	["BLACK","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
-                     |	],
-                     |	"turn":"BLACK"}""".stripMargin, factory)
-				assert(factory.context.isWinner(s4))
-
-				val s5 = TablutSerializer.fromJson("""
-                     |{"board":[
-                     |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","KING","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["BLACK","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","BLACK"],
-                     |	["BLACK","BLACK","EMPTY","BLACK","EMPTY","BLACK","EMPTY","BLACK","BLACK"],
-                     |	["BLACK","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
-                     |	],
-                     |	"turn":"BLACK"}""".stripMargin, factory)
-				assert(factory.context.isWinner(s5))
-
-
-				val s6 = TablutSerializer.fromJson("""
-                     |{"board":[
-                     |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","KING","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY"],
-                     |	["BLACK","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","BLACK"],
-                     |	["BLACK","BLACK","EMPTY","BLACK","EMPTY","BLACK","EMPTY","BLACK","BLACK"],
-                     |	["BLACK","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","WHITE","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","EMPTY","BLACK","EMPTY","EMPTY","EMPTY","EMPTY"],
-                     |	["EMPTY","EMPTY","EMPTY","BLACK","BLACK","BLACK","EMPTY","EMPTY","EMPTY"]
-                     |	],
-                     |	"turn":"BLACK"}""".stripMargin, factory)
-				assert(factory.context.isWinner(s6))
-
 				val state = iniState.transform(Map(
 					(4,4) -> CellContent.EMPTY,
-					(4,5) -> CellContent.BLACK,
 					(4,6) -> CellContent.KING
 				)).nextPlayer
 
-				assert(factory.context.isWinner(state))
+
+				assert(factory.context.getWinner(state.applyAction(Action(Player.BLACK, state(0)(5).get, state(4,5).get))).contains(Player.BLACK))
 			}
 
 			"detect BLACK lost" in{
@@ -197,7 +72,7 @@ class NormalGameContextTest extends WordSpec{
 					(7,2) -> CellContent.KING
 				)).nextPlayer
 
-				assert(!factory.context.isWinner(state))
+				assert(!factory.context.getWinner(state).contains(Player.BLACK))
 			}
 		}
 	}

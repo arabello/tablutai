@@ -129,6 +129,40 @@ class StateTest extends WordSpec{
 				assert(nearCampEating.applyAction(action2) == expectedResult2)
 			}
 
+			"eat king" in{
+				val eaten = state.transform(Map(
+					(4,4) -> CellContent.EMPTY,
+					(4,2) -> CellContent.KING,
+					(4,3) -> CellContent.EMPTY
+				))
+
+				val action = Action(Player.BLACK, eaten(8)(3).get, eaten(4)(3).get)
+				assert(eaten.applyAction(action)(4)(2).exists(c => c.cellContent == CellContent.EMPTY))
+				assert(eaten.applyAction(action).findKing.isEmpty)
+
+				val castle = state.transform(Map(
+					(4,2) -> CellContent.BLACK,
+					(4,5) -> CellContent.BLACK,
+					(5,4) -> CellContent.BLACK,
+					(3,4) -> CellContent.EMPTY
+				))
+
+				val action2 = Action(Player.BLACK, castle(3)(0).get, castle(3)(4).get)
+				assert(castle.applyAction(action2)(4)(4).exists(c => c.cellContent == CellContent.EMPTY))
+				assert(castle.applyAction(action2).findKing.isEmpty)
+
+				val nearCastle = state.transform(Map(
+					(4,4) -> CellContent.EMPTY,
+					(4,3) -> CellContent.KING,
+					(3,3) -> CellContent.BLACK,
+					(4,2) -> CellContent.BLACK
+				))
+
+				val action3 = Action(Player.BLACK, nearCastle(5)(0).get, nearCastle(5)(3).get)
+				assert(nearCastle.applyAction(action3)(4)(3).exists(c => c.cellContent == CellContent.EMPTY))
+				assert(nearCastle.applyAction(action3).findKing.isEmpty)
+			}
+
 			"getCells with coordinates" in{
 				val cells = state.get((2,4),(3,4),(15,15))(factory.context)
 

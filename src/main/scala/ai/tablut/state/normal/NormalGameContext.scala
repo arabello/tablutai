@@ -2,6 +2,7 @@ package ai.tablut.state.normal
 
 import ai.tablut.state.CellContent._
 import ai.tablut.state.CellType._
+import ai.tablut.state.Player.Player
 import ai.tablut.state._
 
 private object NormalGameContext extends GameContext{
@@ -30,25 +31,16 @@ private object NormalGameContext extends GameContext{
 		(1,8), (2,8), (6,8), (7,8)
 	)
 
-	override def isWinner(state: State): Boolean = {
+	override def getWinner(state: State): Option[Player] = {
 		val findKing = state.findKing
 
-		if (findKing.isEmpty){
-			if (state.turn == Player.WHITE)
-				return false
-			else
-				return true
-		}
-
-		val kingCell = findKing.get
-
-		val isEscaped = escapePoints.contains(kingCell.coords)
-
-		if (isEscaped) state.turn match {
-			case Player.WHITE => return true
-			case _ => return false
-		}
-
+		if (findKing.isEmpty)
+			Some(Player.BLACK)
+		else if (escapePoints.contains(findKing.get.coords))
+			Some(Player.WHITE)
+		else
+			None
+/*
 		val (x,y) = kingCell.coords
 
 		val isKilled = kingCell.coords match {
@@ -97,6 +89,7 @@ private object NormalGameContext extends GameContext{
 		}
 
 		false
+		*/
 	}
 
 	override val maxWhites: Int = 9

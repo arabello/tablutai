@@ -1,7 +1,7 @@
 package ai.tablut.adversarial.test
 
 import ai.tablut.adversarial.TablutGame
-import ai.tablut.state.{CellContent, Player, StateFacade}
+import ai.tablut.state.{Action, CellContent, Player, StateFacade}
 import org.scalatest.WordSpec
 
 class TablutGameTest extends WordSpec{
@@ -23,32 +23,33 @@ class TablutGameTest extends WordSpec{
 			}
 
 			"getUtility black winner" in {
-				val blackWinner = initState.transform(Map(
+				val state = initState.transform(Map(
 					(4,4) -> CellContent.EMPTY,
-					(4,2) -> CellContent.KING,
-					(3,2) -> CellContent.BLACK,
-					(5,2) -> CellContent.BLACK
+					(4,3) -> CellContent.EMPTY,
+					(4,2) -> CellContent.KING
 				)).nextPlayer
 
+				val blackWinner = state.applyAction(Action(Player.BLACK, state(8,3).get, state(4,3).get))
 				assert(game.isTerminal(blackWinner))
 				assert(game.getUtility(blackWinner, Player.WHITE) == 0f)
 				assert(game.getUtility(blackWinner, Player.BLACK) == 1f)
 			}
 
 			"terminal state" in{
-				val whiteWin = initState.transform(Map(
+				val state = initState.transform(Map(
 					(4,4) -> CellContent.EMPTY,
-					(8,2) -> CellContent.KING
+					(4,2) -> CellContent.KING
 				))
-
+				val whiteWin = state.applyAction(Action(Player.WHITE, state(4,2).get, state(8,2).get))
 				assert(game.isTerminal(whiteWin))
 
-				val blackWin = initState.transform(Map(
+				val state2 = initState.transform(Map(
 					(4,4) -> CellContent.EMPTY,
 					(4,2) -> CellContent.KING,
-					(4,3) -> CellContent.BLACK
-				))
+					(4,3) -> CellContent.EMPTY
+				)).nextPlayer
 
+				val blackWin = state2.applyAction(Action(Player.BLACK, state(8,3).get, state(4,3).get))
 				assert(game.isTerminal(blackWin))
 			}
 

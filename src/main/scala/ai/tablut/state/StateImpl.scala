@@ -47,13 +47,18 @@ private case class StateImpl(
 		val allies = (action.to surroundingAt 2).withFilter(c => c.orNull != null
 			&& (c.get.cellContent == action.who.toCellContent || c.get.cellType == CellType.CASTLE || c.get.cellType == CellType.CAMP)).map(c => c.get)
 
-		allies.map(c => (action.to until c).drop(1).head).foldLeft[State](afterMove)((acc, enemy) =>
+		val eat = allies.map(c => (action.to until c).drop(1).head).foldLeft[State](afterMove)((acc, enemy) =>
 			if ((enemy.cellContent == BLACK && action.who.toCellContent == WHITE) ||
 				( (enemy.cellContent == WHITE || enemy.cellContent == KING) && action.who.toCellContent == BLACK))
 				acc.clearCells(enemy.coords)
 			else
 				acc
-		).nextPlayer
+		).nextPlayer.asInstanceOf[StateImpl] // DO NOT alternate player turn. For that call #nextPlayer
+
+		if (eat.findKing.exists(c => c.cellContent == CellContent.EMPTY))
+			eat.kingCoords = None
+
+		eat
 	}
 
 	/**
