@@ -49,10 +49,10 @@ class TablutSearchTest extends WordSpec{
 					(4,2) -> CellContent.EMPTY
 				))
 
-				val actions = new ActionFactory(state, factory.context).actions(state.getCells)
+				val actions = new ActionFactory(state, factory.context).createActions
 				assert(actions.exists(a => a.from.cellContent == CellContent.KING))
 
-				val sorted = search.orderActions(state, actions, Player.WHITE, 4)
+				val sorted = search.orderActions(state, actions, Player.WHITE, 1)
 				assert(sorted.head.from.cellContent == CellContent.KING)
 				assert(state.distance(sorted(1).from.coords, sorted(1).to.coords) < state.distance(sorted(0).from.coords, sorted(0).to.coords))
 			}

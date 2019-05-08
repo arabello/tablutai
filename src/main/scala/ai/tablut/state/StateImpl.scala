@@ -112,11 +112,6 @@ private case class StateImpl(
 			copy(board = newBoard)
 	}
 
-	override def allActions(context: GameContext): Seq[Action] = {
-		val factory = new ActionFactory(this, context)
-		factory.allActions
-	}
-
 	override def isGameRulesComplied(gameRules: GameContext): Boolean = ???
 
 	override def toString: String = {

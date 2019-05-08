@@ -29,7 +29,7 @@ class KingPathStrategy(gameContext: GameContext) extends HeuristicStrategy {
 
 			val king = findKing.get
 			val actionFactory = new ActionFactory(state, gameContext)
-			val actions = actionFactory.actions(king)
+			val actions = actionFactory.createKingActions
 			val set = new util.HashSet[agent.Action]()
 			actions.foreach(a => set.add(KingAction(a)))
 			set

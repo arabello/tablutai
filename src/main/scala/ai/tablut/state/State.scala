@@ -16,8 +16,6 @@ trait State extends GameRulesComplied {
 
 	def findKing: Option[BoardCell]
 
-	def allActions(context: GameContext): Seq[Action]
-
 	def nextPlayer: State
 
 	/**

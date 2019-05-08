@@ -39,7 +39,7 @@ class ActionFactoryTest extends WordSpec{
 					Action(p, b(4)(6), b(0)(6)), Action(p, b(4)(6), b(1)(6)), Action(p, b(4)(6), b(2)(6)), Action(p, b(4)(6), b(3)(6)),
 					Action(p, b(4)(6), b(5)(6)), Action(p, b(4)(6), b(6)(6)), Action(p, b(4)(6), b(7)(6)), Action(p, b(4)(6), b(8)(6)),
 				)
-				val actions = actionsFactory.allActions
+				val actions = actionsFactory.createActions
 				assert(actions.toSet == expected)
 			}
 
@@ -49,7 +49,7 @@ class ActionFactoryTest extends WordSpec{
 					(4,3) -> CellContent.EMPTY
 				))
 
-				val actions = new ActionFactory(state, factory.context).actions(state.getCells)
+				val actions = new ActionFactory(state, factory.context).createActions
 				assert(actions.exists(a => a.from.cellContent == CellContent.KING))
 			}
 		}
