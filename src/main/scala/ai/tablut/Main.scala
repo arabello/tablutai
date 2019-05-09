@@ -32,7 +32,14 @@ object Main {
 		val connFactory = new ConnFactory(conf)
 		val client = if (clientType == "w") connFactory.createWhiteClient() else connFactory.createBlackClient()
 		val stateFactory = StateFacade.normalStateFactory()
-		val maxComputationTime = conf.getProperty("MAX_COMPUTATION_TIME", "57").toInt
+		val defaultMaxCompTime = conf.getProperty("MAX_COMPUTATION_TIME", "55").toInt
+		val maxComputationTime =
+			if (args.length >= 2) try {
+				args(1).toInt
+			}catch {
+				case _: Throwable => defaultMaxCompTime
+			}else
+				defaultMaxCompTime
 
 		client.writeTeamName()
 		if (clientType == "b") // bad protocol: black player have to read twice, because the first time the init state is given before the white move
