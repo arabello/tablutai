@@ -3,8 +3,8 @@ package ai.tablut.adversarial.test
 import java.io.FileInputStream
 import java.util.Properties
 
+import ai.tablut.adversarial.PhaseFactory
 import ai.tablut.adversarial.heuristic.Phase
-import ai.tablut.adversarial.{PhaseFactory, TablutGame}
 import ai.tablut.state.{CellContent, Player, StateFacade}
 import org.scalatest.WordSpec
 
