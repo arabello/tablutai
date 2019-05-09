@@ -4,10 +4,10 @@ import java.io.FileInputStream
 import java.util.Properties
 
 import ai.tablut.adversarial.heuristic.Phase
-import ai.tablut.adversarial.{IterativeDeepeningAlphaBetaSearch, TablutGame, TablutSearch}
+import ai.tablut.adversarial.{IterativeDeepeningAlphaBetaSearch, PhaseFactory, TablutGame, TablutSearch}
 import ai.tablut.connectivity.ConnFactory
 import ai.tablut.serialization.TablutSerializer
-import ai.tablut.state.StateFacade
+import ai.tablut.state.{Player, StateFacade}
 
 object Main {
 	def main(args: Array[String]): Unit = {
@@ -29,9 +29,6 @@ object Main {
 
 		LogInterceptor.init(conf)
 
-		val midPhaseFrom = conf.getProperty("MID_PHASE_FROM", "3").toInt
-		val endPhaseFrom = conf.getProperty("END_PHASE_FROM", "10").toInt
-
 		val connFactory = new ConnFactory(conf)
 		val client = if (clientType == "w") connFactory.createWhiteClient() else connFactory.createBlackClient()
 		val stateFactory = StateFacade.normalStateFactory()
@@ -45,28 +42,37 @@ object Main {
 
 		val game = new TablutGame(stateFactory, initState)
 		val search = new TablutSearch(stateFactory.context, game, maxComputationTime)
-		///val search = new IterativeDeepeningAlphaBetaSearch(game, 0, 1, 40)
+		val phaseFactor = new PhaseFactory(conf)
 
 		var currState = initState
 		var nTurn = 1
 		while(true) {
 			val nextAction = search.makeDecision(currState)
+			client.writeAction(nextAction)
+
+			// Wait for enemy turn
+
 			val metrics = search.getMetrics
 			LogInterceptor{
 				println(s"$metrics")
 			}
-			client.writeAction(nextAction)
 
-			client.readState() // my state from server
+			// my state from server
+			val afterActionJson = client.readState()
+			val afterActionState = TablutSerializer.fromJson(afterActionJson, stateFactory)
+
+			val newPhase = phaseFactor.createPhase(afterActionState, client.player, nTurn)
+			nTurn += 1
+			search.setPhase(newPhase)
+
+			// TODO("System.gc() and monitor performance"
+
+			// Read state after enemy turn
 
 			val jsonState = client.readState()
 			currState = TablutSerializer.fromJson(jsonState, stateFactory)
 
-			nTurn += 1
-			if (nTurn > midPhaseFrom)
-				search.setPhase(Phase.MID)
-			if (nTurn > endPhaseFrom)
-				search.setPhase(Phase.END)
+
 		}
 	}
 }

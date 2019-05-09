@@ -7,7 +7,7 @@ import ai.tablut.serialization.TablutSerializer
 import ai.tablut.state.Player.Player
 import ai.tablut.state.{Action, Player}
 
-private abstract class Client(props: Properties, player: Player) extends CompetitionClient {
+private abstract class Client(props: Properties, override val player: Player) extends CompetitionClient {
 	val teamName: String = props.getProperty("TEAM_NAME")
 	val serverIp: String = props.getProperty("SERVER_IP")
 	val port: Int = player match {

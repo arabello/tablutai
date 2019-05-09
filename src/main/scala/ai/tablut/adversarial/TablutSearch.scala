@@ -3,6 +3,7 @@ package ai.tablut.adversarial
 import ai.tablut.LogInterceptor
 import ai.tablut.adversarial.heuristic.Phase.Phase
 import ai.tablut.adversarial.heuristic._
+import ai.tablut.state.Player.Player
 import ai.tablut.state.{Player, _}
 
 import scala.language.postfixOps
