@@ -15,7 +15,7 @@ class ActionFactory(state: State, gameContext: GameContext) {
 			case _ => false
 		})
 
-		if (state.turn == Player.WHITE) state.findKing.toList ++ c else c
+		if (state.turn == Player.WHITE) state.findKing.get +: c else c
 	}
 
 	private def upActions(cells: Seq[BoardCell]): Seq[Action] = cells.flatMap(current =>
