@@ -65,7 +65,7 @@ object Main {
 			nTurn += 1
 			search.setPhase(newPhase)
 
-			// TODO("System.gc() and monitor performance"
+			//System.gc()
 
 			// Read state after enemy turn
 

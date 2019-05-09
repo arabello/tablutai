@@ -17,7 +17,7 @@ private object NormalGameContext extends GameContext{
 		(0,3), (0,4), (0,5), (1,4),
 		(8,3), (8,4), (8,5), (7,4),
 		(3,0), (4,0), (5,0), (4,1),
-		(3,8), (4,8), (5,8), (4,8)
+		(3,8), (4,8), (5,8), (4,7)
 	)
 
 	override val invalidBoardCell: Set[(CellType, CellContent)] = Set(
