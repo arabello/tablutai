@@ -42,7 +42,6 @@ class ActionFactory(state: State, gameContext: GameContext) {
 		      if a.validate(gameContext, state)
 		) yield a)
 
-	// TODO Try performance without parallelism
 	private def allWayActions(cells: Seq[BoardCell]): Seq[Action] =
 		//upActions(cells) ++ rightActions(cells) ++ downActions(cells) ++ leftActions(cells)
 		ParArray(upActions(cells), rightActions(cells), downActions(cells), leftActions(cells))
