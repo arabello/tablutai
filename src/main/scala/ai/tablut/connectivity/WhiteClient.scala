@@ -1,7 +1,5 @@
 package ai.tablut.connectivity
 
-import java.util.Properties
-
 import ai.tablut.state.Player
 
-private class WhiteClient(props: Properties) extends Client(props, Player.WHITE)
+private class WhiteClient(override val teamName: String, override val serverIp: String, override val port: Int) extends Client(teamName, serverIp, port, Player.WHITE)

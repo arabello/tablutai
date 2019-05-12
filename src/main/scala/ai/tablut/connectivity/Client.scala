@@ -1,19 +1,12 @@
 package ai.tablut.connectivity
 import java.io.{DataInputStream, DataOutputStream}
 import java.net.Socket
-import java.util.Properties
 
 import ai.tablut.serialization.TablutSerializer
+import ai.tablut.state.Action
 import ai.tablut.state.Player.Player
-import ai.tablut.state.{Action, Player}
 
-private abstract class Client(props: Properties, override val player: Player) extends CompetitionClient {
-	val teamName: String = props.getProperty("TEAM_NAME")
-	val serverIp: String = props.getProperty("SERVER_IP")
-	val port: Int = player match {
-		case Player.WHITE => props.getProperty("WHITE_PORT").toInt
-		case Player.BLACK => props.getProperty("BLACK_PORT").toInt
-	}
+private abstract class Client(val teamName: String, val serverIp: String, val port: Int, override val player: Player) extends CompetitionClient {
 	private val socket = new Socket(serverIp, port)
 
 	val inStream = new DataInputStream(socket.getInputStream)

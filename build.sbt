@@ -1,14 +1,15 @@
 name := "tablutai"
 
-version := "0.1"
+version := "1.0"
 
 scalaVersion := "2.12.8"
 
-libraryDependencies += "com.typesafe.play" %% "play-json" % "2.7.2"
+libraryDependencies ++= Seq(
+	"org.scalactic" %% "scalactic" % "3.0.5",
+	"com.typesafe.play" %% "play-json" % "2.7.2",
+	"org.scalatest" %% "scalatest" % "3.0.5" % "test",
+	"com.googlecode.aima-java" % "aima-core" % "3.0.0",
+)
 
-// https://github.com/aimacode/aima-java
-libraryDependencies += "com.googlecode.aima-java" % "aima-core" % "3.0.0"
-
-// http://www.scalatest.org
-libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.5"
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+mainClass in assembly := Some("ai.tablut.Main")
+unmanagedResources in Compile += baseDirectory.value / "config.properties"

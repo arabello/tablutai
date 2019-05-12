@@ -1,8 +1,5 @@
 package ai.tablut
 
-import java.io.FileInputStream
-import java.util.Properties
-
 import ai.tablut.adversarial.{PhaseFactory, TablutGame, TablutSearch}
 import ai.tablut.connectivity.ConnFactory
 import ai.tablut.serialization.TablutSerializer
@@ -11,7 +8,7 @@ import ai.tablut.state.StateFacade
 object Main {
 	def main(args: Array[String]): Unit = {
 		if (args.length == 0){
-			System.err.println("Usage 'main [w|b]'")
+			System.err.println("Usage 'main w|b [compute time in seconds] [server ip] [server port]'")
 			System.exit(1)
 		}
 
@@ -23,22 +20,28 @@ object Main {
 				System.exit(1)
 		}
 
-		val conf = new Properties()
-		conf.load(new FileInputStream("config.properties"))
-
-		LogInterceptor.init(conf)
-
-		val connFactory = new ConnFactory(conf)
-		val client = if (clientType == "w") connFactory.createWhiteClient() else connFactory.createBlackClient()
-		val stateFactory = StateFacade.normalStateFactory()
-		val defaultMaxCompTime = conf.getProperty("MAX_COMPUTATION_TIME", "55").toInt
-		val maxComputationTime =
-			if (args.length >= 2) try {
+		val maxComputationTime = try {
 				args(1).toInt
 			}catch {
-				case _: Throwable => defaultMaxCompTime
-			}else
-				defaultMaxCompTime
+				case _: Throwable => Config.MAX_COMPUTATION_TIME
+			}
+
+		val serverIp = try {
+			args(2)
+		}catch {
+			case _: Throwable => Config.SERVER_IP
+		}
+
+		val connFactory = new ConnFactory(Config.TEAM_NAME, serverIp)
+
+		val port = try{
+			args(3).toInt
+		}catch {
+			case _: Throwable => if (clientType == "w") Config.WHITE_PORT else Config.BLACK_PORT
+		}
+
+		val client = if (clientType == "w") connFactory.createWhiteClient(port) else connFactory.createBlackClient(port)
+		val stateFactory = StateFacade.normalStateFactory()
 
 		client.writeTeamName()
 		if (clientType == "b") // bad protocol: black player have to read twice, because the first time the init state is given before the white move
@@ -48,7 +51,7 @@ object Main {
 
 		val game = new TablutGame(stateFactory, initState)
 		val search = new TablutSearch(stateFactory.context, game, maxComputationTime)
-		val phaseFactor = new PhaseFactory(conf)
+		val phaseFactor = new PhaseFactory()
 
 		var currState = initState
 		var nTurn = 1

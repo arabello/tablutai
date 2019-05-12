@@ -1,14 +1,13 @@
 package ai.tablut.adversarial
 
-import java.util.Properties
-
+import ai.tablut.Config
 import ai.tablut.adversarial.heuristic.Phase._
 import ai.tablut.state.Player.Player
 import ai.tablut.state.State
 
-class PhaseFactory(props: Properties) {
-	private val midPhaseTurn = props.getProperty("MID_PHASE_TURN", "3").toInt
-	private val endPhaseTurn = props.getProperty("END_PHASE_TURN", "10").toInt
+class PhaseFactory() {
+	private val midPhaseTurn = Config.MID_PHASE_TURN
+	private val endPhaseTurn = Config.END_PHASE_TURN
 
 	def createPhase(state: State, player: Player, nTurn: Int): Phase = {
 		if (nTurn > endPhaseTurn)
