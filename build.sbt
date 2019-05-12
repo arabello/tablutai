@@ -12,4 +12,5 @@ libraryDependencies ++= Seq(
 )
 
 mainClass in assembly := Some("ai.tablut.Main")
-unmanagedResources in Compile += baseDirectory.value / "config.properties"
+assemblyDefaultJarName in assembly := "pelle"
+target in assembly := baseDirectory.value / "bin"
