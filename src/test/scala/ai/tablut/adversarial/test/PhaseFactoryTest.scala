@@ -1,5 +1,6 @@
 package ai.tablut.adversarial.test
 
+import ai.tablut.Config
 import ai.tablut.adversarial.PhaseFactory
 import ai.tablut.adversarial.heuristic.Phase
 import ai.tablut.state.{CellContent, Player, StateFacade}
@@ -10,7 +11,8 @@ class PhaseFactoryTest extends WordSpec{
 		"using normal game rules" should {
 			val factory = StateFacade.normalStateFactory()
 			val initState = factory.createInitialState()
-			val phaseFactory = new PhaseFactory()
+			val config = Config()
+			val phaseFactory = new PhaseFactory(config.midPhaseTurn, config.endPhaseTurn)
 
 			"detect phase" in {
 				assert(phaseFactory.createPhase(initState, Player.WHITE, 1) == Phase.START)

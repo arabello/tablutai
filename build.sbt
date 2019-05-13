@@ -9,6 +9,7 @@ libraryDependencies ++= Seq(
 	"com.typesafe.play" %% "play-json" % "2.7.2",
 	"org.scalatest" %% "scalatest" % "3.0.5" % "test",
 	"com.googlecode.aima-java" % "aima-core" % "3.0.0",
+	"com.github.scopt" %% "scopt" % "4.0.0-RC2"
 )
 
 mainClass in assembly := Some("ai.tablut.Main")

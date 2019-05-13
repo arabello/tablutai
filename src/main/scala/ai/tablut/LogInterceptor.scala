@@ -1,7 +1,7 @@
 package ai.tablut
 
 object LogInterceptor {
-	private val debug: Boolean = Config.DEBUG
+	var debug: Boolean = false
 
 	def apply(block: =>Unit): Unit = if (debug) block
 }
