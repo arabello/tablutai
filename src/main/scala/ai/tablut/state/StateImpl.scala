@@ -10,7 +10,7 @@ private case class StateImpl(
 	                            board: Vector[Vector[BoardCell]],
 	                            turn: Player,
 	                            var kingCoords: Option[(Int, Int)] = None,
-	                            ending: Option[Ending] = None) extends State with GameRulesComplied {
+	                            ending: Option[Ending] = None) extends State{
 
 	def apply(coord: (Int, Int)): Option[BoardCell] = apply(coord._1)(coord._2)
 
@@ -117,7 +117,7 @@ private case class StateImpl(
 			copy(board = newBoard)
 	}
 
-	override def isGameRulesComplied(gameRules: GameContext): Boolean = ???
+	override def isGameRulesComplied(gameRules: GameContext): Boolean = true
 
 	override def toString: String = {
 		val sb = scala.collection.mutable.StringBuilder.newBuilder
