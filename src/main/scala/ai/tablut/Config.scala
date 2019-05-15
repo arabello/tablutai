@@ -11,5 +11,5 @@ case class Config (
   maxCompTime: Int = 55,
   debug: Boolean = false,
   midPhaseTurn: Int = 3,
-  endPhaseTurn: Int = 10
+  endPhaseTurn: Int = 6
 )
