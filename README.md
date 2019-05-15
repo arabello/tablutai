@@ -57,8 +57,6 @@ Competition project of the Artificial Intelligence Fundamentals course at Univer
 `tablutai` is a formal and knowledge based AI.
 It use mainly an iterative deepening alpha beta search ([Russell-Norvig](http://aima.cs.berkeley.edu/)).
 
-![Board](src/test/res/board2.png)
-
 ## Getting Started
 
 ### Server
