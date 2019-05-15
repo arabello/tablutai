@@ -44,7 +44,18 @@ pelle 1.x
 ```
 
 ### Compilazione
-Nel caso fosse necessario generare l'eseguibile, aprire un terminale nella cartella root ed eseguire:
+Nel caso fosse necessario generare l'eseguibile, installare [sbt](https://www.scala-sbt.org/download.html):
+
+Per esempio, in ambiente Ubuntu o altri basati su Debian:
+
+```
+echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+sudo apt-get update
+sudo apt-get install sbt
+```
+ 
+Successivamente, aprire un terminale nella cartella root ed eseguire:
 
 `sbt assembly`
 
@@ -92,7 +103,18 @@ pelle 1.x
 ```
 
 ### Compile
-If a new executable is required, open a new terminal in the root project folder and execute:
+If a new executable is required, install [sbt](https://www.scala-sbt.org/download.html):
+                                
+For example, on Ubuntu or other Debian-based systems:
+
+```
+echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+sudo apt-get update
+sudo apt-get install sbt
+```
+
+Then, open a new terminal in the root project folder and execute:
 
 `sbt assembly`
 
