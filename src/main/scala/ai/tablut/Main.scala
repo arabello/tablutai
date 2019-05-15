@@ -17,7 +17,7 @@ object Main {
 					case "b" | "black" | "BLACK" => c.copy(player = Some(Player.BLACK))
 					case _ => c.copy(player = None)
 				})
-				.text("Type of player.\n'w' | 'white' | 'WHITE' for the WHITE player.\n'b' | 'black' 'BLACK' for the BLACK player")
+				.text("Type of player. Use 'w' or 'white' or 'WHITE' for the WHITE player. Use 'b' or 'black' or 'BLACK' for the BLACK player")
 
 			opt[Int]('c', "computeTime")
 				.action((x, c) => c.copy(maxCompTime = x))
