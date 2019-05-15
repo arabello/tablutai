@@ -2,7 +2,7 @@
 
 English version [below](#tablut-game-ai).
 
-Progetto di concorso per il corso di Fondamenti di Intelligenza Artificiale presso l'Università di Bologna.
+Progetto di concorso per il corso di Fondamenti di Intelligenza Artificiale presso Università di Bologna.
 
 `tablutai` è una intelligenza artificiale formale basata su conoscenza.
 Utilizza principalmente una ricerca negli spazi degli stati ad approfondimento iterativo con tagli Alpha Beta ([Russell-Norvig](http://aima.cs.berkeley.edu/)).
@@ -33,9 +33,7 @@ Per ottenere tutte le opzioni disponibili:
 pelle 1.x
  Usage: java -jar bin/pelle [options]
  
-   -p, --player <value>     Type of player.
- 'w' | 'white' | 'WHITE' for the WHITE player.
- 'b' | 'black' 'BLACK' for the BLACK player
+   -p, --player <value>      Type of player. Use 'w' or 'white' or 'WHITE' for the WHITE player. Use 'b' or 'black' or 'BLACK' for the BLACK player
    -c, --computeTime <value>
                             The max computing time in seconds (only computing NOT the entire player turn). Default is 55
    -s, --serverIp <value>   The server IP. Default is localhost
@@ -85,9 +83,7 @@ To get all the usage details:
 pelle 1.x
  Usage: java -jar bin/pelle [options]
  
-   -p, --player <value>     Type of player.
- 'w' | 'white' | 'WHITE' for the WHITE player.
- 'b' | 'black' 'BLACK' for the BLACK player
+   -p, --player <value>     Type of player. Use 'w' or 'white' or 'WHITE' for the WHITE player. Use 'b' or 'black' or 'BLACK' for the BLACK player
    -c, --computeTime <value>
                             The max computing time in seconds (only computing NOT the entire player turn). Default is 55
    -s, --serverIp <value>   The server IP. Default is localhost
