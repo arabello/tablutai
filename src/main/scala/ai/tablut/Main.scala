@@ -66,32 +66,29 @@ object Main {
 				val phaseFactor = new PhaseFactory(config.midPhaseTurn, config.endPhaseTurn)
 
 				var currState = initState
-				var nTurn = 1
+				var nTurn = if (player == Player.BLACK) 2 else 1
 				while(true) {
 					val nextAction = search.makeDecision(currState)
 					client.writeAction(nextAction)
 
+					// my state from server
+					client.readState()
+
 					// Wait for enemy turn
+					System.gc()
 
 					val metrics = search.getMetrics
 					LogInterceptor{
 						println(s"$metrics")
 					}
 
-					// my state from server
-					val afterActionJson = client.readState()
-					val afterActionState = TablutSerializer.fromJson(afterActionJson, stateFactory)
-
-					val newPhase = phaseFactor.createPhase(afterActionState, client.player, nTurn)
-					nTurn += 1
-					search.setPhase(newPhase)
-
-					System.gc()
-
 					// Read state after enemy turn
-
 					val jsonState = client.readState()
 					currState = TablutSerializer.fromJson(jsonState, stateFactory)
+
+					val newPhase = phaseFactor.createPhase(currState, client.player, nTurn)
+					nTurn += 1
+					search.setPhase(newPhase)
 				}
 
 			case None =>
