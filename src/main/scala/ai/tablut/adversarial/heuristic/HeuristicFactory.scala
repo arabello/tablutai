@@ -25,13 +25,14 @@ object HeuristicFactory{
 			(new CellPriorityStrategy(gameContext), 10)
 		)
 		case Phase.MID => Seq(
-			(new CellPriorityStrategy(gameContext), 4),
-			(new KingPathStrategy(gameContext), 4),
-			(new PawsMajorityStrategy(), 2)
+			(new CellPriorityStrategy(gameContext), 5),
+			(new PawsMajorityStrategy(), 3),
+			(new KingPathStrategy(gameContext), 2)
 		)
 		case Phase.END => Seq(
 			(new KingKillingStrategy, 6),
-			(new KingPathStrategy(gameContext), 4)
+			(new KingPathStrategy(gameContext), 3),
+			(new CellPriorityStrategy(gameContext), 1),
 		)
 	}
 
