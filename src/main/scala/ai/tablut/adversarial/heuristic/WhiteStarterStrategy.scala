@@ -20,10 +20,10 @@ class WhiteStarterStrategy(gameContext: GameContext) extends HeuristicStrategy {
 		case Player.WHITE =>
 			var value = minValue
 			state.get(castleCorners:_ *)(gameContext)
-				.withFilter(c => c.cellContent == CellContent.WHITE).foreach(_ => value += 2)
+				.withFilter(c => c.cellContent == CellContent.WHITE).foreach(_ => value += 1)
 
 			state.get(castleSides:_ *)(gameContext)
-				.withFilter(c => c.cellContent == CellContent.KING).foreach(_ => value += 1)
+				.withFilter(c => c.cellContent == CellContent.KING).foreach(_ => value += 2)
 
 			value
 		case _ => minValue

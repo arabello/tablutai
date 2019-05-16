@@ -7,16 +7,17 @@ import ai.tablut.state.{GameContext, Player}
 object HeuristicFactory{
 	private def whiteStrategies(gameContext: GameContext, phase: Phase) = phase match{
 		case Phase.START => Seq(
-			(new WhiteStarterStrategy(gameContext), 10)
+			(new WhiteStarterStrategy(gameContext), 10),
 		)
 		case Phase.MID => Seq(
-			(new KingPathStrategy(gameContext), 6),
-			(new PawsMajorityStrategy(), 3),
+			(new KingPathStrategy(gameContext), 5),
+			(new PawsMajorityStrategy(), 4),
 			(new CellPriorityStrategy(gameContext), 1)
 		)
 		case Phase.END => Seq(
-			(new KingPathStrategy(gameContext), 8),
-			(new PawsMajorityStrategy(), 2)
+			(new KingPathStrategy(gameContext), 5),
+			(new CellPriorityStrategy(gameContext), 4),
+			(new PawsMajorityStrategy(), 1),
 		)
 	}
 
