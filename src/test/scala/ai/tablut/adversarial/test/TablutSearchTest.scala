@@ -65,6 +65,21 @@ class TablutSearchTest extends WordSpec{
 
 				assert(search.eval(state, Player.WHITE) == search.utilMax)
 				assert(search.eval(state, Player.BLACK) == search.utilMin)
+
+                val state2 = initState.transform(Map(
+                    (4,4) -> CellContent.EMPTY,
+                    (6,1) -> CellContent.KING,
+                    (5,0) -> CellContent.EMPTY,
+                    (6,2) -> CellContent.WHITE,
+                    (8,1) -> CellContent.BLACK,
+                    (4,1) -> CellContent.EMPTY,
+                    (3,1) -> CellContent.BLACK
+                )).nextPlayer
+                
+                println(state2)
+
+				assert(search.eval(state2, Player.WHITE) == search.utilMax)
+				assert(search.eval(state2, Player.BLACK) == search.utilMin)
 			}
 
 			"eval BLACK winner" in {
