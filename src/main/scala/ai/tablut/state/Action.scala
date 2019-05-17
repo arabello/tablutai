@@ -72,7 +72,7 @@ case class Action(who: Player, from: BoardCell, to: BoardCell) extends GameRules
 		val between = if (isXFixed) for (y <- f to t) yield (fromX, y) else for(x <- f to t) yield (x, fromY)
 
 		for(coords <- between; cell = board.board(coords._1)(coords._2))
-			if (cell.cellContent != CellContent.EMPTY || cell.cellType == CellType.CASTLE || cell.cellType == CellType.CAMP)
+			if (cell.cellContent != CellContent.EMPTY || cell.cellType == CellType.CASTLE || (cell.cellType == CellType.CAMP && from.cellType != CellType.CAMP))
 				return false
 
 		true
