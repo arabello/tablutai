@@ -36,9 +36,9 @@ object Main {
 				.action((x, c) => c.copy(blackPort = x))
 				.text("The server port for the BLACK player. Default is 5801")
 
-			opt[Boolean]('d', "debug")
-				.action((x, c) => c.copy(debug = x))
-				.text("Enable debug log texts. Default is false")
+			opt[Unit]('d', "debug")
+				.action((x, c) => c.copy(debug = true))
+				.text("Flag to enable debug logging")
 
 			help("help").abbr("h")
 		}
@@ -59,14 +59,16 @@ object Main {
 				client.writeTeamName()
 				if (player == Player.BLACK) // bad protocol: black player have to read twice, because the first time the init state is given before the white move
 					client.readState()
-                                var turnMillis = System.currentTimeMillis()
+
 				val jsonInitState = client.readState()
+				var turnMillis = System.currentTimeMillis()
 				val initState = TablutSerializer.fromJson(jsonInitState, stateFactory)
 
 				val game = new TablutGame(stateFactory, initState)
-                                val compTime = if (config.maxTurnTime <= config.paddingTime) config.maxTurnTime else config.maxTurnTime - config.paddingTime 
+				val compTime = if (config.maxTurnTime <= config.paddingTime) config.maxTurnTime else config.maxTurnTime - config.paddingTime
 				val search = new TablutSearch(stateFactory.context, game, compTime)
-				val phaseFactor = new PhaseFactory(config.midPhaseTurn, config.endPhaseTurn)
+				val phaseFactory = new PhaseFactory(config.midPhaseTurn, config.endPhaseTurn)
+
 
 				var currState = initState
 				var nTurn = if (player == Player.BLACK) 2 else 1
@@ -74,11 +76,11 @@ object Main {
 					val nextAction = search.makeDecision(currState)
 					client.writeAction(nextAction)
 
-                                        LogInterceptor{
-                                            print(s"turn time: ${(System.currentTimeMillis() - turnMillis) / 1000.toFloat} ms ")
-                                        }
+                    LogInterceptor{
+                        print(s"turn time: ${(System.currentTimeMillis() - turnMillis) / 1000.toFloat} s ")
+                    }
 
-					// my state from server
+					// My state from server
 					client.readState()
 
 					// Wait for enemy turn
@@ -91,10 +93,10 @@ object Main {
 
 					// Read state after enemy turn
 					val jsonState = client.readState()
-                                        turnMillis = System.currentTimeMillis()
+					turnMillis = System.currentTimeMillis()
 					currState = TablutSerializer.fromJson(jsonState, stateFactory)
 
-					val newPhase = phaseFactor.createPhase(currState, client.player, nTurn)
+					val newPhase = phaseFactory.createPhase(currState, client.player, nTurn)
 					nTurn += 1
 					search.setPhase(newPhase)
 				}
