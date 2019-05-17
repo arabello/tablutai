@@ -25,22 +25,25 @@ Per giocare come nero:
 
 `java -jar bin/pelle -p b`
 
+Per modificare il tempo massimo (in secondi) dedicato a turno:
+
+`java -jar bin/pelle -p b -t 50`
+
 Per ottenere tutte le opzioni disponibili:
 
 `java -jar bin/pelle -h`
 
 ```
 pelle 1.x
- Usage: java -jar bin/pelle [options]
- 
-   -p, --player <value>      Type of player. Use 'w' or 'white' or 'WHITE' for the WHITE player. Use 'b' or 'black' or 'BLACK' for the BLACK player
-   -c, --computeTime <value>
-                            The max computing time in seconds (only computing NOT the entire player turn). Default is 55
-   -s, --serverIp <value>   The server IP. Default is localhost
-   -w, --whitePort <value>  The server port for the WHITE player. Default is 5800
-   -b, --blackPort <value>  The server port for the BLACK player. Default is 5801
-   -d, --debug <value>      Enable debug log texts. Default is false
-   -h, --help
+Usage: java -jar bin/pelle [options]
+
+  -p, --player <value>     Type of player. Use 'w' or 'white' or 'WHITE' for the WHITE player. Use 'b' or 'black' or 'BLACK' for the BLACK player
+  -t, --time <value>       The max player turn time in seconds. Default is 60
+  -s, --serverIp <value>   The server IP. Default is localhost
+  -w, --whitePort <value>  The server port for the WHITE player. Default is 5800
+  -b, --blackPort <value>  The server port for the BLACK player. Default is 5801
+  -d, --debug              Flag to enable debug logging
+  -h, --help
 ```
 
 ### Compilazione
@@ -84,22 +87,25 @@ To play as black:
 
 `java -jar bin/pelle -p b`
 
+To change the maximum time (in seconds) of the player turn:
+
+`java -jar bin/pelle -p b -t 50`
+
 To get all the usage details:
 
 `java -jar bin/pelle -h`
 
 ```
 pelle 1.x
- Usage: java -jar bin/pelle [options]
- 
-   -p, --player <value>     Type of player. Use 'w' or 'white' or 'WHITE' for the WHITE player. Use 'b' or 'black' or 'BLACK' for the BLACK player
-   -c, --computeTime <value>
-                            The max computing time in seconds (only computing NOT the entire player turn). Default is 55
-   -s, --serverIp <value>   The server IP. Default is localhost
-   -w, --whitePort <value>  The server port for the WHITE player. Default is 5800
-   -b, --blackPort <value>  The server port for the BLACK player. Default is 5801
-   -d, --debug <value>      Enable debug log texts. Default is false
-   -h, --help
+Usage: java -jar bin/pelle [options]
+
+  -p, --player <value>     Type of player. Use 'w' or 'white' or 'WHITE' for the WHITE player. Use 'b' or 'black' or 'BLACK' for the BLACK player
+  -t, --time <value>       The max player turn time in seconds. Default is 60
+  -s, --serverIp <value>   The server IP. Default is localhost
+  -w, --whitePort <value>  The server port for the WHITE player. Default is 5800
+  -b, --blackPort <value>  The server port for the BLACK player. Default is 5801
+  -d, --debug              Flag to enable debug logging
+  -h, --help
 ```
 
 ### Compile
