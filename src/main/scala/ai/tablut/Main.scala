@@ -19,9 +19,10 @@ object Main {
 				})
 				.text("Type of player. Use 'w' or 'white' or 'WHITE' for the WHITE player. Use 'b' or 'black' or 'BLACK' for the BLACK player")
 
-			opt[Int]('c', "computeTime")
-				.action((x, c) => c.copy(maxCompTime = x))
-				.text("The max computing time in seconds (only computing NOT the entire player turn). Default is 55")
+			opt[Int]('t', "time")
+                                .validate(x => if (x <= 0) failure("time must be > 0") else success)
+				.action((x, c) => c.copy(maxTurnTime = x))
+				.text("The max player turn time in seconds. Default is 60")
 
 			opt[String]('s', "serverIp")
 				.action((x, c) => c.copy(serverIP = x))
@@ -62,7 +63,8 @@ object Main {
 				val initState = TablutSerializer.fromJson(jsonInitState, stateFactory)
 
 				val game = new TablutGame(stateFactory, initState)
-				val search = new TablutSearch(stateFactory.context, game, config.maxCompTime)
+                                val compTime = if (config.maxTurnTime <= config.paddingTime) config.maxTurnTime else config.maxTurnTime - config.paddingTime 
+				val search = new TablutSearch(stateFactory.context, game, compTime)
 				val phaseFactor = new PhaseFactory(config.midPhaseTurn, config.endPhaseTurn)
 
 				var currState = initState
