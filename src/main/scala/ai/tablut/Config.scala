@@ -9,7 +9,7 @@ case class Config (
   whitePort: Int = 5800,
   blackPort: Int = 5801,
   maxTurnTime: Int = 60,
-  paddingTime: Int = 4,
+  paddingTime: Int = 2,
   debug: Boolean = false,
   midPhaseTurn: Int = 3,
   endPhaseTurn: Int = 6
