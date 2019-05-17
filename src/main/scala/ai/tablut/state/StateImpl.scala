@@ -121,7 +121,7 @@ private case class StateImpl(
 
 	override def toString: String = {
 		val sb = scala.collection.mutable.StringBuilder.newBuilder
-
+                var r = 0
 		sb.append("\n")
 		board.foreach { row =>
 			row.foreach{cell =>
@@ -131,8 +131,11 @@ private case class StateImpl(
 				}
 				sb.append(s" $char")
 			}
-			sb.append("\n")
+			sb.append(s" $r\n")
+                        r += 1
 		}
+                for (c <- 0 until cols) sb.append(s" $c")
+                sb.append("\n")
 		sb.mkString
 	}
 }
