@@ -59,6 +59,7 @@ object Main {
 				client.writeTeamName()
 				if (player == Player.BLACK) // bad protocol: black player have to read twice, because the first time the init state is given before the white move
 					client.readState()
+                                var turnMillis = System.currentTimeMillis()
 				val jsonInitState = client.readState()
 				val initState = TablutSerializer.fromJson(jsonInitState, stateFactory)
 
@@ -73,6 +74,10 @@ object Main {
 					val nextAction = search.makeDecision(currState)
 					client.writeAction(nextAction)
 
+                                        LogInterceptor{
+                                            print(s"turn time: ${(System.currentTimeMillis() - turnMillis) / 1000.toFloat} ms ")
+                                        }
+
 					// my state from server
 					client.readState()
 
@@ -86,6 +91,7 @@ object Main {
 
 					// Read state after enemy turn
 					val jsonState = client.readState()
+                                        turnMillis = System.currentTimeMillis()
 					currState = TablutSerializer.fromJson(jsonState, stateFactory)
 
 					val newPhase = phaseFactor.createPhase(currState, client.player, nTurn)
