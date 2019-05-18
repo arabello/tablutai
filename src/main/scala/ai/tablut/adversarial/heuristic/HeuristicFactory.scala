@@ -5,6 +5,8 @@ import ai.tablut.state.Player.Player
 import ai.tablut.state.{GameContext, Player}
 
 object HeuristicFactory{
+	private val depthThreshold = 4
+
 	private def whiteStrategies(gameContext: GameContext, phase: Phase) = phase match{
 		case Phase.START => Seq(
 			(new WhiteStarterStrategy(gameContext), 10),
@@ -37,10 +39,17 @@ object HeuristicFactory{
 		)
 	}
 
-	def createHeuristicFunction(gameContext: GameContext, player: Player, phase: Phase): HeuristicFunction =
-		new HeuristicFunctionImpl(player match{
-			case Player.WHITE => whiteStrategies(gameContext, phase)
-			case Player.BLACK => blackStrategies(gameContext, phase)
+	def createHeuristicFunction(gameContext: GameContext, player: Player, phase: Phase, depth: Int): HeuristicFunction = {
+		val strategies = player match{
+			case Player.WHITE =>
+				whiteStrategies(gameContext, phase)
+			case Player.BLACK =>
+				blackStrategies(gameContext, phase)
 			case _ => Seq()
-		})
+		}
+
+		val basedOnDepth = if (depth > depthThreshold) strategies else strategies.filterNot(s => s._1.isInstanceOf[KingPathStrategy])
+		new HeuristicFunctionImpl(basedOnDepth)
+	}
+
 }

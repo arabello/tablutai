@@ -76,6 +76,7 @@ class IterativeDeepeningAlphaBetaSearch[S, A, P](var game: Game[S, A, P], var ut
 
 	protected var currDepthLimit = 0
 	private var heuristicEvaluationUsed = false // indicates that non-terminal
+	protected var onDepthUpdate: Int => Unit = {_ => }
 
 	// nodes
 	// have been evaluated.
@@ -103,6 +104,7 @@ class IterativeDeepeningAlphaBetaSearch[S, A, P](var game: Game[S, A, P], var ut
 		currDepthLimit = 0
 		do {
 			currDepthLimit += 1
+			onDepthUpdate(currDepthLimit)
 
 			heuristicEvaluationUsed = false
 
