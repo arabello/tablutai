@@ -9,16 +9,21 @@ import scala.language.postfixOps
 
 class TablutSearch(gameContext: GameContext, game: TablutGame, time: Int) extends IterativeDeepeningAlphaBetaSearch(game, 0, 1, time){
 	private var phase: Phase = Phase.START
-	private var whiteHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.WHITE, phase, currDepthLimit)
-	private var blackHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.BLACK, phase, currDepthLimit)
+	private val heuristicFactory = new HeuristicFactory(time)
+	private var whiteHeuristic = heuristicFactory.createHeuristicFunction(gameContext, Player.WHITE, phase, currDepthLimit)
+	private var blackHeuristic = heuristicFactory.createHeuristicFunction(gameContext, Player.BLACK, phase, currDepthLimit)
 
 	def setPhase(phase: Phase): Unit = {
 		this.phase = phase
 	}
 
 	onDepthUpdate = depth => {
-		whiteHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.WHITE, phase, depth)
-		blackHeuristic = HeuristicFactory.createHeuristicFunction(gameContext, Player.BLACK, phase, depth)
+		whiteHeuristic = heuristicFactory.createHeuristicFunction(gameContext, Player.WHITE, phase, depth)
+		blackHeuristic = heuristicFactory.createHeuristicFunction(gameContext, Player.BLACK, phase, depth)
+		LogInterceptor{
+			if (heuristicFactory.isIntensiveUsed)
+				println(s"Intensive heuristic at depth $depth")
+		}
 	}
 
 	/**

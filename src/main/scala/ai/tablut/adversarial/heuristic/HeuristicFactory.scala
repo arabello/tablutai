@@ -4,8 +4,10 @@ import ai.tablut.adversarial.heuristic.Phase.Phase
 import ai.tablut.state.Player.Player
 import ai.tablut.state.{GameContext, Player}
 
-object HeuristicFactory{
-	private val depthThreshold = 4
+class HeuristicFactory(computeTimeSeconds: Int){
+	val intensiveHeuristicDepthStart: Int = scala.math.floor(scala.math.log(computeTimeSeconds) / scala.math.log(2)).toInt
+	private var intensive = false
+	def isIntensiveUsed: Boolean = intensive
 
 	private def whiteStrategies(gameContext: GameContext, phase: Phase) = phase match{
 		case Phase.START => Seq(
@@ -40,6 +42,8 @@ object HeuristicFactory{
 	}
 
 	def createHeuristicFunction(gameContext: GameContext, player: Player, phase: Phase, depth: Int): HeuristicFunction = {
+		intensive = false
+
 		val strategies = player match{
 			case Player.WHITE =>
 				whiteStrategies(gameContext, phase)
@@ -48,7 +52,16 @@ object HeuristicFactory{
 			case _ => Seq()
 		}
 
-		val basedOnDepth = if (depth > depthThreshold) strategies else strategies.filterNot(s => s._1.isInstanceOf[KingPathStrategy])
+		if (phase == Phase.START)
+			return new HeuristicFunctionImpl(strategies)
+
+		val basedOnDepth =
+			if (depth >= intensiveHeuristicDepthStart) {
+				intensive = true
+				strategies
+			} else
+				strategies.filterNot(s => s._1.isInstanceOf[KingPathStrategy])
+
 		new HeuristicFunctionImpl(basedOnDepth)
 	}
 
