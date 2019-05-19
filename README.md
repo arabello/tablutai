@@ -104,7 +104,7 @@ file versions up to 52.0
 Competition project of the Artificial Intelligence Fundamentals course at University of Bologna.
 
 `tablutai` is a formal and knowledge based AI.
-It use mainly an iterative deepening alpha beta search ([Russell-Norvig](http://aima.cs.berkeley.edu/)).
+It mainly use an iterative deepening alpha beta search ([Russell-Norvig](http://aima.cs.berkeley.edu/)).
 
 ## Getting Started
 
