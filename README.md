@@ -64,6 +64,37 @@ Successivamente, aprire un terminale nella cartella root ed eseguire:
 
 il quale compila, esegue tutti i test ed crea un nuovo fat jar sostituendo quello precedente sotto la cartella `bin`.
 
+## Risoluzione dei problemi
+
+### JRE Fatal Error
+Se durante l'esecuzione del giocatore, il JRE riscontra un problema fatele simile al seguente:
+
+```
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007f0b024734cd, pid=21947, tid=139676677560592
+#
+# JRE version: 6.0_15-b03
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (14.1-b02 mixed mode linux-amd64 )
+# Problematic frame:
+# V  [libjvm.so+0x5df4cd]
+```
+
+Aprire un terminale ed eseguire il seguente comando: 
+
+`export LD_BIND_NOW=1`
+
+Per i dettagli sulla problematica, [qui](http://osr507doc.sco.com/en/tools/ccs_linkedit_runtime_compat.html).
+
+### Unsupported Class Version Error
+Se l'esecuzione del jar ritorna un errore simile al seguente:
+```
+Exception in thread "main" java.lang.UnsupportedClassVersionError: ai/tablut/connectivity/StreamUtils has been compiled by 
+a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class 
+file versions up to 52.0
+```
+
+è necessario [compilare](#compilazione) il progetto.
 
 # Tablut Game AI
 Competition project of the Artificial Intelligence Fundamentals course at University of Bologna.
@@ -125,6 +156,38 @@ Then, open a new terminal in the root project folder and execute:
 `sbt assembly`
 
 that compiles, executes all the tests and create a new fat jar replacing the old one into the `bin` folder.
+
+## Troubleshooting
+
+### JRE Fatal Error
+If during the runtime execution, the JRE throws a fatal error of this kind:
+
+```
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007f0b024734cd, pid=21947, tid=139676677560592
+#
+# JRE version: 6.0_15-b03
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (14.1-b02 mixed mode linux-amd64 )
+# Problematic frame:
+# V  [libjvm.so+0x5df4cd]
+```
+
+open a termina and execute: 
+
+`export LD_BIND_NOW=1`
+
+For details about this issue, [here](http://osr507doc.sco.com/en/tools/ccs_linkedit_runtime_compat.html).
+
+### Unsupported Class Version Error
+If the execution of the jar file returns an error of this kind:
+```
+Exception in thread "main" java.lang.UnsupportedClassVersionError: ai/tablut/connectivity/StreamUtils has been compiled by 
+a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class 
+file versions up to 52.0
+```
+
+it is required to [compile](#compilazione) the project.
 
 # License
 
