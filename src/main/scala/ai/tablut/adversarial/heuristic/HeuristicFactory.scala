@@ -5,7 +5,7 @@ import ai.tablut.state.Player.Player
 import ai.tablut.state.{GameContext, Player}
 
 class HeuristicFactory(computeTimeSeconds: Int){
-	val intensiveHeuristicDepthStart: Int = scala.math.floor(scala.math.log(computeTimeSeconds) / scala.math.log(2)).toInt
+	val intensiveHeuristicDepthStart: Int = 5
 	private var intensive = false
 	def isIntensiveUsed: Boolean = intensive
 
