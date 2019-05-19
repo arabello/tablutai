@@ -3,7 +3,7 @@ package ai.tablut
 import ai.tablut.adversarial.{PhaseFactory, TablutGame, TablutSearch}
 import ai.tablut.connectivity.ConnFactory
 import ai.tablut.serialization.TablutSerializer
-import ai.tablut.state.{Player, StateFacade}
+import ai.tablut.state.{ActionFactory, Player, StateFacade}
 
 object Main {
 	def main(args: Array[String]): Unit = {
@@ -73,8 +73,16 @@ object Main {
 				var currState = initState
 				var nTurn = if (player == Player.BLACK) 2 else 1
 				while(true) {
-					val nextAction = search.makeDecision(currState)
-					client.writeAction(nextAction)
+					try {
+						val nextAction = search.makeDecision(currState)
+						client.writeAction(nextAction)
+					}catch{ // Something bad happen, fallback random
+						case _: Throwable =>
+							val actionFactory = new ActionFactory(currState, stateFactory.context)
+							val actions = actionFactory.createActions
+							val nextAction = actions(scala.util.Random.nextInt(actions.size))
+							client.writeAction(nextAction)
+					}
 
                     LogInterceptor{
                         print(s"turn time: ${(System.currentTimeMillis() - turnMillis) / 1000.toFloat} s ")
